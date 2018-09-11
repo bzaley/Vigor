@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Android_Experimentation</string>
+    <string name="btnDo">Do Something!</string>
+    <string name="Routines">btnRoutine</string>
+    <string name="btnRoutine">Routines</string>
+    <string name="btnStats">Stats</string>
+    <string name="btnClasses">Classes</string>
+    <string name="title_activity_routines_home">RoutinesHome</string>
+    <string name="title_activity_stats_home">StatsHome</string>
+    <string name="title_activity_classes_home">ClassesHome</string>
 </resources>

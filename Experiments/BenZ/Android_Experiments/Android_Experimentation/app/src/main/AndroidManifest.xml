@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RoutinesHome"
+            android:label="@string/title_activity_routines_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StatsHome"
+            android:label="@string/title_activity_stats_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ClassesHome"
+            android:label="@string/title_activity_classes_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
