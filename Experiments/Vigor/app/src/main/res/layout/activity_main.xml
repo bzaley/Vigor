@@ -11,7 +11,7 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/firstNumEditText"
+        android:id="@+id/numEditText1"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/secondNumEditText"
+        android:id="@+id/numEditText2"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/thirdNumEditText"
+        android:id="@+id/numEditText3"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/fourthNumEditText"
+        android:id="@+id/numEditText4"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/fithNumEditText"
+        android:id="@+id/numEditText5"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -84,7 +84,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/sixthNumEditText"
+        android:id="@+id/numEditText6"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/seventhNumEditText"
+        android:id="@+id/numEditText7"
         android:layout_width="35dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"
@@ -124,7 +124,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fourthNumEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/numEditText4" />
 
     <TextView
         android:id="@+id/resultTextView"
@@ -140,7 +140,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toEndOf="@+id/averageBTN"
-        app:layout_constraintTop_toBottomOf="@+id/fithNumEditText"
+        app:layout_constraintTop_toBottomOf="@+id/numEditText5"
         app:layout_constraintVertical_bias="0.008" />
 
     <com.jjoe64.graphview.GraphView
