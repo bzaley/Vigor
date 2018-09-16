@@ -1,5 +1,6 @@
 package com.example.adrian.vigor;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        configureNextButton();
 
         Button results = (Button) findViewById(R.id.averageBTN);
         results.setOnClickListener(new View.OnClickListener() {
@@ -81,5 +84,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+//
+//    private void configureNextButton(){
+//        Button nB = (Button) findViewById(R.id.nextButton);
+//        nB.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, ScreenAttempt.class));
+//            }
+//        });
+//    }
 
+    public void configureNextButton(View view) {
+        startActivity(new Intent(MainActivity.this, ScreenAttempt.class));
+    }
 }
