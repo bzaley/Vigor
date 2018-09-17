@@ -70,5 +70,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         numSteps++;
         TvSteps.setText(TEXT_NUM_STEPS + numSteps);
     }
-
 }
