@@ -20,20 +20,21 @@ import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button nextButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        configureNextButton();
-
         Button results = (Button) findViewById(R.id.averageBTN);
+        nextButton = (Button) findViewById(R.id.nextButton);
         results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 double[] week = new double[8];
-                double resultNum = 0;
+                double resultNum = 0, temp = 0;
 
                 //Read in Values
                 int[] ids = new int[]{R.id.numEditText1,R.id.numEditText2,R.id.numEditText3,R.id.numEditText4,R.id.numEditText5,R.id.numEditText6,R.id.numEditText7};
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         week[j] = Integer.parseInt(t.getText().toString());
                         resultNum += week[j];
+                        if (week[j] > temp){
+                            temp = week[j];
+                        }
                     }
                     j++;
                 }
@@ -80,22 +84,21 @@ public class MainActivity extends AppCompatActivity {
                 weekRev.setValuesOnTopColor(Color.BLACK);
                 Viewport view1 = revGraph.getViewport();
                 view1.setMinY(0);
+//                view1.setMaxY();
 
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, TestActivity.class));
             }
         });
     }
 //
-//    private void configureNextButton(){
-//        Button nB = (Button) findViewById(R.id.nextButton);
-//        nB.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, ScreenAttempt.class));
-//            }
-//        });
+//    public void launchActivity() {
+//        Intent intent = new Intent(MainActivity.this, ScreenAttempt.class);
+//
 //    }
-
-    public void configureNextButton(View view) {
-        startActivity(new Intent(MainActivity.this, ScreenAttempt.class));
-    }
 }

@@ -26,8 +26,6 @@ public class ScreenAttempt extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_attempt);
 
-//        configureBackButton();
-
         itemET = findViewById(R.id.text_item_1);
         btn1 = findViewById(R.id.add_item_btn);
         todoList = findViewById(R.id.itemList);
@@ -37,6 +35,8 @@ public class ScreenAttempt extends AppCompatActivity implements View.OnClickList
 
         btn1.setOnClickListener(this);
         todoList.setOnItemClickListener(this);
+
+
     }
 
     @Override
@@ -58,18 +58,4 @@ public class ScreenAttempt extends AppCompatActivity implements View.OnClickList
         listAdapter.notifyDataSetChanged();
         Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
     }
-
-    public void configureBackButton(View view) {
-        finish();
-    }
-
-//    private void configureBackButton(){
-//        Button bB = (Button) findViewById(R.id.backButton);
-//        bB.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//    }
 }
