@@ -8,7 +8,7 @@
 
     <ListView
         android:id="@+id/lvItems"
-        android:layout_width="wrap_content"
+        android:layout_width="290dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnAddItem"
         android:layout_alignParentLeft="true"
@@ -18,9 +18,22 @@
         app:layout_constraintTop_toBottomOf="@+id/etNewItem"
         tools:layout_editor_absoluteX="0dp" />
 
+    <ListView
+        android:id="@+id/lvAmounts"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnAddItem"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lvItems"
+        app:layout_constraintTop_toBottomOf="@+id/etNewItem" />
+
     <EditText
         android:id="@+id/etNewItem"
-        android:layout_width="294dp"
+        android:layout_width="203dp"
         android:layout_height="51dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -32,17 +45,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/etNewAmount"
+        android:layout_width="93dp"
+        android:layout_height="51dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Amount"
+        android:inputType="none|textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddItem"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etNewItem"
+        tools:layout_editor_absoluteY="0dp" />
+
     <Button
         android:id="@+id/btnAddItem"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="51dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:onClick="onAddItem"
         android:text="Add Item"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etNewItem"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
