@@ -52,13 +52,13 @@
         android:id="@+id/buttonMessage"
         android:layout_width="112dp"
         android:layout_height="99dp"
-        android:layout_alignStart="@+id/buttonNext"
-        android:layout_below="@+id/buttonNext"
+        android:layout_alignStart="@+id/buttonViewProfile"
+        android:layout_below="@+id/buttonViewProfile"
         android:text="Message" />
 
     <Button
-        android:id="@+id/buttonNext"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonViewProfile"
+        android:layout_width="112dp"
         android:layout_height="97dp"
         android:layout_alignStart="@+id/imageView2"
         android:layout_below="@+id/editText4"

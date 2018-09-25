@@ -18,23 +18,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         b1 = (Button) findViewById(R.id.buttonMessage);
-        b2 = (Button) findViewById(R.id.buttonNext);
+        b2 = (Button) findViewById(R.id.buttonViewProfile);
 
         b1.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Hello Android!", Toast.LENGTH_LONG).show();
             }
-        } );
+        });
 
         b2.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(i);
             }
         });
+
     }
 }
