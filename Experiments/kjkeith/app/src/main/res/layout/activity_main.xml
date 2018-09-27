@@ -27,4 +27,11 @@
         android:text="Stop Pedometer"
     />
 
+    <Button
+        android:id="@+id/sync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sync Steps"
+        />
+
 </LinearLayout>

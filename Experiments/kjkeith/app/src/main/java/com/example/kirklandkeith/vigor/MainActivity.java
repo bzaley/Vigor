@@ -9,6 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
     private TextView textView;
@@ -32,9 +38,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         simpleStepDetector = new stepMonitor();
         simpleStepDetector.registerListener(this);
 
+        RequestQueue requestQueue;
+
         TvSteps = findViewById(R.id.tv_steps);
         Button BtnStart = findViewById(R.id.btn_start);
         Button BtnStop = findViewById(R.id.btn_stop);
+        Button Sync = findViewById(R.id.sync);
+
+        String url = "proj309-ad-07.misc.iastate.edu";
+
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error while reading project server", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
 
@@ -51,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 sensorManager.unregisterListener(MainActivity.this);
             }
         });
+
+        Sync.setOnClickListener(
+                @Override
+                public void onClick() {
+
+                }
+
+        );
     }
 
     @Override
