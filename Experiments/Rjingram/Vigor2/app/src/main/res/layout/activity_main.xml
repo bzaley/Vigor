@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/buttonNext4"
+        android:id="@+id/btnDUMMY1"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_alignEnd="@+id/imageView3"
@@ -15,7 +15,7 @@
         android:text="Dummy" />
 
     <Button
-        android:id="@+id/buttonNext5"
+        android:id="@+id/btnDUMMY2"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_above="@+id/buttonMessage"
@@ -23,7 +23,7 @@
         android:text="Dummy" />
 
     <Button
-        android:id="@+id/buttonNext3"
+        android:id="@+id/btnDUMMY3"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_alignTop="@+id/buttonMessage"
@@ -31,7 +31,7 @@
         android:text="Dummy" />
 
     <Button
-        android:id="@+id/buttonNext2"
+        android:id="@+id/btnDUMMY4"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_above="@+id/buttonMessage"
@@ -52,13 +52,13 @@
         android:id="@+id/buttonMessage"
         android:layout_width="112dp"
         android:layout_height="99dp"
-        android:layout_alignStart="@+id/buttonViewProfile"
-        android:layout_below="@+id/buttonViewProfile"
+        android:layout_alignStart="@+id/btnViewProfile"
+        android:layout_below="@+id/btnViewProfile"
         android:text="Message" />
 
     <Button
-        android:id="@+id/buttonViewProfile"
-        android:layout_width="112dp"
+        android:id="@+id/btnViewProfile"
+        android:layout_width="114dp"
         android:layout_height="97dp"
         android:layout_alignStart="@+id/imageView2"
         android:layout_below="@+id/editText4"
@@ -78,7 +78,7 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="353dp"
-        android:layout_height="160dp"
+        android:layout_height="141dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="147dp"

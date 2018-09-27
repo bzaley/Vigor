@@ -11,29 +11,28 @@ public class MainActivity extends AppCompatActivity {
 
     Button b1, b2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        b1 = (Button) findViewById(R.id.buttonMessage);
-        b2 = (Button) findViewById(R.id.buttonViewProfile);
+        b1 = findViewById(R.id.buttonMessage);
+        b2 = findViewById(R.id.btnViewProfile);
+
 
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Hello Android!", Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Hello Joe!", Toast.LENGTH_LONG).show();
             }
         });
 
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ProfileHome.class);
                 startActivity(i);
             }
         });
-
     }
 }
