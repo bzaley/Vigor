@@ -8,8 +8,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Server_Controller</name>
-    <description>Version 1.0 of Server_Controller</description>
+    <name>Server_Control</name>
+    <description>1.0 Version of Controlling HTTP requests</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
