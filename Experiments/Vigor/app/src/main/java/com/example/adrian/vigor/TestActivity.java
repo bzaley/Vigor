@@ -3,80 +3,58 @@ package com.example.adrian.vigor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class TestActivity extends AppCompatActivity {
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
-    private ListView lvItems;
+public class TestActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private EditText itemActivity;
+    private EditText itemAmount;
+    private Button addBtn;
+    private ListView activitiesList;
+    private ListView amountsList;
+
+    private ArrayList<String> activities;
+    private ArrayList<String> amounts;
+
+    private ArrayAdapter<String> activityAdapter;
+    private ArrayAdapter<String> amountAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<String>();
-        readItems();
-        itemsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
-        setupListViewListener();
+        itemActivity = findViewById(R.id.toAddActivities);
+        itemAmount = findViewById(R.id.toAddAmounts);
+        addBtn = findViewById(R.id.addTo);
+        activitiesList = findViewById(R.id.activitiesListItem);
+        amountsList = findViewById(R.id.amountsListItem);
+
+        addBtn.setOnClickListener(this);
     }
 
-    private void setupListViewListener() {
-        lvItems.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapter,
-                                                   View item, int pos, long id) {
-                        // Remove the item within array at position
-                        items.remove(pos);
-                        // Refresh the adapter
-                        itemsAdapter.notifyDataSetChanged();
-                        // Return true consumes the long click event (marks it handled)
-                        writeItems();
-                        return true;
-                    }
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.addTo:
+                String activityEntered = itemActivity.getText().toString();
+                String amountEntered = itemAmount.getText().toString();
 
-                });
-    }
+                activityAdapter.add(activityEntered);
+                amountAdapter.add(amountEntered);
 
-    public void onAddItem(View v) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
-        etNewItem.setText("");
-        writeItems();
-    }
+                itemActivity.setText("");
+                itemAmount.setText("");
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<String>();
-        }
-    }
-
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
+                Toast.makeText(this, "Items Added", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }
