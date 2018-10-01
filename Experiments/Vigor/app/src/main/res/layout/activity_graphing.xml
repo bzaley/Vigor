@@ -120,12 +120,25 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Average"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.071"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/numEditText4" />
+
+    <Button
+        android:id="@+id/popButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Pull"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/averageBTN" />
 
     <TextView
         android:id="@+id/resultTextView"
@@ -139,10 +152,10 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintHorizontal_bias="0.453"
         app:layout_constraintStart_toEndOf="@+id/averageBTN"
         app:layout_constraintTop_toBottomOf="@+id/numEditText5"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintVertical_bias="0.025" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/avgPlot"
@@ -153,5 +166,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/jsonData"
+        android:layout_width="89dp"
+        android:layout_height="35dp"
+        android:text="JsonText"
+        tools:layout_editor_absoluteX="193dp"
+        tools:layout_editor_absoluteY="165dp" />
 
 </android.support.constraint.ConstraintLayout>
