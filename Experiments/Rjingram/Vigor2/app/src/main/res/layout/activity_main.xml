@@ -31,12 +31,12 @@
         android:text="Dummy" />
 
     <Button
-        android:id="@+id/btnDUMMY4"
+        android:id="@+id/btnVolley"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_above="@+id/buttonMessage"
         android:layout_centerHorizontal="true"
-        android:text="Dummy" />
+        android:text="Volley" />
 
     <ImageView
         android:id="@+id/imageView2"

@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button b1, b2;
+    Button b1, b2, b3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         b1 = findViewById(R.id.buttonMessage);
         b2 = findViewById(R.id.btnViewProfile);
-
+        b3 = findViewById(R.id.btnVolley);
 
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, ProfileHome.class);
+                startActivity(i);
+            }
+        });
+
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, VolleyActivity.class);
                 startActivity(i);
             }
         });
