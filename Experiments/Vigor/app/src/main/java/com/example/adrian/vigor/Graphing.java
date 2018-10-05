@@ -61,13 +61,13 @@ public class Graphing extends AppCompatActivity {
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              jsonParse("steps");
+              jsonParse("steps", "dummyuser");
             }
         });
     }
 
-    private void jsonParse(final String DataSet) {
-        String JsonURL = "https://api.myjson.com/bins/eowm0";
+    private void jsonParse(final String DataSet, String usrname) {
+        String JsonURL = "https://eaxample.iforgottheserverurl/var/temp/" + DataSet + "/" + usrname;
         final int data[] = new int[7];
         final String dates[] = new String[7];
 
@@ -76,10 +76,10 @@ public class Graphing extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray arr = response.getJSONArray("dailyData");
+                    JSONArray arr = response.getJSONArray(DataSet);
                     for (int i = 0; i < 7; i++){
                         JSONObject day = arr.getJSONObject(i);
-                        data[i] = day.getInt(DataSet);
+                        data[i] = day.getInt("" + i);
                         dates[i] = day.getString("date");
                         dates[i] = dates[i].substring(2,4)+'/'+dates[i].substring(4,6)+'/'+dates[i].substring(0,2);
                     }
