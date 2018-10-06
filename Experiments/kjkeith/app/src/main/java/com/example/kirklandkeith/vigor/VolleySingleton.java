@@ -42,12 +42,12 @@ public class VolleySingleton {
         return this.mImageLoader;
     }
 
-    public <T> void addtoRequestQueue(Request<T> req, String tag) {
-        if (tag == null) {
-            req.setTag(tag);
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        if (tag == null || tag.isEmpty()) {
+            req.setTag(TAG);
         }
         else {
-            req.setTag(TAG);
+            req.setTag(tag);
         }
         getRequestQueue().add(req);
     }

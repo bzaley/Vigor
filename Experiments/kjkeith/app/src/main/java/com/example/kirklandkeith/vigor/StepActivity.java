@@ -10,26 +10,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class StepActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
     private TextView textView;
     private stepMonitor simpleStepDetector;
     private SensorManager sensorManager;
+    private JsonRequest jsonRequest;
     private Sensor accel;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
+    private int userID;
+    private String TAG = StepActivity.class.getSimpleName();
 
     TextView TvSteps;
 
@@ -37,7 +41,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
-
 
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -47,30 +50,46 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
 
         RequestQueue requestQueue;
 
+        // Create instance of JSON request class
+        jsonRequest = new JsonRequest();
+
+        // TODO Determine user's ID
+        userID = 1;
+
         TvSteps = findViewById(R.id.tv_steps);
         Button BtnStart = findViewById(R.id.btn_start);
         Button BtnStop = findViewById(R.id.btn_stop);
 
-        String url = "proj309-ad-07.misc.iastate.edu";
-
-        StringRequest stringRequest = new StringRequest(url, new Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error while reading project server", Toast.LENGTH_SHORT).show();
-            }
-        });
+        String sendJsonURL = "proj309-ad-07.misc.iastate.edu";
+        String receiveJsonURL = "proj309-ad-07.misc.iastate.edu";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                numSteps = 0;
-                sensorManager.registerListener(StepActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                        receiveJsonURL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            numSteps = Integer.parseInt(response.getString("steps"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error:" + error.getMessage());
+                    }
+
+                });
+
+                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+                sensorManager.registerListener(StepActivity.this, accel,
+                        SensorManager.SENSOR_DELAY_FASTEST);
             }
         });
 
@@ -78,11 +97,31 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View arg0) {
                 sensorManager.unregisterListener(StepActivity.this);
+                JSONObject updateData = null;
+                try {
+                    updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, date);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                        sendJsonURL, updateData, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error:" + error.getMessage());
+                    }
+                });
+
+                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
             }
         });
     }
-
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

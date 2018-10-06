@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e5e56c8-a6b3-453e-bc08-2964b9e4d163" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/stepMonitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/stepMonitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/JsonRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/JsonRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/StepActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/StepActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/VolleySingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/kjkeith/app/src/main/java/com/example/kirklandkeith/vigor/VolleySingleton.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,11 +29,12 @@
     <session id="279800368">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.25" value="1" />
+          <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.47" value="2" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
