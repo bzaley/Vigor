@@ -6,17 +6,24 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
+import org.json.JSONObject;
+
+public class StepActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
     private TextView textView;
     private stepMonitor simpleStepDetector;
     private SensorManager sensorManager;
@@ -29,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_step);
 
 
         // Get an instance of the SensorManager
@@ -43,11 +50,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TvSteps = findViewById(R.id.tv_steps);
         Button BtnStart = findViewById(R.id.btn_start);
         Button BtnStop = findViewById(R.id.btn_stop);
-        Button Sync = findViewById(R.id.sync);
 
         String url = "proj309-ad-07.misc.iastate.edu";
 
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(url, new Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -64,25 +70,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View arg0) {
                 numSteps = 0;
-                sensorManager.registerListener(MainActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+                sensorManager.registerListener(StepActivity.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
             }
         });
 
         BtnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                sensorManager.unregisterListener(MainActivity.this);
+                sensorManager.unregisterListener(StepActivity.this);
             }
         });
-
-        Sync.setOnClickListener(
-                @Override
-                public void onClick() {
-
-                }
-
-        );
     }
+
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
