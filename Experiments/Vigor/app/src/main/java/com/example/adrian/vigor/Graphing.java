@@ -14,9 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -25,7 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.util.Date;
 
 public class Graphing extends AppCompatActivity {
     private Button nextButton;
@@ -34,7 +34,6 @@ public class Graphing extends AppCompatActivity {
     JSONObject data;
 
     RequestQueue requestQue;
-    Button populateButton;
 
 
     @Override
@@ -46,12 +45,24 @@ public class Graphing extends AppCompatActivity {
         results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double[] week = new double[8];
-                double resultNum = 0, temp = 0;
-
-                //Read in Values
                 int[] ids = new int[]{R.id.numEditText1, R.id.numEditText2, R.id.numEditText3, R.id.numEditText4, R.id.numEditText5, R.id.numEditText6, R.id.numEditText7};
-                Graph(ids);
+                //Read in Values
+                int j = 0;
+                for (int id : ids) {
+                    EditText t = (EditText) findViewById(id);
+                    if (t.getText().toString().equals("")) {
+                        ids[j] = 0;
+                    } else {
+                        ids[j] = Integer.parseInt(t.getText().toString());
+                    }
+                    j++;
+                }
+
+                Date dates[] = new Date[7];
+                for (int i = 0; i < 7; i++){
+                    dates[i] = new Date(18, 10, i);
+                }
+                Graph(ids, dates);
             }
         });
 
@@ -61,27 +72,27 @@ public class Graphing extends AppCompatActivity {
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              jsonParse("steps", "dummyuser");
+                jsonParse("steps", "dummyuser");
             }
         });
     }
 
-    private void jsonParse(final String DataSet, String usrname) {
-        String JsonURL = "https://eaxample.iforgottheserverurl/var/temp/" + DataSet + "/" + usrname;
+    private void jsonParse(final String DataSet, final String usrname) {
+        String JsonURL = "http://proj309-ad-07.misc.iastate.edu/" + usrname + "/" + DataSet + "/get";
         final int data[] = new int[7];
-        final String dates[] = new String[7];
+        final int datesRaw[] = new int[7];
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
+                new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray arr = response.getJSONArray(DataSet);
+                    JSONArray arr = response.getJSONArray(usrname);
                     for (int i = 0; i < 7; i++){
                         JSONObject day = arr.getJSONObject(i);
-                        data[i] = day.getInt("" + i);
-                        dates[i] = day.getString("date");
-                        dates[i] = dates[i].substring(2,4)+'/'+dates[i].substring(4,6)+'/'+dates[i].substring(0,2);
+                        datesRaw[i] = day.getInt("date");
+                        data[i] = day.getInt(DataSet);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -94,27 +105,26 @@ public class Graphing extends AppCompatActivity {
             }
         });
 
-        Graph(data);
+        Date dateList[] = new Date[7];
+
+        for (int i = 0; i < 7; i++){
+            int day = datesRaw[i] % 100;
+            int month = datesRaw[i] % 100;
+            int year = datesRaw[i] % 100;
+            dateList[i] = new Date(year, month, day);
+        }
+
+        Graph(data, dateList);
     }
 
-    public void Graph(int days[]){
-        double[] week = new double[8];
+    public void Graph(int days[], Date dates[]){
         double resultNum = 0, temp = 0;
 
-        //Read in Values
-        int j = 0;
-        for (int id : days) {
-            EditText t = (EditText) findViewById(id);
-            if (t.getText().toString().equals("")) {
-                week[j] = 0;
-            } else {
-                week[j] = Integer.parseInt(t.getText().toString());
-                resultNum += week[j];
-                if (week[j] > temp) {
-                    temp = week[j];
-                }
+        for (int i = 0; i < 7; i++){
+            if (days[i] > temp){
+                temp = days[i];
             }
-            j++;
+            resultNum += days[i];
         }
 
         //Print Average
@@ -126,20 +136,21 @@ public class Graphing extends AppCompatActivity {
         //Initialize Graph
         GraphView revGraph = (GraphView) findViewById(R.id.avgPlot);
         revGraph.removeAllSeries();
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumFractionDigits(0);
-        nf.setMinimumIntegerDigits(0);
-        revGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
+//        NumberFormat nf = NumberFormat.getInstance();
+//        nf.setMinimumFractionDigits(0);
+//        nf.setMinimumIntegerDigits(0);
+//
+//        revGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
 
         //Display Graph
         BarGraphSeries<DataPoint> weekRev = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(1, week[0]),
-                new DataPoint(2, week[1]),
-                new DataPoint(3, week[2]),
-                new DataPoint(4, week[3]),
-                new DataPoint(5, week[4]),
-                new DataPoint(6, week[5]),
-                new DataPoint(7, week[6])
+                new DataPoint(dates[0], days[0]),
+                new DataPoint(dates[1], days[1]),
+                new DataPoint(dates[2], days[2]),
+                new DataPoint(dates[3], days[3]),
+                new DataPoint(dates[4], days[4]),
+                new DataPoint(dates[5], days[5]),
+                new DataPoint(dates[6], days[6])
         });
         revGraph.addSeries(weekRev);
 
@@ -148,7 +159,21 @@ public class Graphing extends AppCompatActivity {
         weekRev.setValuesOnTopColor(Color.BLACK);
         Viewport view1 = revGraph.getViewport();
         view1.setMinY(0);
-//                view1.setMaxY();
+        weekRev.setSpacing(5);
 
+
+        // set date label formatter
+        revGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(Graphing.this));
+        revGraph.getGridLabelRenderer().setNumHorizontalLabels(1); // only 4 because of the space
+        revGraph.getGridLabelRenderer().setNumVerticalLabels(5);
+
+// set manual x bounds to have nice steps
+        revGraph.getViewport().setMinX(dates[0].getTime() - 50000000);
+        revGraph.getViewport().setMaxX(dates[6].getTime() + 50000000);
+        revGraph.getViewport().setXAxisBoundsManual(true);
+
+// as we use dates as labels, the human rounding to nice readable numbers
+// is not necessary
+        revGraph.getGridLabelRenderer().setHumanRounding(false);
     }
 }
