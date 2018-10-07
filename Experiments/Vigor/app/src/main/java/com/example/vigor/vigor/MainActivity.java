@@ -28,5 +28,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TestActivity.class));
             }
         });
+
+        Button stepButton = (Button) findViewById(R.id.pedometer);
+        stepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, StepActivity.class));
+            }
+        });
     }
 }

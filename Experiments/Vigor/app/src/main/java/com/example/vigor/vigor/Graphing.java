@@ -105,6 +105,9 @@ public class Graphing extends AppCompatActivity {
             }
         });
 
+
+        VolleySingleton.getInstance().addToRequestQueue(request, "json_req");
+
         Date dateList[] = new Date[7];
 
         for (int i = 0; i < 7; i++){

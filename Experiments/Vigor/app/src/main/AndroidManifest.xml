@@ -3,7 +3,10 @@
     package="com.example.vigor.vigor">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
+        android:name="com.example.vigor.vigor.VolleySingleton"
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,6 +22,7 @@
         </activity>
         <activity android:name="com.example.vigor.vigor.TestActivity" />
         <activity android:name="com.example.vigor.vigor.Graphing"></activity>
+        <activity android:name="com.example.vigor.vigor.StepActivity"></activity>
     </application>
 
 </manifest>
