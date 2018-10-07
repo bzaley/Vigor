@@ -8,7 +8,7 @@
     android:maxWidth="1000dp"
     android:minHeight="1000dp"
     android:minWidth="1000dp"
-    tools:context=".MainActivity">
+    tools:context="com.example.vigor.vigor.MainActivity">
 
     <EditText
         android:id="@+id/numEditText1"
