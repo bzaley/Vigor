@@ -1,8 +1,12 @@
 package com.project.user;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity //JPA knows to create table of this type
 public class User {
 
-	
+	@Id //Tells JPA what the primary key is
 	private int user_id;
 	private String user_email;
 	private String firstname;
