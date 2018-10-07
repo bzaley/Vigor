@@ -1,4 +1,4 @@
-package com.example.kirklandkeith.vigor;
+package com.example.vigor.vigor;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.kirklandkeith.vigor", appContext.getPackageName());
+        assertEquals("com.example.vigor.vigor", appContext.getPackageName());
     }
 }
