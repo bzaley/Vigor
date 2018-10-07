@@ -1,4 +1,4 @@
-package com.example.kirklandkeith.vigor.utils;
+package com.example.vigor.vigor.utils;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;

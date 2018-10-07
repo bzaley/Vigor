@@ -1,4 +1,4 @@
-package com.example.kirklandkeith.vigor;
+package com.example.vigor.vigor;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -60,10 +60,10 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         Button BtnStart = findViewById(R.id.btn_start);
         Button BtnStop = findViewById(R.id.btn_stop);
 
-        String sendJsonURL = "proj309-ad-07.misc.iastate.edu";
-        String receiveJsonURL = "proj309-ad-07.misc.iastate.edu";
+        final String sendJsonURL = "proj309-ad-07.misc.iastate.edu";
+        final String receiveJsonURL = "proj309-ad-07.misc.iastate.edu";
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
+        final int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
 

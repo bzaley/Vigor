@@ -1,4 +1,4 @@
-package com.example.kirklandkeith.vigor;
+package com.example.vigor.vigor;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.example.kirklandkeith.vigor;
+package com.example.vigor.vigor;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.example.kirklandkeith.vigor.utils.LruBitmapCache;
+import com.example.vigor.vigor.utils.LruBitmapCache;
 
 public class VolleySingleton {
     private static VolleySingleton mInstance;
