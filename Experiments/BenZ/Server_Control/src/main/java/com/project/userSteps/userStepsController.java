@@ -14,14 +14,25 @@ public class userStepsController {
 	@Autowired
 	private userStepsService stepsService;
 
-	@RequestMapping("/{user_id}/{date}")
-	public userSteps getStepsByDate(@PathVariable int user_id, @PathVariable int date) {
-		return stepsService.getToday(user_id, date);
+	@RequestMapping("/{userId}/{date}")
+	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable int date) {
+		return stepsService.getToday(userId, date);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/add")
 	public void addStepsToUser(@RequestBody userSteps user) {
-		stepsService.updateStepEntry(user);
+
+		stepsService.addNewEntry(user);
+
 	}
+	@RequestMapping(method = RequestMethod.POST, value = "/update")
+	public void updateStepsToUser(@RequestBody userSteps user) {
+		int date = user.getDate();
+		int userId = user.getUserId();
+		int steps = user.getSteps();
+		stepsService.updateStepEntry(userId, date, steps);
+
+	}
+
 
 }

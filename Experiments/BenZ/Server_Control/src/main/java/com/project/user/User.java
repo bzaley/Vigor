@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class User {
 
 	@Id //Tells JPA what the primary key is
-	private int user_id;
+	private int userId;
 	private String user_email;
 	private String firstname;
 	private String lastname;
@@ -18,9 +18,9 @@ public class User {
 		
 	}
 	
-	public User(int user_id, String user_email, String firstname, String lastname, String password, String role) {
+	public User(int userId, String user_email, String firstname, String lastname, String password, String role) {
 		super();
-		this.user_id = user_id;
+		this.userId = userId;
 		this.user_email = user_email;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -30,11 +30,11 @@ public class User {
 	
 	
 	
-	public int getUser_id() {
-		return user_id;
+	public int getuserId() {
+		return userId;
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setuserId(int userId) {
+		this.userId = userId;
 	}
 	public String getUser_email() {
 		return user_email;

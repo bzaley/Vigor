@@ -1,38 +1,40 @@
 package com.project.userSteps;
 
-import java.util.ArrayList;
-import java.util.List;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class userStepsService {
 	
+	@Autowired
 	private userStepsRepository stepsRepo;
 	
-	public List<userSteps> getPastDays(int user_id, int numDays){
+	/*public List<userSteps> getPastDays(int userId, int numDays){
 		List<userSteps> pastSteps = new ArrayList();
 		//TODO
 		return pastSteps;
-	}
+	}*/
 	
-	public userSteps getToday(int user_id, int date) {
-		this.checkForEntry(user_id, date);
-		return stepsRepo.findByDate(user_id, date);
+	public userSteps getToday(int userId, int date) {
+		this.checkForEntry(userId, date);
+		return stepsRepo.findByUserIdAndDate(userId, date);
 		
 	}
 	
-	public void updateStepEntry(userSteps updated) {
-		stepsRepo.save(updated);
+	public void updateStepEntry(int userId, int date, int steps) {
+		stepsRepo.updateSteps(userId, date, steps);
+		
 	}
 	
 	public void addNewEntry(userSteps newEntry) {
 		stepsRepo.save(newEntry);
 	}
 	
-	public void checkForEntry(int user_id, int date) {
-		if(!stepsRepo.existsByDate(user_id, date)) {
-			userSteps u = new userSteps(user_id, date, 0);
+	public void checkForEntry(int userId, int date) {
+		if(!stepsRepo.existsByUserIdAndDate(userId, date)) {
+			userSteps u = new userSteps(userId, date, 0);
 			this.addNewEntry(u);
 		}
 	}

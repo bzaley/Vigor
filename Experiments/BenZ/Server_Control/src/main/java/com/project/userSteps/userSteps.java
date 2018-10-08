@@ -1,32 +1,39 @@
 package com.project.userSteps;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class userSteps {
 	
 	@Id
-	private int user_id;
+	@GeneratedValue //auto increments the value when a new row is created
+	@Column(columnDefinition ="serial")
+	private int entry; //Simple counting variable to allow for multiple instances of a users step entries.
+	private int userId;
 	private int date;
 	private int steps;
 	
 	public userSteps() {
 	}
 	
-	public userSteps(int user_id, int date, int steps) {
+	public userSteps(int userId, int date, int steps) {
 		super();
-		this.user_id = user_id;
+		
+		this.userId = userId;
 		this.date = date;
 		this.steps = steps;
 	}
 
-	public int getUser_id() {
-		return user_id;
+
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setUser_id(int userId) {
+		this.userId = userId;
 	}
 
 	public int getDate() {

@@ -28,9 +28,9 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
-	@RequestMapping("/{user_id}") //Gets user based on integer user_id passed into address 
-	public User getUser(@PathVariable int user_id) {
-		return userService.getUser(user_id);
+	@RequestMapping("/{userId}") //Gets user based on integer userId passed into address 
+	public User getUser(@PathVariable int userId) {
+		return userService.getUser(userId);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/add") //Setting the RequestMEthod to POST will allow adding new values
