@@ -20,7 +20,6 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +28,7 @@ import java.util.Date;
 
 public class Graphing extends AppCompatActivity {
     private Button nextButton;
+    private int stepsTemp = 0;
 
     TextView jsonresults;
     JSONObject data;
@@ -77,36 +77,37 @@ public class Graphing extends AppCompatActivity {
         });
     }
 
-    private void jsonParse(final String DataSet, final String usrname) {
-        String JsonURL = "http://proj309-ad-07.misc.iastate.edu/" + usrname + "/" + DataSet + "/get";
-        final int data[] = new int[7];
-        final int datesRaw[] = new int[7];
+    private void jsonParse(final String DataSet, final String usrid) {
 
+        int data[] = new int[7];
+        int datesRaw[] = new int[7];
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
-                new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray arr = response.getJSONArray(usrname);
-                    for (int i = 0; i < 7; i++){
-                        JSONObject day = arr.getJSONObject(i);
-                        datesRaw[i] = day.getInt("date");
-                        data[i] = day.getInt(DataSet);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        for (int i = 0; i < 7; i++){
+            int date = 181007 - i;
+            String dateStr = date + "";
+            String JsonURL = "http://proj309-ad-07.misc.iastate.edu/" + DataSet + "/" + usrid + "/" + dateStr;
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                stepsTemp = response.getInt("date");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-
-
-        VolleySingleton.getInstance().addToRequestQueue(request, "json_req");
+            });
+            VolleySingleton.getInstance().addToRequestQueue(request, "json_req");
+            data[i] = stepsTemp;
+            datesRaw[i] = date;
+        }
 
         Date dateList[] = new Date[7];
 
