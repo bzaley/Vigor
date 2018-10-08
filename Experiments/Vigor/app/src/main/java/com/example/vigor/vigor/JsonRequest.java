@@ -9,7 +9,7 @@ public class JsonRequest {
 
     private String tag_cancel_json = "json_req";
 
-    public JSONObject makeStepsJsonObject(int userID, int steps, int date) throws JSONException{
+    public JSONObject makeStepsJsonObject(int userID, int steps, String date) throws JSONException{
        JSONObject objToSend = new JSONObject();
        try {
            objToSend.put("user id", userID);

@@ -59,11 +59,12 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         TvSteps = findViewById(R.id.tv_steps);
         Button BtnStart = findViewById(R.id.btn_start);
         Button BtnStop = findViewById(R.id.btn_stop);
-
-        final String sendJsonURL = "proj309-ad-07.misc.iastate.edu";
-        final String receiveJsonURL = "proj309-ad-07.misc.iastate.edu";
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        final int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
+        final String dateS = sdf.format(Calendar.getInstance().getTime());
+        // final int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
+        final String serverURL = "proj309-ad-07.misc.iastate.edu";
+        final String sendJsonURL = serverURL + "/steps/update";
+        final String receiveJsonURL = serverURL + "/steps/" + userID + dateS;
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
 
@@ -99,7 +100,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 sensorManager.unregisterListener(StepActivity.this);
                 JSONObject updateData = null;
                 try {
-                    updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, date);
+                    updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, dateS);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
