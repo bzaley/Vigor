@@ -12,8 +12,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -31,9 +31,12 @@ import java.util.Date;
 public class Graphing extends AppCompatActivity {
     private Button nextButton;
     private int stepsTemp = 0;
+    private int data[] = new int[7];
+
+    private String TAG = Graphing.class.getSimpleName();
 
     TextView jsonresults;
-    JSONObject data;
+//    JSONObject data;
 
     RequestQueue requestQue;
 
@@ -79,7 +82,6 @@ public class Graphing extends AppCompatActivity {
             }
         });
 
-        requestQue = Volley.newRequestQueue(this);
         jsonresults = (TextView) findViewById(R.id.jsonData);
         Button populate = (Button) findViewById(R.id.popButton);
         populate.setOnClickListener(new View.OnClickListener() {
@@ -91,43 +93,44 @@ public class Graphing extends AppCompatActivity {
     }
 
     private void jsonParse(final String DataSet, final int usrid, final String date) {
-
-        int data[] = new int[7];
         int datesRaw[] = new int[7];
 
         for (int i = 0; i < 7; i++){
             int dateNew = Integer.parseInt(date) - i;
-            String dateStr = date + "";
             String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/" + DataSet + "/" + usrid + "/" + dateNew;
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                stepsTemp = response.getInt("steps");
+            datesRaw[i] = dateNew;
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                    JsonURL, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        stepsTemp = response.getInt("steps");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
+                    VolleyLog.d(TAG, "Error:" + error.getMessage());
                 }
+
             });
-            VolleySingleton.getInstance().addToRequestQueue(request, "json_req");
+            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
             data[i] = stepsTemp;
-            datesRaw[i] = dateNew;
         }
 
         Date dateList[] = new Date[7];
 
         for (int i = 0; i < 7; i++){
             int day = datesRaw[i] % 100;
+            datesRaw[i] = datesRaw[i] / 100;
             int month = datesRaw[i] % 100;
+            datesRaw[i] = datesRaw[i] / 100;
             int year = datesRaw[i] % 100;
+            datesRaw[i] = datesRaw[i] / 100;
             dateList[i] = new Date(year, month, day);
         }
 
@@ -181,7 +184,7 @@ public class Graphing extends AppCompatActivity {
 
         // set date label formatter
         revGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(Graphing.this));
-        revGraph.getGridLabelRenderer().setNumHorizontalLabels(1); // only 4 because of the space
+        revGraph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 4 because of the space
         revGraph.getGridLabelRenderer().setNumVerticalLabels(5);
 
 // set manual x bounds to have nice steps
