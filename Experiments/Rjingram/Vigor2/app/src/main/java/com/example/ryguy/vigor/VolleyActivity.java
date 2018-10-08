@@ -32,6 +32,10 @@ public class VolleyActivity extends Activity implements OnClickListener {
     private TextView msgResponse;
     private ProgressDialog pDialog;
 
+    final String URL = "https://proj309-ad-07.misc.iastate.edu/POST_Test.json";
+
+
+
     // These tags will be used to cancel the requests
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
@@ -44,6 +48,9 @@ public class VolleyActivity extends Activity implements OnClickListener {
         btnJsonArray = (Button) findViewById(R.id.btnJsonArray);
         msgResponse = (TextView) findViewById(R.id.msgResponse);
 
+
+        // ProgressDialog is the "pop-up" that shows progress
+        // In this case the loading screen that occurs when loading the text from a file
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
@@ -66,11 +73,17 @@ public class VolleyActivity extends Activity implements OnClickListener {
      * Making json object request
      * */
     private void makeJsonObjReq() {
-        showProgressDialog();
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
+        showProgressDialog();       // Loading Dialog pops up
+        // JsonObjectRequest is created
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
                 Const.URL_JSON_OBJECT, null,
                 new Response.Listener<JSONObject>() {
 
+                    /**
+                     * Logs the response (file) in debug mode.
+                     * Shows the response in the msgResponse TextView.
+                     * @param response
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
@@ -85,6 +98,7 @@ public class VolleyActivity extends Activity implements OnClickListener {
                 hideProgressDialog();
             }
         }) {
+
 
             /**
              * Passing some request headers
