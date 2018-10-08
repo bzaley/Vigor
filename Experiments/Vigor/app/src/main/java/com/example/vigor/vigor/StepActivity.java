@@ -48,8 +48,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         simpleStepDetector = new stepMonitor();
         simpleStepDetector.registerListener(this);
 
-        RequestQueue requestQueue;
-
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();
 
@@ -62,17 +60,16 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         final String dateS = sdf.format(Calendar.getInstance().getTime());
         // final int date = Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
-        final String serverURL = "proj309-ad-07.misc.iastate.edu";
+        final String serverURL = "http://proj309-ad-07.misc.iastate.edu:8080";
         final String sendJsonURL = serverURL + "/steps/update";
-        final String receiveJson = "https://api.myjson.com/bins/1a3v70";
-        // final String receiveJsonURL = serverURL + "/steps/" + userID + dateS;
+        final String receiveJsonURL = serverURL + "/steps/" + userID + "/" + dateS;
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
-                        receiveJson, null, new Response.Listener<JSONObject>() {
+                        receiveJsonURL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {

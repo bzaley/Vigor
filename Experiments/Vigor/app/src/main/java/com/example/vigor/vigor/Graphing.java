@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Graphing extends AppCompatActivity {
@@ -40,6 +42,9 @@ public class Graphing extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphing);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        final String dateS = sdf.format(Calendar.getInstance().getTime());
 
         Button results = (Button) findViewById(R.id.averageBTN);
         results.setOnClickListener(new View.OnClickListener() {
@@ -60,8 +65,16 @@ public class Graphing extends AppCompatActivity {
 
                 Date dates[] = new Date[7];
                 for (int i = 0; i < 7; i++){
-                    dates[i] = new Date(18, 10, i);
+                    dates[i] = new Date(18, 10, 0);
                 }
+
+                int datesRaw[] = new int[7];
+                int dateNew = 0;
+                for (int i = 0; i < 7; i++) {
+                    dateNew = Integer.parseInt(dateS) - i;
+                    datesRaw[i] = dateNew;
+                }
+
                 Graph(ids, dates);
             }
         });
@@ -72,27 +85,27 @@ public class Graphing extends AppCompatActivity {
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jsonParse("steps", "dummyuser");
+                jsonParse("steps", 1, dateS);
             }
         });
     }
 
-    private void jsonParse(final String DataSet, final String usrid) {
+    private void jsonParse(final String DataSet, final int usrid, final String date) {
 
         int data[] = new int[7];
         int datesRaw[] = new int[7];
 
         for (int i = 0; i < 7; i++){
-            int date = 181007 - i;
+            int dateNew = Integer.parseInt(date) - i;
             String dateStr = date + "";
-            String JsonURL = "http://proj309-ad-07.misc.iastate.edu/" + DataSet + "/" + usrid + "/" + dateStr;
+            String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/" + DataSet + "/" + usrid + "/" + dateNew;
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                stepsTemp = response.getInt("date");
+                                stepsTemp = response.getInt("steps");
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -106,7 +119,7 @@ public class Graphing extends AppCompatActivity {
             });
             VolleySingleton.getInstance().addToRequestQueue(request, "json_req");
             data[i] = stepsTemp;
-            datesRaw[i] = date;
+            datesRaw[i] = dateNew;
         }
 
         Date dateList[] = new Date[7];
@@ -174,6 +187,7 @@ public class Graphing extends AppCompatActivity {
 // set manual x bounds to have nice steps
         revGraph.getViewport().setMinX(dates[0].getTime() - 50000000);
         revGraph.getViewport().setMaxX(dates[6].getTime() + 50000000);
+
         revGraph.getViewport().setXAxisBoundsManual(true);
 
 // as we use dates as labels, the human rounding to nice readable numbers
