@@ -12,7 +12,7 @@ public class VolleySingleton extends android.app.Application{
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
+    //private static Context mCtx;
     public static final String TAG = VolleySingleton.class.getSimpleName();
 
     @Override
@@ -24,7 +24,7 @@ public class VolleySingleton extends android.app.Application{
     // private VolleySingleton(Context context) {
     //     mCtx = context;
     //     mRequestQueue = getRequestQueue();
-    // }
+    //}
 
     public static synchronized VolleySingleton getInstance() {
         return mInstance;
@@ -34,7 +34,7 @@ public class VolleySingleton extends android.app.Application{
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
         return mRequestQueue;
     }
