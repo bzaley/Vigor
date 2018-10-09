@@ -3,9 +3,7 @@ package com.example.vigor.vigor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +17,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -31,14 +28,14 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 
 public class Graphing extends AppCompatActivity {
     private Button nextButton;
     private int stepsTemp;
     private static int data[] = new int[7];
     public static ArrayList<Integer> dataArrayList = new ArrayList<>();
-    int j = 0;
+    public static int j = 0;
     private String TAG = Graphing.class.getSimpleName();
 
     TextView jsonresults;
@@ -54,6 +51,7 @@ public class Graphing extends AppCompatActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         final String dateS = sdf.format(Calendar.getInstance().getTime());
+        final String dateString = dateS;
 
         jsonresults = (TextView) findViewById(R.id.jsonData);
 
@@ -62,7 +60,6 @@ public class Graphing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int[] ids = new int[]{R.id.numEditText1, R.id.numEditText2, R.id.numEditText3, R.id.numEditText4, R.id.numEditText5, R.id.numEditText6, R.id.numEditText7};
-                Date dateList[] = new Date[7];
                 int dateNew;
                 //Read in Values
                 int j = 0;
@@ -73,69 +70,50 @@ public class Graphing extends AppCompatActivity {
                     } else {
                         ids[j] = Integer.parseInt(t.getText().toString());
                     }
-
-                    dateNew = Integer.parseInt(dateS) - j;
-                    int day = dateNew % 100;
-                    dateNew = dateNew / 100;
-                    int month = (dateNew % 100) - 1;
-                    dateNew = dateNew / 100;
-                    int year = dateNew % 100;
-                    dateList[j] = new Date(year + 100, month, day);
-
-                    j++;
                 }
-
-                Graph(ids, dateList);
+                Graph(ids, dateString);
             }
         });
-
 
         Button populate = (Button) findViewById(R.id.popButton);
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date dateList[] = new Date[7];
+                j = 0;
                 for (int i=0; i<7; i++){
+                    //initializing variables
                     int dateNew = Integer.parseInt(dateS) - i;
-                    String JsonURL = "proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
-                            JsonURL, null, new Response.Listener<JSONObject>() {
+                    String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
+                    //Making initial request
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, JsonURL, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
                                 stepsTemp = response.getInt("steps");
-                                jsonresults.setText("" + stepsTemp);
-                                data[j] = response.getInt("steps");
+//                                jsonresults.setText("" + stepsTemp);
+                                Graphing.data[j] = stepsTemp;
                                 j++;
                             } catch (JSONException e) {
-                                System.out.println("failed in try/catch loop ln 103");
+                                jsonresults.setText("failed in try/catch loop ln 120");
                                 e.printStackTrace();
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            System.out.println("failed in onErrorResponse ln 112");
+                            jsonresults.setText("failed in onErrorResponse ln 127");
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req0");
-
-                    int day = dateNew % 100;
-                    dateNew = dateNew / 100;
-                    int month = (dateNew % 100) - 1;
-                    dateNew = dateNew / 100;
-                    int year = dateNew % 100;
-                    dateNew = dateNew / 100;
-                    dateList[i] = new Date(year + 100, month, day);
                 }
-
-                Graph(data, dateList);
+                //Graph data
+                Graph(Graphing.data, dateString);
             }
         });
     }
 
-    public void Graph(int days[], Date dates[]){
+    public void Graph(int days[], String dateString){
         double resultNum = 0, temp = 0;
 
         for (int i = 0; i < 7; i++){
