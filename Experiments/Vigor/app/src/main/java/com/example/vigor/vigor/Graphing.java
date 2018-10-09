@@ -3,7 +3,9 @@ package com.example.vigor.vigor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -24,15 +27,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Graphing extends AppCompatActivity {
     private Button nextButton;
-    private int stepsTemp = 0;
-    private int data[] = new int[7];
-
+    private int stepsTemp;
+    private static int data[] = new int[7];
+    public static ArrayList<Integer> dataArrayList = new ArrayList<>();
+    int j = 0;
     private String TAG = Graphing.class.getSimpleName();
 
     TextView jsonresults;
@@ -49,11 +55,15 @@ public class Graphing extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         final String dateS = sdf.format(Calendar.getInstance().getTime());
 
+        jsonresults = (TextView) findViewById(R.id.jsonData);
+
         Button results = (Button) findViewById(R.id.averageBTN);
         results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int[] ids = new int[]{R.id.numEditText1, R.id.numEditText2, R.id.numEditText3, R.id.numEditText4, R.id.numEditText5, R.id.numEditText6, R.id.numEditText7};
+                Date dateList[] = new Date[7];
+                int dateNew;
                 //Read in Values
                 int j = 0;
                 for (int id : ids) {
@@ -63,78 +73,66 @@ public class Graphing extends AppCompatActivity {
                     } else {
                         ids[j] = Integer.parseInt(t.getText().toString());
                     }
+
+                    dateNew = Integer.parseInt(dateS) - j;
+                    int day = dateNew % 100;
+                    dateNew = dateNew / 100;
+                    int month = (dateNew % 100) - 1;
+                    dateNew = dateNew / 100;
+                    int year = dateNew % 100;
+                    dateList[j] = new Date(year + 100, month, day);
+
                     j++;
                 }
 
-                Date dates[] = new Date[7];
-                for (int i = 0; i < 7; i++){
-                    dates[i] = new Date(18, 10, 0);
-                }
-
-                int datesRaw[] = new int[7];
-                int dateNew = 0;
-                for (int i = 0; i < 7; i++) {
-                    dateNew = Integer.parseInt(dateS) - i;
-                    datesRaw[i] = dateNew;
-                }
-
-                Graph(ids, dates);
+                Graph(ids, dateList);
             }
         });
 
-        jsonresults = (TextView) findViewById(R.id.jsonData);
+
         Button populate = (Button) findViewById(R.id.popButton);
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jsonParse("steps", 1, dateS);
+                Date dateList[] = new Date[7];
+                for (int i=0; i<7; i++){
+                    int dateNew = Integer.parseInt(dateS) - i;
+                    String JsonURL = "proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                            JsonURL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                stepsTemp = response.getInt("steps");
+                                jsonresults.setText("" + stepsTemp);
+                                data[j] = response.getInt("steps");
+                                j++;
+                            } catch (JSONException e) {
+                                System.out.println("failed in try/catch loop ln 103");
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("failed in onErrorResponse ln 112");
+                            VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        }
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req0");
+
+                    int day = dateNew % 100;
+                    dateNew = dateNew / 100;
+                    int month = (dateNew % 100) - 1;
+                    dateNew = dateNew / 100;
+                    int year = dateNew % 100;
+                    dateNew = dateNew / 100;
+                    dateList[i] = new Date(year + 100, month, day);
+                }
+
+                Graph(data, dateList);
             }
         });
-    }
-
-    private void jsonParse(final String DataSet, final int usrid, final String date) {
-        int datesRaw[] = new int[7];
-
-        for (int i = 0; i < 7; i++){
-            int dateNew = Integer.parseInt(date) - i;
-            String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/" + DataSet + "/" + usrid + "/" + dateNew;
-
-            datesRaw[i] = dateNew;
-
-            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
-                    JsonURL, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        stepsTemp = response.getInt("steps");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error:" + error.getMessage());
-                }
-
-            });
-            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
-            data[i] = stepsTemp;
-        }
-
-        Date dateList[] = new Date[7];
-
-        for (int i = 0; i < 7; i++){
-            int day = datesRaw[i] % 100;
-            datesRaw[i] = datesRaw[i] / 100;
-            int month = datesRaw[i] % 100;
-            datesRaw[i] = datesRaw[i] / 100;
-            int year = datesRaw[i] % 100;
-            datesRaw[i] = datesRaw[i] / 100;
-            dateList[i] = new Date(year, month, day);
-        }
-
-        Graph(data, dateList);
     }
 
     public void Graph(int days[], Date dates[]){
@@ -156,21 +154,21 @@ public class Graphing extends AppCompatActivity {
         //Initialize Graph
         GraphView revGraph = (GraphView) findViewById(R.id.avgPlot);
         revGraph.removeAllSeries();
-//        NumberFormat nf = NumberFormat.getInstance();
-//        nf.setMinimumFractionDigits(0);
-//        nf.setMinimumIntegerDigits(0);
-//
-//        revGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumFractionDigits(0);
+        nf.setMinimumIntegerDigits(0);
+
+        revGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
 
         //Display Graph
         BarGraphSeries<DataPoint> weekRev = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(dates[0], days[0]),
-                new DataPoint(dates[1], days[1]),
-                new DataPoint(dates[2], days[2]),
-                new DataPoint(dates[3], days[3]),
-                new DataPoint(dates[4], days[4]),
-                new DataPoint(dates[5], days[5]),
-                new DataPoint(dates[6], days[6])
+                new DataPoint(1, days[0]),
+                new DataPoint(2, days[1]),
+                new DataPoint(3, days[2]),
+                new DataPoint(4, days[3]),
+                new DataPoint(5, days[4]),
+                new DataPoint(6, days[5]),
+                new DataPoint(7, days[6])
         });
         revGraph.addSeries(weekRev);
 
@@ -182,19 +180,19 @@ public class Graphing extends AppCompatActivity {
         weekRev.setSpacing(5);
 
 
-        // set date label formatter
-        revGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(Graphing.this));
-        revGraph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 4 because of the space
+//        // set date label formatter
+//        revGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(Graphing.this));
+        revGraph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
         revGraph.getGridLabelRenderer().setNumVerticalLabels(5);
-
-// set manual x bounds to have nice steps
-        revGraph.getViewport().setMinX(dates[0].getTime() - 50000000);
-        revGraph.getViewport().setMaxX(dates[6].getTime() + 50000000);
+//
+//// set manual x bounds to have nice steps
+        revGraph.getViewport().setMinX(0.5);
+        revGraph.getViewport().setMaxX(7.5);
 
         revGraph.getViewport().setXAxisBoundsManual(true);
-
-// as we use dates as labels, the human rounding to nice readable numbers
-// is not necessary
-        revGraph.getGridLabelRenderer().setHumanRounding(false);
+//
+//// as we use dates as labels, the human rounding to nice readable numbers
+//// is not necessary
+//        revGraph.getGridLabelRenderer().setHumanRounding(false);
     }
 }
