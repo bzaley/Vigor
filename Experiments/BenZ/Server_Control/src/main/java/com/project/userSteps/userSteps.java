@@ -11,7 +11,7 @@ public class userSteps {
 	@Id
 	@GeneratedValue //auto increments the value when a new row is created
 	@Column(columnDefinition ="serial")
-	private int entry; //Simple counting variable to allow for multiple instances of a users step entries.
+	private int entry; //Simple counting variable to allow for multiple instances of a users step entries. Not part of userSteps object.
 	private int userId;
 	private int date;
 	private int steps;
