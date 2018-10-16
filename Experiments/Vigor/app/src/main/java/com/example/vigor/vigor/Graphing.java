@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
@@ -28,15 +29,17 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class Graphing extends AppCompatActivity {
-    private Button nextButton;
     private int stepsTemp;
+    private int i = 0;
     private static int data[] = new int[7];
-    public static ArrayList<Integer> dataArrayList = new ArrayList<>();
     public static int j = 0;
-    private String TAG = Graphing.class.getSimpleName();
+//    private String TAG = Graphing.class.getSimpleName();
 
     TextView jsonresults;
 //    JSONObject data;
@@ -75,37 +78,32 @@ public class Graphing extends AppCompatActivity {
             }
         });
 
+        /*
+        put request into new method and make boolean that cheecks if thing recieved is correct.
+         */
         Button populate = (Button) findViewById(R.id.popButton);
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                j = 0;
-                for (int i=0; i<7; i++){
+                for (i=0; i<7; i++){
                     //initializing variables
                     int dateNew = Integer.parseInt(dateS) - i;
                     String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
                     //Making initial request
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, JsonURL, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                stepsTemp = response.getInt("steps");
-//                                jsonresults.setText("" + stepsTemp);
-                                Graphing.data[j] = stepsTemp;
-                                j++;
-                            } catch (JSONException e) {
-                                jsonresults.setText("failed in try/catch loop ln 120");
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            jsonresults.setText("failed in onErrorResponse ln 127");
-                            VolleyLog.d(TAG, "Error:" + error.getMessage());
-                        }
-                    });
+                    RequestFuture<JSONObject> future = RequestFuture.newFuture();
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonURL, null, future, future);
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req0");
+                    try {
+                        JSONObject response = future.get(10, TimeUnit.SECONDS);
+                        stepsTemp = response.getInt("steps");
+                        data[i] = stepsTemp;
+
+                    } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 //Graph data
                 Graph(Graphing.data, dateString);
