@@ -12,12 +12,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class userExerciseController {
 
 	@Autowired
-	private userExerciseService userExerciseService;
+	private userExerciseService exerciseService;
 	
 	@RequestMapping(method=RequestMethod.POST, value="/addExercise")
 	public void addExercise(@RequestBody userExercise userExercise) {
-		userExerciseService.addExercise(userExercise);
+		exerciseService.addExercise(userExercise);
 	}
 	
-
+	@RequestMapping(method=RequestMethod.DELETE, value="/removeExercise")
+	public void removeExercise(@RequestBody userExercise userExercise) {
+		exerciseService.removeExercise(userExercise);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/update")
+	public void updateExercise(@RequestBody userExercise userExercise) {
+		exerciseService.updateExercise(userExercise);
+	}
+	
+	
+	
 }

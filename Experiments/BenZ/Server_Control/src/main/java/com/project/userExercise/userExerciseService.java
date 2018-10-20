@@ -3,12 +3,13 @@ package com.project.userExercise;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class userExerciseService {
 
 	@Autowired
-	private userExerciseRepository userExerciseRepository;
+	private userExerciseRepository exerciseRepo;
 	
 	/*
 	 * Get everything from exercises
@@ -24,8 +25,19 @@ public class userExerciseService {
 	}*/
 	
 	public void addExercise(userExercise userExercise) {
-		userExerciseRepository.save(userExercise);
+		exerciseRepo.save(userExercise);
 	}
+
+	public void removeExercise(userExercise userExercise) {
+		exerciseRepo.delete(userExercise);
+	}
+	
+	public void updateExercise(userExercise userExercise){
+		exerciseRepo.save(userExercise);
+	}
+	/*public userExercise getExercises(int date, int userId) {
+		userExerciseRepository.getUserExercises(date, userId);
+	}*/
 
 	
 

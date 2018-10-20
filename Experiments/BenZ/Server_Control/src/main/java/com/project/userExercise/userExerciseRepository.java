@@ -1,6 +1,11 @@
 package com.project.userExercise;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface userExerciseRepository extends CrudRepository<userExercise, Integer> {
 
@@ -10,5 +15,8 @@ public interface userExerciseRepository extends CrudRepository<userExercise, Int
 	// deleteExercise(int date, int user)
 	// updateExercise(int date, int user)
 	
-	
+	/*
+	@Query(value = "SELECT * FROM userExercise WHERE(userId = :userId AND date = :date)", nativeQuery = true)
+	public List<userExercise> getUserExercises(@Param("userId")int userId, @Param("date")int date);
+	*/
 }

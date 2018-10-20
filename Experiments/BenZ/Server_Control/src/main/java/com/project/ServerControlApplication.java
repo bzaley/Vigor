@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@EntityScan({"com.project.user", "com.project.userSteps"})
+@EntityScan({"com.project.user", "com.project.userSteps", "com.project.userExercise", "com.project.userExercise"})
 @ComponentScan({"com.project.user", "com.project.userSteps"})
 public class ServerControlApplication {
 
