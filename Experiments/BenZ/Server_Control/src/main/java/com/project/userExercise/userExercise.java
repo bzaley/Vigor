@@ -9,7 +9,7 @@ public class userExercise {
 	@Id
 	private int userId;
 	private int date;
-	private String exercise;
+	private int exerciseId;
 	private int sets;
 	private int reps;
 	private boolean complete;
@@ -18,11 +18,11 @@ public class userExercise {
 		
 	}
 	
-	public userExercise(int userId, int date, String exercise, int sets, int reps, boolean complete) {
+	public userExercise(int userId, int date, int exerciseId, int sets, int reps, boolean complete) {
 		super();
 		this.userId = userId;
 		this.date = date;
-		this.exercise = exercise;
+		this.exerciseId = exerciseId;
 		this.sets = sets;
 		this.reps = reps;
 		this.complete = complete;
@@ -41,11 +41,11 @@ public class userExercise {
 	public void setDate(int date) {
 		this.date = date;
 	}
-	public String getExercise() {
-		return exercise;
+	public int getExercise() {
+		return exerciseId;
 	}
-	public void setExercise(String exercise) {
-		this.exercise = exercise;
+	public void setExercise(int exerciseId) {
+		this.exerciseId = exerciseId;
 	}
 	public int getSets() {
 		return sets;

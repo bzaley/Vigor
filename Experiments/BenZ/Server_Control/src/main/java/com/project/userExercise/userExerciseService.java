@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class userExerciseService {
 
 	@Autowired
-	private userExerciseRepository exerciseRepo;
+	private userExerciseRepository userExerciseRepo;
 	
 	/*
 	 * Get everything from exercises
@@ -19,24 +19,24 @@ public class userExerciseService {
 		// TO-DO
 		// Get all exercises for given date
 		List<userExercise> userExercises = new ArrayList<>();
-		userExerciseRepository.findAll()
+		userExerciseRepo.findAll()
 		.forEach(userExercises::add);
 		return userExercises;
 	}*/
 	
 	public void addExercise(userExercise userExercise) {
-		exerciseRepo.save(userExercise);
+		userExerciseRepo.save(userExercise);
 	}
 
 	public void removeExercise(userExercise userExercise) {
-		exerciseRepo.delete(userExercise);
+		userExerciseRepo.delete(userExercise);
 	}
 	
 	public void updateExercise(userExercise userExercise){
-		exerciseRepo.save(userExercise);
+		userExerciseRepo.save(userExercise);
 	}
 	/*public userExercise getExercises(int date, int userId) {
-		userExerciseRepository.getUserExercises(date, userId);
+		userExerciseRepo.getUserExercises(date, userId);
 	}*/
 
 	
