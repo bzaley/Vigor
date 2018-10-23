@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.user.User;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @RestController
@@ -36,6 +36,11 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST, value = "/add") //Setting the RequestMEthod to POST will allow adding new values
 	public void addUser(@RequestBody User user) { //RequestBody tells spring you will provide JSON package of instance and convert it into an object instance
 		userService.addUser(user);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/signup")
+	public void signUp(@RequestBody User user) {
+		user.setPassword(encode(user.getPassword()));
 	}
 	
 	

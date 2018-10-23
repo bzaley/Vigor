@@ -2,6 +2,8 @@ package com.project.userSteps;
 
 
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,4 +41,9 @@ public class userStepsService {
 		}
 	}
 	
+	public ArrayList<userSteps> getMultipleDays(int userId, int startingDate, int numDays){
+		ArrayList<userSteps> multipleDays = new ArrayList<userSteps>();
+		//TODO
+		return multipleDays;
+	}
 }
