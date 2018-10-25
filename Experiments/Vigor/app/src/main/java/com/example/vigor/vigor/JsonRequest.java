@@ -21,4 +21,15 @@ public class JsonRequest {
        }
        return objToSend;
     }
+
+    public JSONObject makeLoginJsonObject(String email, String password) throws JSONException{
+        JSONObject objToSend = new JSONObject();
+        try {
+            objToSend.put("email", email);
+            objToSend.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return objToSend;
+    }
 }

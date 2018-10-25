@@ -24,12 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class StepActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
-    private stepMonitor simpleStepDetector;
+    private stepMonitor stepMonitor;
     private SensorManager sensorManager;
     private JsonRequest jsonRequest;
     private Sensor accel;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
+    private int tempSteps;
     private int userID;
     private int dateI;
     private int currentDate;
@@ -46,8 +47,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        simpleStepDetector = new stepMonitor();
-        simpleStepDetector.registerListener(this);
+        stepMonitor = new stepMonitor();
+        stepMonitor.registerListener(this);
 
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();
@@ -61,6 +62,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         Button BtnStop = findViewById(R.id.btn_stop);
         Button BtnPrev = findViewById(R.id.btn_prev);
         Button BtnNext = findViewById(R.id.btn_next);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         final String dateS = sdf.format(Calendar.getInstance().getTime());
         dateI = Integer.parseInt(dateS);
@@ -141,6 +143,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     public void onResponse(JSONObject response) {
                         try {
                             numSteps = response.getInt("steps");
+                            tempSteps = numSteps;
                             TvDate.setText(dateS);
                             TvSteps.setText(TEXT_NUM_STEPS + numSteps);
                         } catch (JSONException e) {
@@ -194,7 +197,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            simpleStepDetector.updateAccel(
+            stepMonitor.updateAccel(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
         }
     }
