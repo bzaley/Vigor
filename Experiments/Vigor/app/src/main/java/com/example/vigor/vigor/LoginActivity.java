@@ -46,9 +46,10 @@ public class LoginActivity extends Activity {
             public void onClick(View arg0) {
                 strEmail = eMail.getText().toString();
                 strPass = passWord.getText().toString();
+                JSONObject loginInfo = null;
                 if (!strEmail.isEmpty() && !strPass.isEmpty()){
                     try {
-                        JSONObject loginInfo = makeLoginJsonObject(strEmail, strPass);
+                        loginInfo = makeLoginJsonObject(strEmail, strPass);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -56,6 +57,15 @@ public class LoginActivity extends Activity {
                             loginURL, loginInfo, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            try {
+                                session.attemptLogin(true,
+                                        response.getInt("user ID"),
+                                        response.getString("email"),
+                                        response.getString("first name"),
+                                         response.getString("last name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             // TODO Figure out what needs to be done on response.
                         }
                     }, new Response.ErrorListener() {
@@ -63,7 +73,9 @@ public class LoginActivity extends Activity {
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
                         }
-                    })
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest,
+                            "login_json_req");
                 }
                 else {
                     if (strEmail.isEmpty() && strPass.isEmpty()) {
