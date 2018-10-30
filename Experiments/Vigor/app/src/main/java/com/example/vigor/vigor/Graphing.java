@@ -12,34 +12,27 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 public class Graphing extends AppCompatActivity {
-    private int stepsTemp;
+    public JSONArray recieved = null;
     private int i = 0;
     private static int data[] = new int[7];
     public static int j = 0;
-//    private String TAG = Graphing.class.getSimpleName();
+    private String TAG = Graphing.class.getSimpleName();
 
     TextView jsonresults;
 //    JSONObject data;
@@ -78,44 +71,39 @@ public class Graphing extends AppCompatActivity {
             }
         });
 
-        /*
-        put request into new method and make boolean that cheecks if thing recieved is correct.
-         */
         Button populate = (Button) findViewById(R.id.popButton);
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (i=0; i<7; i++){
-                    //initializing variables
-                    int dateNew = Integer.parseInt(dateS) - i;
-                    String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
-                    //Making initial request
-                    RequestFuture<JSONObject> future = RequestFuture.newFuture();
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonURL, null, future, future);
-                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req0");
-                    try {
-                        JSONObject response = future.get(10, TimeUnit.SECONDS);
-                        stepsTemp = response.getInt("steps");
-                        data[i] = stepsTemp;
+                //hardcoded for testing
+                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/week/181021";
+                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                recieved = response;
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
 
-                    } catch (InterruptedException | TimeoutException | ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
 
-                }
+
                 //Graph data
                 Graph(Graphing.data, dateString);
             }
         });
     }
 
-    public void Graph(int days[], String dateString){
+    public void Graph(int days[], String dateString) {
         double resultNum = 0, temp = 0;
 
-        for (int i = 0; i < 7; i++){
-            if (days[i] > temp){
+        for (int i = 0; i < 7; i++) {
+            if (days[i] > temp) {
                 temp = days[i];
             }
             resultNum += days[i];
