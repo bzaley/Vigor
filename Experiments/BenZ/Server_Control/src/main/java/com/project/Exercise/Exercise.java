@@ -1,4 +1,4 @@
-package com.project.Exercise;
+/*package com.project.Exercise;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,4 +35,4 @@ public class Exercise {
 	}
 	
 	
-}
+}*/

@@ -29,11 +29,10 @@ public class userExerciseController {
 		userExerciseService.updateExercise(userExercise);
 	}
 	
-	/*
 	@RequestMapping(method=RequestMethod.POST, value="/find/{userExercise}")
-	public void findExercise(@RequestBody userExercise userExercise) {
-		userExerciseService.findExercise(userExercise);
-	}*/
+	public void findDayExercises(@PathVariable userExercise userExercise) {
+		userExerciseService.findDayExercises(userExercise);
+	}
 	
 	
 }

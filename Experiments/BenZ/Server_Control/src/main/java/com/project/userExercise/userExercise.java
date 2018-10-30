@@ -8,7 +8,7 @@ public class userExercise {
 
 	@Id
 	private int userId;
-	private int date;
+	private int day;
 	private int exerciseId;
 	private int sets;
 	private int reps;
@@ -18,10 +18,10 @@ public class userExercise {
 		
 	}
 	
-	public userExercise(int userId, int date, int exerciseId, int sets, int reps, boolean complete) {
+	public userExercise(int userId, int day, int exerciseId, int sets, int reps, boolean complete) {
 		super();
 		this.userId = userId;
-		this.date = date;
+		this.day = day;
 		this.exerciseId = exerciseId;
 		this.sets = sets;
 		this.reps = reps;
@@ -36,10 +36,10 @@ public class userExercise {
 		this.userId = userId;
 	}
 	public int getDate() {
-		return date;
+		return day;
 	}
-	public void setDate(int date) {
-		this.date = date;
+	public void setDate(int day) {
+		this.day = day;
 	}
 	public int getExercise() {
 		return exerciseId;

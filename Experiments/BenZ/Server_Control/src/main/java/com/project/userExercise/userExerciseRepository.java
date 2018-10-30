@@ -19,4 +19,7 @@ public interface userExerciseRepository extends CrudRepository<userExercise, Int
 	@Query(value = "SELECT * FROM userExercise WHERE(userId = :userId AND date = :date)", nativeQuery = true)
 	public List<userExercise> getUserExercises(@Param("userId")int userId, @Param("date")int date);
 	*/
+	
+	@Query(value = "SELECT exerciseId, sets, reps, complete FROM user_exercise ue WHERE (ue.day = :day) AND (ue.userId = :ID)", nativeQuery = true)
+	public List<userExercise> findByDayUser(@Param("day") int day, @Param("ID") int userId);
 }

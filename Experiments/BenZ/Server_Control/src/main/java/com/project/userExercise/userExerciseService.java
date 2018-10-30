@@ -35,9 +35,10 @@ public class userExerciseService {
 	public void updateExercise(userExercise userExercise){
 		userExerciseRepo.save(userExercise);
 	}
-	/*public userExercise getExercises(int date, int userId) {
-		userExerciseRepo.getUserExercises(date, userId);
-	}*/
+	
+	public List<userExercise> findDayExercises(int day, int userId) {
+		userExerciseRepo.findByDayUser(day, userId);
+	}
 
 	
 

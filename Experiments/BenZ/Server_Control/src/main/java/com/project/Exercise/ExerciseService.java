@@ -1,4 +1,4 @@
-package com.project.Exercise;
+/*package com.project.Exercise;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,4 +16,4 @@ public class ExerciseService {
 	}
 	
 	
-}
+}*/
