@@ -15,10 +15,12 @@ public class OpenActivity extends Activity {
 
         // TODO Create Splash Screen image.
 
+        // if checkLogin returns true, user is already logged; Screen should switch to MainActivity
+        // Otherwise, switch to LoginActivity to allow user to login
         if(session.checkLogin()) {
-            startActivity(new Intent(OpenActivity.this, LoginActivity.class));
-        } else {
             startActivity(new Intent(OpenActivity.this, MainActivity.class));
+        } else {
+            startActivity(new Intent(OpenActivity.this, LoginActivity.class));
         }
     }
 }

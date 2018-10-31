@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import static android.provider.Telephony.Mms.Part.FILENAME;
-
 public class SessionController {
     private static String TAG = SessionController.class.getSimpleName();
 
@@ -26,7 +24,7 @@ public class SessionController {
 
     public SessionController(Context context) {
         this.context = context;
-        sharedPref = this.context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        sharedPref = this.context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
         spEditor = sharedPref.edit();
     }
 
@@ -52,6 +50,20 @@ public class SessionController {
 
     public String returnEmail() {
         return sharedPref.getString(USER_EMAIL, "");
+    }
+
+    public String returnFirstName() {
+        return sharedPref.getString(USER_FIRST, "");
+    }
+
+    public String returnLastName() {
+        return sharedPref.getString(USER_LAST, "");
+    }
+
+    public String returnFullName() {
+        String fullName = sharedPref.getString(USER_FIRST, "") + " " +
+                sharedPref.getString(USER_LAST, "");
+        return fullName;
     }
 
 }

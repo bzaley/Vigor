@@ -1,9 +1,7 @@
 package com.example.vigor.vigor;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends Activity {
+    private String TAG = LoginActivity.class.getSimpleName();
+    private String loginURL = "https://proj309-ad-07.misc.iastate.edu:8080/login";
     private String strEmail;
     private String strPass;
     private Button loginButton;
@@ -27,17 +27,16 @@ public class LoginActivity extends Activity {
     private EditText eMail;
     private EditText passWord;
     private SessionController session;
-    private String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginButton = findViewById(R.id.login);
+        loginButton = findViewById(R.id.loginButt);
         eMail = findViewById(R.id.etUser);
         passWord = findViewById(R.id.etPass);
-        registerButton = findViewById(R.id.register);
+        registerButton = findViewById(R.id.registerButt);
 
         session = new SessionController(getApplicationContext());
 
@@ -58,24 +57,34 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                session.attemptLogin(true,
-                                        response.getInt("user ID"),
-                                        response.getString("email"),
-                                        response.getString("first name"),
-                                         response.getString("last name"));
+                                boolean error = response.getBoolean("error");
+                                if (!error) {
+                                    session.attemptLogin(true,
+                                            response.getInt("user ID"),
+                                            response.getString("email"),
+                                            response.getString("first name"),
+                                            response.getString("last name"));
+                                    startActivity(new Intent(LoginActivity.this,
+                                            MainActivity.class));
+                                    finish();
+                                } else {
+                                    String errorReceived = response.getString("error_msg");
+                                    Toast.makeText(getApplicationContext(), errorReceived,
+                                            Toast.LENGTH_LONG).show();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // TODO Figure out what needs to be done on response.
+                            // TODO Try loop is currently assuming you will always get a user back
+                            // TODO needs error handling
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            VolleyLog.d(TAG, "Error:" + error.getMessage());
+                            VolleyLog.d( TAG, "Error:" + error.getMessage());
                         }
                     });
-                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest,
-                            "login_json_req");
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "login_req");
                 }
                 else {
                     if (strEmail.isEmpty() && strPass.isEmpty()) {
