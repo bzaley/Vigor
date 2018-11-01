@@ -58,11 +58,11 @@ public class ToDoList extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                DataModel dataModel = dataModels.get(position);
-
-                Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getType() + " API: " + dataModel.getVersion_number(), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
+//
+//                DataModel dataModel = dataModels.get(position);
+//
+//                Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getType() + "", Snackbar.LENGTH_LONG)
+//                        .setAction("No action", null).show();
             }
         });
 
@@ -74,7 +74,7 @@ public class ToDoList extends AppCompatActivity {
                 if (!(enteredItem.equals(""))) {
                     if (enteredAmount.equals(""))
                         enteredAmount = "0";
-                    dataModels.add(new DataModel(enteredItem, enteredAmount, "null", "null"));
+                    dataModels.add(new DataModel(enteredItem, enteredAmount, "Assigned By; Me"));
                     adapter.notifyDataSetChanged();
                     toAddItem.setText("");
                     toAddAmount.setText("");

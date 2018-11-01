@@ -2,33 +2,26 @@ package com.example.vigor.vigor;
 
 public class DataModel {
 
-    String name;
-    String type;
-    String version_number;
-    String feature;
+    String Activity;
+    String Amount;
+    String AssignedBy;
 
-    public DataModel(String name, String type, String version_number, String feature) {
-        this.name = name;
-        this.type = type;
-        this.version_number = version_number;
-        this.feature = feature;
-
+    public DataModel(String Activity, String Amount, String AssignedBy) {
+        this.Activity = Activity;
+        this.Amount = Amount;
+        this.AssignedBy = AssignedBy;
     }
 
-    public String getName() {
-        return name;
+    public String getActivity() {
+        return Activity;
     }
 
-    public String getType() {
-        return type;
+    public String getAmount() {
+        return Amount;
     }
 
-    public String getVersion_number() {
-        return version_number;
-    }
-
-    public String getFeature() {
-        return feature;
+    public String getAssignedBy() {
+        return AssignedBy;
     }
 
 }

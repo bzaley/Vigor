@@ -2,14 +2,12 @@ package com.example.vigor.vigor;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,10 +20,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
 
     // View lookup cache
     private static class ViewHolder {
-        TextView txtName;
-        TextView txtType;
-        TextView txtVersion;
-        ImageView info;
+        TextView txtActivity;
+        TextView txtAmount;
+        TextView txtAssignedBy;
     }
 
     public CustomAdapter(ArrayList<DataModel> data, Context context) {
@@ -42,12 +39,12 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         Object object = getItem(position);
         DataModel dataModel = (DataModel) object;
 
-        switch (v.getId()) {
-            case R.id.item_info:
-                Snackbar.make(v, "Release date " + dataModel.getFeature(), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.item_info:
+//                Snackbar.make(v, "Release date ", Snackbar.LENGTH_LONG)
+//                        .setAction("No action", null).show();
+//                break;
+//        }
     }
 
     private int lastPosition = -1;
@@ -66,10 +63,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.txtType = (TextView) convertView.findViewById(R.id.type);
-            viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.version_number);
-            viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
+            viewHolder.txtActivity = (TextView) convertView.findViewById(R.id.activity);
+            viewHolder.txtAmount = (TextView) convertView.findViewById(R.id.amount);
+            viewHolder.txtAssignedBy = (TextView) convertView.findViewById(R.id.assignedBy);
 
             result = convertView;
 
@@ -83,11 +79,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtName.setText(dataModel.getName());
-        viewHolder.txtType.setText(dataModel.getType());
-        viewHolder.txtVersion.setText(dataModel.getVersion_number());
-        viewHolder.info.setOnClickListener(this);
-        viewHolder.info.setTag(position);
+        viewHolder.txtActivity.setText(dataModel.getActivity());
+        viewHolder.txtAmount.setText(dataModel.getAmount());
+        viewHolder.txtAssignedBy.setText(dataModel.getAssignedBy());
         // Return the completed view to render on screen
         return convertView;
     }
