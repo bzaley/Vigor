@@ -1,5 +1,8 @@
 package com.example.vigor.vigor;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -55,14 +58,34 @@ public class ToDoList extends AppCompatActivity {
         adapter = new CustomAdapter(dataModels, getApplicationContext());
 
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        ToDoList.this);
+                alert.setTitle("Are you sure about that?");
+                alert.setMessage("Are you sure to delete record?");
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dataModels.remove(position);
+                        adapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
 //                DataModel dataModel = dataModels.get(position);
 //
 //                Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getType() + "", Snackbar.LENGTH_LONG)
 //                        .setAction("No action", null).show();
+            return true;
             }
         });
 
@@ -71,7 +94,18 @@ public class ToDoList extends AppCompatActivity {
             public void onClick(View v) {
                 String enteredItem = toAddItem.getText().toString();
                 String enteredAmount = toAddAmount.getText().toString();
-                if (!(enteredItem.equals(""))) {
+                if (isInt(enteredAmount)){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            ToDoList.this);
+                    alert.setTitle("Amount entered isn't a number.");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+                } else if (!(enteredItem.equals(""))) {
                     if (enteredAmount.equals(""))
                         enteredAmount = "0";
                     dataModels.add(new DataModel(enteredItem, enteredAmount, "Assigned By; Me"));
@@ -96,12 +130,17 @@ public class ToDoList extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isInt(String name) {
+        char[] chars = name.toCharArray();
+        for (char c : chars)
+            if(Character.isLetter(c))
+                return true;
+        return false;
     }
 }
