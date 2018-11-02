@@ -17,7 +17,7 @@ public class userStepsController {
 	private userStepsService stepsService;
 
 	@RequestMapping("/{userId}/{date}")
-	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable int date) {
+	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable String date) {
 		return stepsService.getToday(userId, date);
 	}
 
@@ -29,7 +29,7 @@ public class userStepsController {
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/update")
 	public void updateStepsToUser(@RequestBody userSteps user) {
-		int date = user.getDate();
+		String date = user.getDate();
 		int userId = user.getUserId();
 		int steps = user.getSteps();
 		stepsService.updateStepEntry(userId, date, steps);

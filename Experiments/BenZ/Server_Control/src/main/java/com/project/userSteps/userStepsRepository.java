@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface userStepsRepository extends JpaRepository<userSteps, Integer>, CrudRepository<userSteps, Integer> {
 	
-	public userSteps findByUserIdAndDate(int userId, int Date);
+	public userSteps findByUserIdAndDate(int userId, String Date);
 	
-	public boolean existsByUserIdAndDate(int userId, int Date);
+	public boolean existsByUserIdAndDate(int userId, String Date);
 	
 	
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE user_steps us SET us.steps = :newSteps WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
-	public void updateSteps(@Param("userID")int userId, @Param("uDate")int Date, @Param("newSteps")int steps);
+	public void updateSteps(@Param("userID")int userId, @Param("uDate")String Date, @Param("newSteps")int steps);
 }

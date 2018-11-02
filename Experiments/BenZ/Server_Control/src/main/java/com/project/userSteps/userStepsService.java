@@ -19,13 +19,13 @@ public class userStepsService {
 		return pastSteps;
 	}*/
 	
-	public userSteps getToday(int userId, int date) {
+	public userSteps getToday(int userId, String date) {
 		this.checkForEntry(userId, date);
 		return stepsRepo.findByUserIdAndDate(userId, date);
 		
 	}
 	
-	public void updateStepEntry(int userId, int date, int steps) {
+	public void updateStepEntry(int userId, String date, int steps) {
 		stepsRepo.updateSteps(userId, date, steps);
 		
 	}
@@ -34,7 +34,7 @@ public class userStepsService {
 		stepsRepo.save(newEntry);
 	}
 	
-	public void checkForEntry(int userId, int date) {
+	public void checkForEntry(int userId, String date) {
 		if(!stepsRepo.existsByUserIdAndDate(userId, date)) {
 			userSteps u = new userSteps(userId, date, 0);
 			this.addNewEntry(u);

@@ -13,13 +13,13 @@ public class userSteps {
 	@Column(columnDefinition ="serial")
 	private int entry; //Simple counting variable to allow for multiple instances of a users step entries. Not part of userSteps object.
 	private int userId;
-	private int date;
+	private String date;
 	private int steps;
 	
 	public userSteps() {
 	}
 	
-	public userSteps(int userId, int date, int steps) {
+	public userSteps(int userId, String date, int steps) {
 		super();
 		
 		this.userId = userId;
@@ -36,11 +36,11 @@ public class userSteps {
 		this.userId = userId;
 	}
 
-	public int getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(int date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

@@ -35,13 +35,19 @@ public class UserService {
 	}
 	public LoginResponse login(String email, String Password) {
 		try {
-			userRepo.findByUserEmail(email);
+			User u = userRepo.findByUserEmail(email);
+			if(u == null) {
+				throw(new NullPointerException());
+			}
 		}catch (Exception e) {
 			LoginResponse sendBack = new LoginResponse(true, "The email entered does not exist.", "", 0, "", "", "");
 			return sendBack;
 		}
 		try {
-			userRepo.findByUserEmailAndPassword(email, Password);
+			User us = userRepo.findByUserEmailAndPassword(email, Password);
+			if(us == null) {
+				throw(new NullPointerException());
+			}
 		}catch(Exception e) {
 			LoginResponse sendBack = new LoginResponse(true, "The email and password do not match.", "", 0, "", "", "");
 			return sendBack;
