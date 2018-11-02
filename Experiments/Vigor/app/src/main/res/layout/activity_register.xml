@@ -44,6 +44,12 @@
             android:layout_height="wrap_content"
             android:hint="Confirm Password"/>
 
+        <EditText
+            android:id="@+id/roleET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Role"/>
+
         <Button
             android:id="@+id/regButton"
             android:layout_width="fill_parent"

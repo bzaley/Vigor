@@ -25,6 +25,7 @@ public class RegisterActivity extends Activity {
     private EditText registerEmail;
     private EditText registerPass;
     private EditText confirmPass;
+    private EditText registerRole;
     private Button registerButton;
     private Button switchToLoginButton;
     private SessionController session;
@@ -35,6 +36,7 @@ public class RegisterActivity extends Activity {
     private String strRegEmail;
     private String strRegPass;
     private String strConfirmPass;
+    private String strRegRole;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class RegisterActivity extends Activity {
         confirmPass = findViewById(R.id.confirmET);
         registerButton = findViewById(R.id.regButton);
         switchToLoginButton = findViewById(R.id.logButton);
+        registerRole = findViewById(R.id.roleET);
 
         session = new SessionController(getApplicationContext());
 
@@ -60,6 +63,7 @@ public class RegisterActivity extends Activity {
                 strRegEmail = registerEmail.getText().toString();
                 strRegPass = registerPass.getText().toString();
                 strConfirmPass = confirmPass.getText().toString();
+                strRegRole = registerRole.getText().toString();
                 JSONObject registerInfo = null;
 
                 if (!strRegFirstName.isEmpty() && !strRegLastName.isEmpty()
@@ -68,7 +72,7 @@ public class RegisterActivity extends Activity {
                     try {
                         if (strRegPass.equals(strConfirmPass)) {
                             registerInfo = makeRegisterJsonObject(strRegFirstName, strRegLastName,
-                                    strRegEmail, strRegPass);
+                                    strRegEmail, strRegPass, strRegRole);
                         } else {
                             Toast.makeText(getApplicationContext(), "Your password fields" +
                                             " do not match",
@@ -125,13 +129,14 @@ public class RegisterActivity extends Activity {
     }
 
     public JSONObject makeRegisterJsonObject(String firstName, String lastName, String email,
-                                             String password) throws JSONException {
+                                             String password, String role) throws JSONException {
         JSONObject returnObject = new JSONObject();
         try {
             returnObject.put("first name", firstName);
             returnObject.put("last name", lastName);
             returnObject.put("email", email);
             returnObject.put("password", password);
+            returnObject.put("role", role);
         } catch (JSONException e) {
             e.printStackTrace();
         }
