@@ -56,5 +56,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button trainertodo = (Button) findViewById(R.id.TrainerToDo);
+        trainertodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, TrainerToDoList.class));
+            }
+        });
+
     }
 }

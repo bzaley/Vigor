@@ -23,14 +23,14 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btnDUMMY2"
+        android:id="@+id/TrainerToDo"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_above="@+id/graphButton"
         android:layout_alignEnd="@+id/imageView3"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Dummy"
+        android:layout_marginEnd="8dp"
+        android:text="Trainer to do"
         app:layout_constraintBottom_toTopOf="@+id/btnDUMMY1"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -83,7 +83,7 @@
         android:layout_marginBottom="5dp"
         android:text="Graphing"
         app:layout_constraintBottom_toTopOf="@+id/toDoButton"
-        app:layout_constraintEnd_toStartOf="@+id/btnDUMMY2"
+        app:layout_constraintEnd_toStartOf="@+id/TrainerToDo"
         app:layout_constraintStart_toEndOf="@+id/btnViewProfile" />
 
     <Button

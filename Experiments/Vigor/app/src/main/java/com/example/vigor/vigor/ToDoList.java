@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -54,52 +55,6 @@ public class ToDoList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
-
-//        Draft[] drafts = {new Draft_6455()};
-//
-//                /**
-//                 * If running this on an android device, make sure it is on the same network as your
-//                 * computer, and change the ip address to that of your computer.
-//                 * If running on the emulator, you can use localhost.
-//                 */
-//                String w = "ws://10.26.13.93:8080/websocket";
-//
-//                try {
-//                    Log.d("Socket:", "Trying socket");
-//                    cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
-//                        @Override
-//                    public void onMessage(String message) {
-//                        Log.d("", "run() returned: " + message);
-//                            String s=t1.getText().toString();
-//                            //t1.setText("hello world");
-//                            //Log.d("first", "run() returned: " + s);
-//                            //s=t1.getText().toString();
-//                            //Log.d("second", "run() returned: " + s);
-//                            t1.setText(s+" Server:"+message);
-//                    }
-//
-//                        @Override
-//                        public void onOpen(ServerHandshake handshake) {
-//                            Log.d("OPEN", "run() returned: " + "is connecting");
-//                        }
-//
-//                        @Override
-//                        public void onClose(int code, String reason, boolean remote) {
-//                            Log.d("CLOSE", "onClose() returned: " + reason);
-//                        }
-//
-//                        @Override
-//                        public void onError(Exception e)
-//                        {
-//                            Log.d("Exception:", e.toString());
-//                        }
-//                    };
-//                }
-//                catch (URISyntaxException e) {
-//                    Log.d("Exception:", e.getMessage().toString());
-//                    e.printStackTrace();
-//                }
-//                cc.connect();
 
         listView = (ListView) findViewById(R.id.list);
         toAddItem = (EditText) findViewById(R.id.etNewItem2);
@@ -151,7 +106,12 @@ public class ToDoList extends AppCompatActivity {
         });
 
         //Load activities from server
-        String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/findIncomplete/userId/181021";
+        String jsonUrl;
+        if (TrainerToDoList.isTrainer){
+            jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/findIncomplete/userId/181021";
+        } else {
+            jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/findIncomplete/userId/181021";
+        }
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -188,19 +148,30 @@ public class ToDoList extends AppCompatActivity {
                 String enteredItem = toAddItem.getText().toString();
                 String enteredSets = toAddSets.getText().toString();
                 String enteredReps = toAddReps.getText().toString();
-                addToList(enteredItem, enteredSets, enteredReps,  "Assigned By; Me");
+                addToList(enteredItem, enteredSets, enteredReps, "Assigned By; Me");
                 toAddItem.setText("");
                 toAddSets.setText("");
                 toAddReps.setText("");
 
                 JSONObject toSend = null;
-                try {
-                    toSend = makeStepsJsonObject(1, 2, dateS, Integer.parseInt(enteredSets), Integer.parseInt(enteredReps), 0, "Me");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                String jsonUrlAddNew;
+                if (TrainerToDoList.isTrainer){
+                    jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/findIncomplete/userId/181021";
+                    try {
+                        toSend = makeJsonObjectTrainer(1, TrainerToDoList.mangedUser, getDayOfWeek(dateS), enteredItem, Integer.parseInt(enteredSets), Integer.parseInt(enteredReps), 0, 0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/findIncomplete/userId/181021";
+                    try {
+                        toSend = makeJsonObjectIndividual(1, getDayOfWeek(dateS), enteredItem, Integer.parseInt(enteredSets), Integer.parseInt(enteredReps), dateS);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/userid/addexercise", toSend, new Response.Listener<JSONObject>() {
+                        jsonUrlAddNew, toSend, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
@@ -265,19 +236,65 @@ public class ToDoList extends AppCompatActivity {
         }
     }
 
-    public JSONObject makeStepsJsonObject(int userID, int activity, String date, int sets, int reps, int complete, String assignedBy) throws JSONException{
+    public JSONObject makeJsonObjectIndividual(int userID, String Day, String activity, int sets, int reps, String Date) throws JSONException {
         JSONObject objToSend = new JSONObject();
         try {
             objToSend.put("userId", userID);
-            objToSend.put("exerciseId", 1);
-            objToSend.put("date", date);
+            objToSend.put("dayOfWeek", Day);
+            objToSend.put("ecerciseId", activity);
             objToSend.put("sets", sets);
             objToSend.put("reps", reps);
-            objToSend.put("complete", complete);
-            objToSend.put("assignedBy", assignedBy);
+            objToSend.put("completeDate", Date);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return objToSend;
+    }
+
+    public JSONObject makeJsonObjectTrainer(int ptID, int userID, String Day, String activity, int sets, int reps, int complete, int repeat) throws JSONException {
+        JSONObject objToSend = new JSONObject();
+        try {
+            objToSend.put("ptID", ptID);
+            objToSend.put("userId", userID);
+            objToSend.put("Day", Day);
+            objToSend.put("exerciseId", activity);
+            objToSend.put("sets", sets);
+            objToSend.put("reps", reps);
+            objToSend.put("complete", complete);
+            objToSend.put("repeat", repeat);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return objToSend;
+    }
+
+    public String getDayOfWeek(String dateCurrent) {
+        int DateWhole = Integer.parseInt(dateCurrent);
+        int day = DateWhole % 100;
+        DateWhole = DateWhole / 100;
+        int month = DateWhole % 100;
+        DateWhole = DateWhole / 100;
+        int year = DateWhole % 100;
+        DateWhole = DateWhole / 100;
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        switch (dayOfWeek) {
+            case 1: return "monday";
+                    break;
+            case 2: return "tuesday";
+                    break;
+            case 3: return "wednesday";
+                    break;
+            case 4: return "thursday";
+                    break;
+            case 5: return "friday";
+                    break;
+            case 6: return "saturday";
+                    break;
+            case 7: return "sunday";
+                    break;
+        }
+        return null;
     }
 }
