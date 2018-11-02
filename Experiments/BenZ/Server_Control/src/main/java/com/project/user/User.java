@@ -8,7 +8,7 @@ public class User {
 
 	@Id //Tells JPA what the primary key is
 	private int userId;
-	private String user_email;
+	private String userEmail;
 	private String firstname;
 	private String lastname;
 	private String password;
@@ -18,16 +18,15 @@ public class User {
 		
 	}
 	
-	public User(int userId, String user_email, String firstname, String lastname, String password, String role) {
+	public User(int userId, String userEmail, String firstname, String lastname, String password, String role) {
 		super();
 		this.userId = userId;
-		this.user_email = user_email;
+		this.userEmail = userEmail;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.password = password;
 		this.role = role;
 	}
-	
 	
 	
 	public int getuserId() {
@@ -36,11 +35,11 @@ public class User {
 	public void setuserId(int userId) {
 		this.userId = userId;
 	}
-	public String getUser_email() {
-		return user_email;
+	public String getuserEmail() {
+		return userEmail;
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setuserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	public String getFirstname() {
 		return firstname;
