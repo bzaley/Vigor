@@ -20,6 +20,8 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -28,9 +30,9 @@ import java.util.Calendar;
 
 
 public class Graphing extends AppCompatActivity {
-    public JSONArray recieved = null;
     private int i = 0;
-    private static int data[] = new int[7];
+    private int data[] = new int[7];
+    private int datsrecieved[] = new int[7];
     public static int j = 0;
     private String TAG = Graphing.class.getSimpleName();
 
@@ -67,7 +69,7 @@ public class Graphing extends AppCompatActivity {
                         ids[j] = Integer.parseInt(t.getText().toString());
                     }
                 }
-                Graph(ids, dateString);
+                Graph(ids, null);
             }
         });
 
@@ -81,7 +83,17 @@ public class Graphing extends AppCompatActivity {
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
-                                recieved = response;
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject element = (JSONObject) response.getJSONObject(i);
+                                        data[i] = element.getInt("steps");
+                                        datsrecieved[i] = Integer.parseInt(element.getString("date"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                //Graph data
+                                Graph(data, datsrecieved);
                             }
                         },
                         new Response.ErrorListener() {
@@ -91,15 +103,11 @@ public class Graphing extends AppCompatActivity {
                         });
 
                 VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
-
-
-                //Graph data
-                Graph(Graphing.data, dateString);
             }
         });
     }
 
-    public void Graph(int days[], String dateString) {
+    public void Graph(int days[], int dates[]) {
         double resultNum = 0, temp = 0;
 
         for (int i = 0; i < 7; i++) {
@@ -159,4 +167,8 @@ public class Graphing extends AppCompatActivity {
 //// is not necessary
 //        revGraph.getGridLabelRenderer().setHumanRounding(false);
     }
+
+//    public void set(int index, int element){
+//
+//    }
 }

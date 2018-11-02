@@ -9,42 +9,43 @@
 
     <TextView
         android:id="@+id/activity"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
+        android:layout_width="225dp"
+        android:layout_height="32dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="1dp"
         android:text="Activity"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/amount"
+        android:id="@+id/sets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activity"
+        android:layout_marginEnd="80dp"
+        app:layout_constraintBottom_toBottomOf="@id/activity"
+        android:text="Sets"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="12dp" />
+
+    <TextView
+        android:id="@+id/reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/activity"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="1dp"
-        android:text="Amount"
+        app:layout_constraintBottom_toBottomOf="@id/activity"
+        android:text="Reps"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/assignedBy"
-        android:layout_width="243dp"
-        android:layout_height="19dp"
-        android:layout_below="@+id/activity"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:text="Assigned By:"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="12dp" />
 
 
 </android.support.constraint.ConstraintLayout>

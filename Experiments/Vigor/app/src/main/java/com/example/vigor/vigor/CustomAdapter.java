@@ -21,8 +21,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
     // View lookup cache
     private static class ViewHolder {
         TextView txtActivity;
-        TextView txtAmount;
-        TextView txtAssignedBy;
+        TextView txtSets;
+        TextView txtReps;
     }
 
     public CustomAdapter(ArrayList<DataModel> data, Context context) {
@@ -64,8 +64,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtActivity = (TextView) convertView.findViewById(R.id.activity);
-            viewHolder.txtAmount = (TextView) convertView.findViewById(R.id.amount);
-            viewHolder.txtAssignedBy = (TextView) convertView.findViewById(R.id.assignedBy);
+            viewHolder.txtSets = (TextView) convertView.findViewById(R.id.sets);
+            viewHolder.txtReps = (TextView) convertView.findViewById(R.id.reps);
 
             result = convertView;
 
@@ -80,8 +80,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         lastPosition = position;
 
         viewHolder.txtActivity.setText(dataModel.getActivity());
-        viewHolder.txtAmount.setText(dataModel.getAmount());
-        viewHolder.txtAssignedBy.setText(dataModel.getAssignedBy());
+        viewHolder.txtSets.setText(dataModel.getSets());
+        viewHolder.txtReps.setText(dataModel.getReps());
         // Return the completed view to render on screen
         return convertView;
     }

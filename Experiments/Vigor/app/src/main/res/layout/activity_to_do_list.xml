@@ -13,30 +13,46 @@
 
     <EditText
         android:id="@+id/etNewItem2"
-        android:layout_width="216dp"
+        android:layout_width="157dp"
         android:layout_height="51dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnAddItem2"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btnAddItem"
-        android:layout_toLeftOf="@+id/btnAddItem"
-        android:layout_toStartOf="@+id/btnAddItem"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
         android:hint="Enter an Activity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etNewAmount2"
-        android:layout_width="80dp"
+        android:id="@+id/etNewSets"
+        android:layout_width="70dp"
         android:layout_height="51dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnAddItem2"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btnAddItem"
-        android:layout_toLeftOf="@+id/btnAddItem"
-        android:layout_toStartOf="@+id/btnAddItem"
-        android:hint="Amount"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:hint="Sets"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/etNewItem2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etNewReps"
+        android:layout_width="70dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:hint="Reps"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toEndOf="@+id/etNewSets"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -53,23 +69,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNewItem2"
-        tools:context=".ToDoList"
-        tools:layout_editor_absoluteX="0dp">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </android.support.design.widget.AppBarLayout>
+        tools:context=".ToDoList">
 
         <include layout="@layout/content_to_do_list" />
 

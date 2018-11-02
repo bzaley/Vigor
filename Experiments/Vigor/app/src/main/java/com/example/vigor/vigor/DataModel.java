@@ -3,25 +3,24 @@ package com.example.vigor.vigor;
 public class DataModel {
 
     String Activity;
-    String Amount;
-    String AssignedBy;
+    String Sets;
+    String Reps;
 
-    public DataModel(String Activity, String Amount, String AssignedBy) {
+    public DataModel(String Activity, String Sets, String Reps) {
         this.Activity = Activity;
-        this.Amount = Amount;
-        this.AssignedBy = AssignedBy;
+        this.Sets = Sets;
+        this.Reps = Reps;
     }
 
     public String getActivity() {
         return Activity;
     }
 
-    public String getAmount() {
-        return Amount;
+    public String getSets() {
+        return Sets;
     }
 
-    public String getAssignedBy() {
-        return AssignedBy;
+    public String getReps() {
+        return Reps;
     }
-
 }
