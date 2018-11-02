@@ -24,6 +24,7 @@ public class RegisterActivity extends Activity {
     private EditText registerLastName;
     private EditText registerEmail;
     private EditText registerPass;
+    private EditText confirmPass;
     private Button registerButton;
     private Button switchToLoginButton;
     private SessionController session;
@@ -33,6 +34,7 @@ public class RegisterActivity extends Activity {
     private String strRegLastName;
     private String strRegEmail;
     private String strRegPass;
+    private String strConfirmPass;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class RegisterActivity extends Activity {
         registerLastName = findViewById(R.id.lastNameET);
         registerEmail = findViewById(R.id.emailET);
         registerPass = findViewById(R.id.passET);
+        confirmPass = findViewById(R.id.confirmET);
         registerButton = findViewById(R.id.regButton);
         switchToLoginButton = findViewById(R.id.logButton);
 
@@ -56,13 +59,21 @@ public class RegisterActivity extends Activity {
                 strRegLastName = registerLastName.getText().toString();
                 strRegEmail = registerEmail.getText().toString();
                 strRegPass = registerPass.getText().toString();
+                strConfirmPass = confirmPass.getText().toString();
                 JSONObject registerInfo = null;
 
                 if (!strRegFirstName.isEmpty() && !strRegLastName.isEmpty()
-                        && !strRegEmail.isEmpty() && !strRegPass.isEmpty()) {
+                        && !strRegEmail.isEmpty() && !strRegPass.isEmpty()
+                        && !strConfirmPass.isEmpty()) {
                     try {
-                        registerInfo = makeRegisterJsonObject(strRegFirstName, strRegLastName,
-                                strRegEmail, strRegPass);
+                        if (strRegPass.equals(strConfirmPass)) {
+                            registerInfo = makeRegisterJsonObject(strRegFirstName, strRegLastName,
+                                    strRegEmail, strRegPass);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Your password fields" +
+                                            " do not match",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

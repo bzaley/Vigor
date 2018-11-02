@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class DateController {
 
-    Date workingDate = null;
-    Calendar workingCalendarDate;
+    private Date workingDate = null;
+    private Calendar workingCalendarDate;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public DateController() {

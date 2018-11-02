@@ -17,22 +17,32 @@
         <EditText
             android:id="@+id/firstNameET"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="First Name"/>
 
         <EditText
             android:id="@+id/lastNameET"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Last Name"/>
 
         <EditText
             android:id="@+id/emailET"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Email" />
 
         <EditText
             android:id="@+id/passET"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Password" />
+
+        <EditText
+            android:id="@+id/confirmET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"/>
 
         <Button
             android:id="@+id/regButton"

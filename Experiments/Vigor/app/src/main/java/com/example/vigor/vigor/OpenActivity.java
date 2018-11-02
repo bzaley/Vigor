@@ -15,6 +15,8 @@ public class OpenActivity extends Activity {
 
         // TODO Create Splash Screen image.
 
+        session = new SessionController(getApplicationContext());
+
         // if checkLogin returns true, user is already logged; Screen should switch to MainActivity
         // Otherwise, switch to LoginActivity to allow user to login
         if(session.checkLogin()) {
@@ -22,5 +24,6 @@ public class OpenActivity extends Activity {
         } else {
             startActivity(new Intent(OpenActivity.this, LoginActivity.class));
         }
+        finish();
     }
 }
