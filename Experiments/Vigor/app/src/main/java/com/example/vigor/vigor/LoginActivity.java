@@ -60,23 +60,22 @@ public class LoginActivity extends Activity {
                                 boolean error = response.getBoolean("error");
                                 if (!error) {
                                     session.attemptLogin(true,
-                                            response.getInt("user ID"),
-                                            response.getString("email"),
-                                            response.getString("first name"),
-                                            response.getString("last name"));
+                                            response.getInt("userId"),
+                                            response.getString("userEmail"),
+                                            response.getString("firstname"),
+                                            response.getString("lastname"),
+                                            response.getString("role"));
                                     startActivity(new Intent(LoginActivity.this,
                                             MainActivity.class));
                                     finish();
                                 } else {
-                                    String errorReceived = response.getString("error_msg");
+                                    String errorReceived = response.getString("errorMsg");
                                     Toast.makeText(getApplicationContext(), errorReceived,
                                             Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // TODO Try loop is currently assuming you will always get a user back
-                            // TODO needs error handling
                         }
                     }, new Response.ErrorListener() {
                         @Override

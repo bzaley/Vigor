@@ -82,7 +82,7 @@ public class RegisterActivity extends Activity {
                                             LoginActivity.class));
                                     finish();
                                 } else {
-                                    String errorReceived = response.getString("error_msg");
+                                    String errorReceived = response.getString("errorMsg");
                                     Toast.makeText(getApplicationContext(), errorReceived,
                                             Toast.LENGTH_LONG).show();
                                 }

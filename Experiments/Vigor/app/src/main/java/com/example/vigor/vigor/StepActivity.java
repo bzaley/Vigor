@@ -22,22 +22,31 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
-public class StepActivity extends AppCompatActivity implements SensorEventListener, genericStepDetection {
+public class StepActivity extends AppCompatActivity implements SensorEventListener,
+        genericStepDetection {
     private stepMonitor stepMonitor;
     private SensorManager sensorManager;
     private JsonRequest jsonRequest;
-    private Sensor accel;
+    private SessionController session;
+    private DateController dateController;
+    private String workingDate;
+    private Sensor Sensor;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
     private int numSteps;
     private int tempSteps;
     private int userID;
     private int dateI;
-    private int currentDate;
+    private Date currentDate;
     private String TAG = StepActivity.class.getSimpleName();
 
     TextView TvSteps;
     TextView TvDate;
+    Button BtnStart;
+    Button BtnStop;
+    Button BtnPrev;
+    Button BtnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,45 +55,52 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
 
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         stepMonitor = new stepMonitor();
         stepMonitor.registerListener(this);
+
+        session = new SessionController(getApplicationContext());
+
+        dateController = new DateController();
+        currentDate = dateController.dateOfToday();
 
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();
 
-        // TODO Determine user's ID
-        userID = 1;
+        // Create instance of userID, allowing it to be called upon later.
+        userID = session.returnUserID();
 
+        // Pair buttons with their given variables.
         TvSteps = findViewById(R.id.tv_steps);
         TvDate = findViewById(R.id.disdate);
-        Button BtnStart = findViewById(R.id.btn_start);
-        Button BtnStop = findViewById(R.id.btn_stop);
-        Button BtnPrev = findViewById(R.id.btn_prev);
-        Button BtnNext = findViewById(R.id.btn_next);
+        BtnStart = findViewById(R.id.btn_start);
+        BtnStop = findViewById(R.id.btn_stop);
+        BtnPrev = findViewById(R.id.btn_prev);
+        BtnNext = findViewById(R.id.btn_next);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        final String dateS = sdf.format(Calendar.getInstance().getTime());
-        dateI = Integer.parseInt(dateS);
-        currentDate = dateI;
-        TvDate.setText(dateS);
+        // TODO properly handle dates later.
+        // SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        // final String dateS = sdf.format(Calendar.getInstance().getTime());
+        // dateI = Integer.parseInt(dateS);
+        TvDate.setText(dateController.returnWorkingDateAsString());
 
         final String serverURL = "http://proj309-ad-07.misc.iastate.edu:8080";
         final String sendJsonURL = serverURL + "/steps/update";
-        final String receiveJsonURL = serverURL + "/steps/" + userID + "/" + dateS;
 
         BtnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                currentDate = currentDate - 1;
-                String testURL = serverURL + "/steps/" + userID + "/" + currentDate;
+                // currentDate = currentDate - 1;
+                dateController.subtractDay();
+                workingDate = dateController.returnWorkingDateAsString();
+                String testURL = serverURL + "/steps/" + userID + "/" + workingDate;
                 JsonObjectRequest prevRequest = new JsonObjectRequest(Request.Method.GET,
                         testURL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             numSteps = response.getInt("steps");
-                            TvDate.setText("" + currentDate);
+                            TvDate.setText("" + workingDate);
                             TvSteps.setText(TEXT_NUM_STEPS + numSteps);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -97,27 +113,23 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     }
                 });
 
-                VolleySingleton.getInstance().addToRequestQueue(prevRequest, "json_req");
+                VolleySingleton.getInstance().addToRequestQueue(prevRequest, "steps_req");
             }
         });
 
         BtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg) {
-                if (currentDate >= dateI){
-                    currentDate = dateI;
-                }
-                else {
-                    currentDate += 1;
-                }
-                String testURL = serverURL + "/steps/" + userID + "/" + currentDate ;
+                dateController.addDay();
+                workingDate = dateController.returnWorkingDateAsString();
+                String testURL = serverURL + "/steps/" + userID + "/" + workingDate;
                 JsonObjectRequest nextRequest = new JsonObjectRequest(Request.Method.GET,
                         testURL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             numSteps = response.getInt("steps");
-                            TvDate.setText("" + currentDate);
+                            TvDate.setText("" + workingDate);
                             TvSteps.setText(TEXT_NUM_STEPS + numSteps);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -129,14 +141,17 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
                     }
                 });
-                VolleySingleton.getInstance().addToRequestQueue(nextRequest, "json_req");
+                VolleySingleton.getInstance().addToRequestQueue(nextRequest, "steps_req");
             }
         });
 
         BtnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                currentDate = dateI;
+                dateController.setWorkingDateToToday();
+                workingDate = dateController.returnWorkingDateAsString();
+                String receiveJsonURL = serverURL + "/steps/" + userID + "/" + workingDate;
+
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
                         receiveJsonURL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -144,7 +159,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                         try {
                             numSteps = response.getInt("steps");
                             tempSteps = numSteps;
-                            TvDate.setText(dateS);
+                            TvDate.setText(workingDate);
                             TvSteps.setText(TEXT_NUM_STEPS + numSteps);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,8 +172,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     }
                 });
 
-                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
-                sensorManager.registerListener(StepActivity.this, accel,
+                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "steps_req");
+                sensorManager.registerListener(StepActivity.this, Sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
             }
         });
@@ -169,7 +184,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 sensorManager.unregisterListener(StepActivity.this);
                 JSONObject updateData = null;
                 try {
-                    updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, dateS);
+                    updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, workingDate);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

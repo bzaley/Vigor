@@ -13,14 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.vigor.vigor.MainActivity">
+        <activity android:name="com.example.vigor.vigor.OpenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.vigor.vigor.MainActivity" />
         <activity android:name="com.example.vigor.vigor.TestActivity" />
+        <activity android:name="com.example.vigor.vigor.LoginActivity" />
+        <activity android:name="com.example.vigor.vigor.RegisterActivity" />
         <activity android:name="com.example.vigor.vigor.Graphing"></activity>
         <activity android:name="com.example.vigor.vigor.StepActivity"></activity>
     </application>

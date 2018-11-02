@@ -16,6 +16,7 @@ public class SessionController {
     private static final String USER_EMAIL = "eMail";
     private static final String USER_FIRST = "firstName";
     private static final String USER_LAST = "lastName";
+    private static final String USER_ROLE = "userRole";
 
 
     SharedPreferences sharedPref;
@@ -28,16 +29,19 @@ public class SessionController {
         spEditor = sharedPref.edit();
     }
 
-    public void attemptLogin(boolean isLoggedIn, int uID, String email, String first_name,
-                             String last_name) {
+    public void attemptLogin(boolean isLoggedIn, int uID, String email, String firstName,
+                             String lastName, String userRole) {
         spEditor.putBoolean(LOGGEDIN_KEY, isLoggedIn);
 
         if (isLoggedIn) {
             spEditor.putInt(USER_ID, uID);
             spEditor.putString(USER_EMAIL, email);
-            spEditor.putString(USER_FIRST, first_name);
-            spEditor.putString(USER_LAST, last_name);
+            spEditor.putString(USER_FIRST, firstName);
+            spEditor.putString(USER_LAST, lastName);
+            spEditor.putString(USER_ROLE, userRole);
         }
+
+        spEditor.commit();
     }
 
     public boolean checkLogin() {
@@ -64,6 +68,10 @@ public class SessionController {
         String fullName = sharedPref.getString(USER_FIRST, "") + " " +
                 sharedPref.getString(USER_LAST, "");
         return fullName;
+    }
+
+    public String returnUserRole() {
+        return sharedPref.getString(USER_ROLE, "");
     }
 
 }
