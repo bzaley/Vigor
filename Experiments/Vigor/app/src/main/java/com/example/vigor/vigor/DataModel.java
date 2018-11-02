@@ -5,11 +5,13 @@ public class DataModel {
     String Activity;
     String Sets;
     String Reps;
+    String AssignedBy;
 
-    public DataModel(String Activity, String Sets, String Reps) {
+    public DataModel(String Activity, String Sets, String Reps, String AssignedBy) {
         this.Activity = Activity;
         this.Sets = Sets;
         this.Reps = Reps;
+        this.AssignedBy = AssignedBy;
     }
 
     public String getActivity() {
@@ -22,5 +24,9 @@ public class DataModel {
 
     public String getReps() {
         return Reps;
+    }
+
+    public String getAssignedBy() {
+        return AssignedBy;
     }
 }

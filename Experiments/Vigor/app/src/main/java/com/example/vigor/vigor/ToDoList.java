@@ -70,41 +70,7 @@ public class ToDoList extends AppCompatActivity {
         adapter = new CustomAdapter(dataModels, getApplicationContext());
 
         listView.setAdapter(adapter);
-
-        //listen for a user to delete an item and confirm with them if they want to.
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(
-                        ToDoList.this);
-                alert.setTitle("Are you sure about that?");
-                alert.setMessage("Are you sure to delete record?");
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DataModel temp = dataModels.get(position);
-                        dataModels.remove(position);
-                        adapter.notifyDataSetChanged();
-                        dialog.dismiss();
-
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.show();
-//                DataModel dataModel = dataModels.get(position);
-//
-//                Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getType() + "", Snackbar.LENGTH_LONG)
-//                        .setAction("No action", null).show();
-                return true;
-            }
-        });
-
+        addToList("Training Goals", "Sets", "Reps", "null");
         //Load activities from server
         String jsonUrl;
         if (TrainerToDoList.isTrainer){
@@ -140,6 +106,44 @@ public class ToDoList extends AppCompatActivity {
                     }
                 });
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
+
+        addToList("Set Goals", "Sets", "Reps", "null");
+
+        //listen for a user to delete an item and confirm with them if they want to.
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                if (!(dataModels.get(position).getAssignedBy().equals("null"))){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            ToDoList.this);
+                    alert.setTitle("Are you sure about that?");
+                    alert.setMessage("Are you sure to delete record?");
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataModel temp = dataModels.get(position);
+                            dataModels.remove(position);
+                            adapter.notifyDataSetChanged();
+                            dialog.dismiss();
+
+                        }
+                    });
+                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
+//                DataModel dataModel = dataModels.get(position);
+//
+//                Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getType() + "", Snackbar.LENGTH_LONG)
+//                        .setAction("No action", null).show();
+                }
+                return true;
+            }
+        });
 
         //Listen for a user to add an activity
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -281,19 +285,12 @@ public class ToDoList extends AppCompatActivity {
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         switch (dayOfWeek) {
             case 1: return "monday";
-                    break;
             case 2: return "tuesday";
-                    break;
             case 3: return "wednesday";
-                    break;
             case 4: return "thursday";
-                    break;
             case 5: return "friday";
-                    break;
             case 6: return "saturday";
-                    break;
             case 7: return "sunday";
-                    break;
         }
         return null;
     }
