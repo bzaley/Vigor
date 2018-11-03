@@ -134,9 +134,9 @@ public class RegisterActivity extends Activity {
                                              String password, String role) throws JSONException {
         JSONObject returnObject = new JSONObject();
         try {
-            returnObject.put("first name", firstName);
-            returnObject.put("last name", lastName);
-            returnObject.put("email", email);
+            returnObject.put("userEmail", email);
+            returnObject.put("firstname", firstName);
+            returnObject.put("lastname", lastName);
             returnObject.put("password", password);
             returnObject.put("role", role);
         } catch (JSONException e) {

@@ -11,10 +11,13 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SessionController session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        session = new SessionController(getApplicationContext());
 
         TextView temp = (TextView) findViewById(R.id.QuickViewText);
         String mystring=new String("Quick View");
@@ -61,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, TrainerToDoList.class));
+            }
+        });
+
+        Button logoutButton = (Button) findViewById(R.id.logoutButt);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                session.attemptLogout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
             }
         });
 

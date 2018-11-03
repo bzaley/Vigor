@@ -44,6 +44,12 @@ public class SessionController {
         spEditor.commit();
     }
 
+    public void attemptLogout() {
+        spEditor.clear();
+        spEditor.putBoolean(LOGGEDIN_KEY, false);
+        spEditor.commit();
+    }
+
     public boolean checkLogin() {
         return sharedPref.getBoolean(LOGGEDIN_KEY, false);
     }
