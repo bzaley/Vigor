@@ -23,15 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-                android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-                android:name="com.example.vigor.vigor.MainActivity"
-                android:screenOrientation="portrait" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name="com.example.vigor.vigor.MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name="com.example.vigor.vigor.LoginActivity" />
         <activity android:name="com.example.vigor.vigor.RegisterActivity" />
         <activity android:name="com.example.vigor.vigor.Graphing" />
         <activity
-                android:name="com.example.vigor.vigor.StepActivity"
-                android:screenOrientation="portrait" />
+            android:name="com.example.vigor.vigor.StepActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.example.vigor.vigor.ToDoList"
             android:label="@string/title_activity_to_do_list"
