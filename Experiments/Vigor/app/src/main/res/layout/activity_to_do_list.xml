@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:maxHeight="1000dp"
+    android:maxWidth="1000dp"
+    android:minHeight="1000dp"
+    android:minWidth="1000dp"
+    tools:context="com.example.vigor.vigor.MainActivity">
+
+    <EditText
+        android:id="@+id/etNewItem2"
+        android:layout_width="157dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:hint="Enter an Activity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etNewSets"
+        android:layout_width="70dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:hint="Sets"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toEndOf="@+id/etNewItem2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etNewReps"
+        android:layout_width="70dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btnAddItem2"
+        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:hint="Reps"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toEndOf="@+id/etNewSets"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnAddItem2"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:text="Add Item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNewItem2"
+        tools:context=".ToDoList">
+
+        <include layout="@layout/content_to_do_list" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

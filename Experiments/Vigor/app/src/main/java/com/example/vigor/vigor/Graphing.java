@@ -12,29 +12,27 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 
 public class Graphing extends AppCompatActivity {
-    private Button nextButton;
-    private int stepsTemp;
-    private static int data[] = new int[7];
-    public static ArrayList<Integer> dataArrayList = new ArrayList<>();
+    private int i = 0;
+    private int data[] = new int[7];
+    private int datsrecieved[] = new int[7];
     public static int j = 0;
     private String TAG = Graphing.class.getSimpleName();
 
@@ -71,7 +69,7 @@ public class Graphing extends AppCompatActivity {
                         ids[j] = Integer.parseInt(t.getText().toString());
                     }
                 }
-                Graph(ids, dateString);
+                Graph(ids, null);
             }
         });
 
@@ -79,45 +77,41 @@ public class Graphing extends AppCompatActivity {
         populate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                j = 0;
-                for (int i=0; i<7; i++){
-                    //initializing variables
-                    int dateNew = Integer.parseInt(dateS) - i;
-                    String JsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/" + dateNew;
-                    //Making initial request
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, JsonURL, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                stepsTemp = response.getInt("steps");
-//                                jsonresults.setText("" + stepsTemp);
-                                Graphing.data[j] = stepsTemp;
-                                j++;
-                            } catch (JSONException e) {
-                                jsonresults.setText("failed in try/catch loop ln 120");
-                                e.printStackTrace();
+                //hardcoded for testing
+                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/week/181021";
+                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject element = (JSONObject) response.getJSONObject(i);
+                                        data[i] = element.getInt("steps");
+                                        datsrecieved[i] = Integer.parseInt(element.getString("date"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                //Graph data
+                                Graph(data, datsrecieved);
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            jsonresults.setText("failed in onErrorResponse ln 127");
-                            VolleyLog.d(TAG, "Error:" + error.getMessage());
-                        }
-                    });
-                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req0");
-                }
-                //Graph data
-                Graph(Graphing.data, dateString);
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
+
+                VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
             }
         });
     }
 
-    public void Graph(int days[], String dateString){
+    public void Graph(int days[], int dates[]) {
         double resultNum = 0, temp = 0;
 
-        for (int i = 0; i < 7; i++){
-            if (days[i] > temp){
+        for (int i = 0; i < 7; i++) {
+            if (days[i] > temp) {
                 temp = days[i];
             }
             resultNum += days[i];
@@ -173,4 +167,8 @@ public class Graphing extends AppCompatActivity {
 //// is not necessary
 //        revGraph.getGridLabelRenderer().setHumanRounding(false);
     }
+
+//    public void set(int index, int element){
+//
+//    }
 }

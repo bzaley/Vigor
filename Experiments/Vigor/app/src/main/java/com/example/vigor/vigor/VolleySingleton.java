@@ -1,14 +1,12 @@
 package com.example.vigor.vigor;
 
-import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.vigor.vigor.utils.LruBitmapCache;
 
-public class VolleySingleton extends android.app.Application{
+public class VolleySingleton extends android.app.Application {
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
@@ -41,7 +39,7 @@ public class VolleySingleton extends android.app.Application{
 
     public ImageLoader getmImageLoader() {
         getRequestQueue();
-        if (mImageLoader == null){
+        if (mImageLoader == null) {
             mImageLoader = new ImageLoader(this.mRequestQueue,
                     new LruBitmapCache());
         }
@@ -51,8 +49,7 @@ public class VolleySingleton extends android.app.Application{
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         if (tag == null || tag.isEmpty()) {
             req.setTag(TAG);
-        }
-        else {
+        } else {
             req.setTag(tag);
         }
         getRequestQueue().add(req);
