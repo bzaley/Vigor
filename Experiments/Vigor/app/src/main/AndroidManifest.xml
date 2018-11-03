@@ -24,16 +24,22 @@
         </activity>
         <activity
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-                android:name="com.example.vigor.vigor.MainActivity" />
+                android:name="com.example.vigor.vigor.MainActivity"
+                android:screenOrientation="portrait" />
         <activity android:name="com.example.vigor.vigor.LoginActivity" />
         <activity android:name="com.example.vigor.vigor.RegisterActivity" />
         <activity android:name="com.example.vigor.vigor.Graphing" />
-        <activity android:name="com.example.vigor.vigor.StepActivity" />
+        <activity
+                android:name="com.example.vigor.vigor.StepActivity"
+                android:screenOrientation="portrait" />
         <activity
             android:name="com.example.vigor.vigor.ToDoList"
             android:label="@string/title_activity_to_do_list"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.example.vigor.vigor.TrainerToDoList" />
+        <activity
+            android:name="com.example.vigor.vigor.TrainerToDoList"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
