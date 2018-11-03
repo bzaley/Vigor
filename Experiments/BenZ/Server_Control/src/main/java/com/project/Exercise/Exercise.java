@@ -1,38 +1,45 @@
-/*package com.project.Exercise;
+package com.project.Exercise;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Exercise {
 
 	@Id
+	@GeneratedValue 
+	@Column(columnDefinition ="serial")
 	private int exerciseId;
-	private String exercise;
+	private String name;
 	
 	public Exercise() {
 		
 	}
-	
-	public Exercise(int exerciseId, String exercise) {
+
+	public Exercise(int exerciseId, String name) {
 		super();
 		this.exerciseId = exerciseId;
-		this.exercise = exercise;
+		this.name = name;
 	}
-	
-	
+
 	public int getExerciseId() {
 		return exerciseId;
 	}
+
 	public void setExerciseId(int exerciseId) {
 		this.exerciseId = exerciseId;
 	}
-	public String getExercise() {
-		return exercise;
+
+	public String getName() {
+		return name;
 	}
-	public void setExercise(String exercise) {
-		this.exercise = exercise;
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	
-}*/
+	
+}

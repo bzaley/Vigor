@@ -1,33 +1,29 @@
 package com.project.userExercise;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+public class userEntry {
 
-@Entity
-public class userExercise {
-
-	@Id
+	
 	private int userId;
 	private String date;
-	private int exerciseId;
+	private String exercise;
 	private int sets;
 	private int reps;
 	private boolean complete;
 	
-	public userExercise() {
+	
+	public userEntry() {
 		
 	}
 	
-	public userExercise(int userId, String date, int exerciseId, int sets, int reps, boolean complete) {
+	public userEntry(int userId, String date, String exercise, int sets, int reps, boolean complete) {
 		super();
 		this.userId = userId;
 		this.date = date;
-		this.exerciseId = exerciseId;
+		this.exercise = exercise;
 		this.sets = sets;
 		this.reps = reps;
 		this.complete = complete;
 	}
-	
 	public int getUserId() {
 		return userId;
 	}
@@ -40,11 +36,11 @@ public class userExercise {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public int getExerciseId() {
-		return exerciseId;
+	public String getExercise() {
+		return exercise;
 	}
-	public void setExerciseId(int exerciseId) {
-		this.exerciseId = exerciseId;
+	public void setExercise(String exercise) {
+		this.exercise = exercise;
 	}
 	public int getSets() {
 		return sets;
@@ -64,4 +60,5 @@ public class userExercise {
 	public void setComplete(boolean complete) {
 		this.complete = complete;
 	}
+	
 }

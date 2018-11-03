@@ -1,25 +1,32 @@
 package com.project.userExercise;
 
 import java.util.List;
-
+import com.project.Exercise.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface userExerciseRepository extends CrudRepository<userExercise, Integer> {
-
+public interface userExerciseRepository extends JpaRepository<userExercise, Integer>, CrudRepository<userExercise, Integer> {
 	
-	// getExercises(int date, int user)
-	// addExercise(int date, int user)
-	// deleteExercise(int date, int user)
-	// updateExercise(int date, int user)
+	public List<userExercise> findAllByUserIdAndDate(int userId, String date);
 	
 	/*
-	@Query(value = "SELECT * FROM userExercise WHERE(userId = :userId AND date = :date)", nativeQuery = true)
-	public List<userExercise> getUserExercises(@Param("userId")int userId, @Param("date")int date);
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE user")
+	public void updateUserExercise(@Param("userId") int user_id, @Param("exerciseId") int exercise_id);
+	*/
+	/*
+	@Query(value = "SELECT t FROM Exercise WHERE t.name = :name", nativeQuery = true)
+	public Exercise getExerciseIdFromName(@Param("name") String name);
+	*/
+	/*
+	@Query(value = "SELECT name t FROM Exercise WHERE t.exerciseId = :id", nativeQuery = true)
+	public Exercise getNameFromExerciseId(@Param("id") int id);
 	*/
 	
-	@Query(value = "SELECT exerciseId, sets, reps, complete FROM user_exercise ue WHERE (ue.day = :day) AND (ue.userId = :ID)", nativeQuery = true)
-	public List<userExercise> findByDayUser(@Param("day") int day, @Param("ID") int userId);
+	
 }
