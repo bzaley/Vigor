@@ -25,7 +25,6 @@
         <activity
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar"
                 android:name="com.example.vigor.vigor.MainActivity" />
-        <activity android:name="com.example.vigor.vigor.TestActivity" />
         <activity android:name="com.example.vigor.vigor.LoginActivity" />
         <activity android:name="com.example.vigor.vigor.RegisterActivity" />
         <activity android:name="com.example.vigor.vigor.Graphing" />
