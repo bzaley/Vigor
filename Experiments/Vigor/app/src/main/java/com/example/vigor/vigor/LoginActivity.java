@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends Activity {
     private String TAG = LoginActivity.class.getSimpleName();
-    private String loginURL = "https://proj309-ad-07.misc.iastate.edu:8080/login";
+    private String loginURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/login";
     private String strEmail;
     private String strPass;
     private Button loginButton;
@@ -81,6 +81,8 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d( TAG, "Error:" + error.getMessage());
+                            Toast.makeText(getApplicationContext(), "Error: " +
+                                            error.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "login_req");

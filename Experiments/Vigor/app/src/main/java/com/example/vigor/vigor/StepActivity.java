@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -110,6 +111,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -139,6 +142,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
                 VolleySingleton.getInstance().addToRequestQueue(nextRequest, "steps_req");
@@ -169,6 +174,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -198,6 +205,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
                 VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
