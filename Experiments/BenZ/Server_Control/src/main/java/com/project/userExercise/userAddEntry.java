@@ -1,33 +1,36 @@
 package com.project.userExercise;
 
-
 // Finalized Ryan Ingram
 
-// Object for every interaction with front end.
-// Difference with userExercise object is exercise to exerciseId and day needs to be added
 
-public class userEntry {
+// Object that will be excepted for any add to userExercise table
+// Difference with table is exercise to exerciseId
+
+public class userAddEntry {
 
 	private int userId;
 	private String planName;
+	private int day;
 	private String exercise;
 	private int sets;
 	private int reps;
 	private String saveDate;
 	
-	public userEntry() {
+	public userAddEntry() {
 		
 	}
 	
-	public userEntry(int userId, String planName, String exercise, int sets, int reps, String saveDate) {
+	public userAddEntry(int userId, String planName, int day, String exercise, int sets, int reps, String saveDate) {
 		super();
 		this.userId = userId;
 		this.planName = planName;
+		this.day = day;
 		this.exercise = exercise;
 		this.sets = sets;
 		this.reps = reps;
 		this.saveDate = saveDate;
 	}
+	
 	
 	public int getUserId() {
 		return userId;
@@ -40,6 +43,12 @@ public class userEntry {
 	}
 	public void setPlanName(String planName) {
 		this.planName = planName;
+	}
+	public int getDay() {
+		return day;
+	}
+	public void setDay(int day) {
+		this.day = day;
 	}
 	public String getExercise() {
 		return exercise;

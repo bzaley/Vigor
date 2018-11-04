@@ -16,15 +16,25 @@ public class userExerciseController {
 	@Autowired
 	private userExerciseService userExerciseService;
 	
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/add")
-	public void addUserExercise(@RequestBody userEntry userEntry) {
-		userExerciseService.addUserExercise(userEntry);
+	/*
+	 * USE CASE: A user adds a single exercise (Not involved with plan)
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/addSingle")
+	public void addUserSingleExercise(@RequestBody userAddEntry userAddEntry) {
+		userExerciseService.addUserSingleExercise(userAddEntry);
 	}
 	
+	/*
+	 * 
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/{userId}/{date}")
 	public List<userEntry> getExercisesForDay(@PathVariable int userId, @PathVariable String date) {
 		return userExerciseService.getExercisesForDay(userId, date);
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/remove")
+	public void removeUserExercise(@RequestBody userEntry userEntry) {
+		userExerciseService.removeUserExercise(userEntry);
 	}
 	
 	/*

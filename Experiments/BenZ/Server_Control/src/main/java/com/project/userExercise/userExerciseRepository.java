@@ -13,20 +13,13 @@ public interface userExerciseRepository extends JpaRepository<userExercise, Inte
 	
 	public List<userExercise> findAllByUserIdAndDate(int userId, String date);
 	
+	public List<userExercise> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
+	
 	/*
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE user")
 	public void updateUserExercise(@Param("userId") int user_id, @Param("exerciseId") int exercise_id);
 	*/
-	/*
-	@Query(value = "SELECT t FROM Exercise WHERE t.name = :name", nativeQuery = true)
-	public Exercise getExerciseIdFromName(@Param("name") String name);
-	*/
-	/*
-	@Query(value = "SELECT name t FROM Exercise WHERE t.exerciseId = :id", nativeQuery = true)
-	public Exercise getNameFromExerciseId(@Param("id") int id);
-	*/
-	
 	
 }

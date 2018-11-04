@@ -3,29 +3,34 @@ package com.project.userExercise;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+// Finalized Ryan Ingram
+
 @Entity
 public class userExercise {
 
 	@Id
 	private int userId;
-	private String date;
+	private String planName;
+	private int day;
 	private int exerciseId;
 	private int sets;
 	private int reps;
-	private boolean complete;
+	private String saveDate;
+	
 	
 	public userExercise() {
 		
 	}
 	
-	public userExercise(int userId, String date, int exerciseId, int sets, int reps, boolean complete) {
+	public userExercise(int userId, String planName, int day, int exerciseId, int sets, int reps, String saveDate) {
 		super();
 		this.userId = userId;
-		this.date = date;
+		this.planName = planName;
+		this.day = day;
 		this.exerciseId = exerciseId;
 		this.sets = sets;
 		this.reps = reps;
-		this.complete = complete;
+		this.saveDate = saveDate;
 	}
 	
 	public int getUserId() {
@@ -34,11 +39,17 @@ public class userExercise {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public String getDate() {
-		return date;
+	public String getPlanName() {
+		return planName;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setPlanName(String planName) {
+		this.planName = planName;
+	}
+	public int getDay() {
+		return day;
+	}
+	public void setDay(int day) {
+		this.day = day;
 	}
 	public int getExerciseId() {
 		return exerciseId;
@@ -58,10 +69,13 @@ public class userExercise {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
-	public boolean isComplete() {
-		return complete;
+	public String getSaveDate() {
+		return saveDate;
 	}
-	public void setComplete(boolean complete) {
-		this.complete = complete;
+	public void setSaveDate(String saveDate) {
+		this.saveDate = saveDate;
 	}
+	
+	
+	
 }
