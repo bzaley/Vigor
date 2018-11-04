@@ -18,9 +18,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,9 +38,12 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     private JsonRequest jsonRequest;
     private SessionController session;
     private DateController dateController;
+    private WebSocketClient socketClient;
     private String workingDate;
     private Sensor Sensor;
     private static final String TEXT_NUM_STEPS = "Number of Steps: ";
+    private static final String serverURL = "http://proj309-ad-07.misc.iastate.edu:8080";
+    private static final String updateStepsURL = serverURL + "/steps/update";
     private int numSteps;
     private int tempSteps;
     private int userID;
@@ -71,6 +80,41 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         // Create instance of userID, allowing it to be called upon later.
         userID = session.returnUserID();
 
+        //websocket link and draft
+//        String ws;
+//        Draft[] drafts = {new Draft_6455()};
+//
+//        //Initialize and start the websocket
+//        try {
+//            socketClient = new WebSocketClient(new URI(ws), drafts[0]) {
+//                @Override
+//                public void onOpen(ServerHandshake serverHandshake) {
+//                    Log.d("OPEN", "run() returned: " + "is connecting");
+//                }
+//
+//                @Override
+//                public void onMessage(String message) {
+//                    Log.d("", "run() returned: " + message);
+//                }
+//
+//                @Override
+//                public void onClose(int i, String s, boolean b) {
+//                    Log.d("CLOSE", "onClose() returned: " + s);
+//                }
+//
+//                @Override
+//                public void onError(Exception e) {
+//                    Log.d("Exception:", e.toString());
+//                }
+//            };
+//        } catch (URISyntaxException e) {
+//            Log.d("Exception:", e.getMessage().toString());
+//            e.printStackTrace();
+//        }
+//
+//        //Connect websocket
+//        socketClient.connect();
+
         // Pair buttons with their given variables.
         TvSteps = findViewById(R.id.tv_steps);
         TvDate = findViewById(R.id.disdate);
@@ -79,14 +123,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         BtnPrev = findViewById(R.id.btn_prev);
         BtnNext = findViewById(R.id.btn_next);
 
-        // TODO properly handle dates later.
-        // SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        // final String dateS = sdf.format(Calendar.getInstance().getTime());
-        // dateI = Integer.parseInt(dateS);
         TvDate.setText(dateController.returnWorkingDateAsString());
-
-        final String serverURL = "http://proj309-ad-07.misc.iastate.edu:8080";
-        final String sendJsonURL = serverURL + "/steps/update";
 
         BtnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +233,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     e.printStackTrace();
                 }
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                        sendJsonURL, updateData, new Response.Listener<JSONObject>() {
+                        updateStepsURL, updateData, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
@@ -205,8 +242,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(TAG, "Error:" + error.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
-                                Toast.LENGTH_LONG).show();
                     }
                 });
                 VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
@@ -230,5 +265,27 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     public void step(long timeNs) {
         numSteps++;
         TvSteps.setText(TEXT_NUM_STEPS + numSteps);
+        if(numSteps >= (tempSteps + 3)) {
+            tempSteps = numSteps;
+            JSONObject updateData = null;
+            try {
+                updateData = jsonRequest.makeStepsJsonObject(userID, numSteps, workingDate);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                    updateStepsURL, updateData, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d(TAG, response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error:" + error.getMessage());
+                }
+            });
+            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_mid_req");
+        }
     }
 }
