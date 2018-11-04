@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface userExerciseRepository extends JpaRepository<userExercise, Integer>, CrudRepository<userExercise, Integer> {
 	
-	public List<userExercise> findAllByUserIdAndDate(int userId, String date);
-	
 	public List<userExercise> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
+	
+	public List<userExercise> findAllByUserIdAndPlanName(int userId, String planName);
 	
 	/*
 	@Modifying
@@ -22,4 +22,20 @@ public interface userExerciseRepository extends JpaRepository<userExercise, Inte
 	public void updateUserExercise(@Param("userId") int user_id, @Param("exerciseId") int exercise_id);
 	*/
 	
+	
+	@Modifying
+	@Transactional
+	@Query(value = "INSERT INTO user_exercise VALUES (entry, :day, :exerciseId, :planName, :reps, :sets, :userId)", nativeQuery = true)
+	public void addUserExercise(@Param("userId") int userId,
+			@Param("planName") String planName,
+			@Param("day") int day,
+			@Param("exerciseId") int exerciseId,
+			@Param("sets") int sets,
+			@Param("reps") int reps);
+	
+	
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM user_exercise WHERE (user_id = :userId AND exercise_id = :exerciseId)", nativeQuery = true)
+	public void removeExercise(@Param("userId") int userId, @Param("exerciseId") int exerciseId);
 }

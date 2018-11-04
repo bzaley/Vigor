@@ -19,18 +19,29 @@ public class userExerciseController {
 	/*
 	 * USE CASE: A user adds a single exercise (Not involved with plan)
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/addSingle")
+	@RequestMapping(method = RequestMethod.POST, value = "/addUserSingle")
 	public void addUserSingleExercise(@RequestBody userAddEntry userAddEntry) {
 		userExerciseService.addUserSingleExercise(userAddEntry);
 	}
 	
 	/*
-	 * 
+	 * USE CASE: A user adds a plan that they created
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/{userId}/{date}")
-	public List<userEntry> getExercisesForDay(@PathVariable int userId, @PathVariable String date) {
-		return userExerciseService.getExercisesForDay(userId, date);
+	@RequestMapping(method = RequestMethod.POST, value = "/addUserPlan")
+	public void addUserPlanExercises(@RequestBody List<userAddEntry> plan) {
+		userExerciseService.addUserPlanExercises(plan);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getPlan/{userId}/{planName}")
+	public List<userEntry> getExercisesForPlan(@PathVariable int userId, @PathVariable String planName) {
+		return userExerciseService.getExercisesForPlan(userId, planName);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/get/{userId}")
+	public List<userEntry> getExercises(@PathVariable int userId) {
+		return userExerciseService.getExercises(userId);
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/remove")
 	public void removeUserExercise(@RequestBody userEntry userEntry) {
@@ -43,10 +54,10 @@ public class userExerciseController {
 		userExerciseService.updateUserExercise(userEntry);
 	}*/
 	
-	/*
-	@RequestMapping(method = RequestMethod.POST, value = "/complete")
-	public void markComplete(@RequestBody userEntry userEntry) {
-		userExerciseService.markComplete(userEntry);
-	}*/
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/complete/{remove}/{saveDate}")
+	public void markComplete(@RequestBody userEntry userEntry, @PathVariable boolean remove, @PathVariable String saveDate) {
+		userExerciseService.markComplete(userEntry, remove, saveDate);
+	}
 	
 }

@@ -14,13 +14,12 @@ public class userAddEntry {
 	private String exercise;
 	private int sets;
 	private int reps;
-	private String saveDate;
 	
 	public userAddEntry() {
 		
 	}
 	
-	public userAddEntry(int userId, String planName, int day, String exercise, int sets, int reps, String saveDate) {
+	public userAddEntry(int userId, String planName, int day, String exercise, int sets, int reps) {
 		super();
 		this.userId = userId;
 		this.planName = planName;
@@ -28,7 +27,6 @@ public class userAddEntry {
 		this.exercise = exercise;
 		this.sets = sets;
 		this.reps = reps;
-		this.saveDate = saveDate;
 	}
 	
 	
@@ -68,12 +66,4 @@ public class userAddEntry {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
-	public String getSaveDate() {
-		return saveDate;
-	}
-	public void setSaveDate(String saveDate) {
-		this.saveDate = saveDate;
-	}
-	
-	
 }
