@@ -59,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button trainertodo = (Button) findViewById(R.id.TrainerToDo);
-        trainertodo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, TrainerToDoList.class));
-            }
-        });
-
         Button logoutButton = (Button) findViewById(R.id.logoutButt);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
                 session.attemptLogout();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
+            }
+        });
+
+        Button btnMakePlan = (Button) findViewById(R.id.btnMakePlan);
+        btnMakePlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, PlanCreator.class));
             }
         });
 
