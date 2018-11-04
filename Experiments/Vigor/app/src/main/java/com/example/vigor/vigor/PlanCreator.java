@@ -2,9 +2,10 @@ package com.example.vigor.vigor;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,13 +13,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import javax.microedition.khronos.egl.EGLDisplay;
 
 public class PlanCreator extends AppCompatActivity {
 
@@ -33,6 +37,8 @@ public class PlanCreator extends AppCompatActivity {
     private ListView listView;
     private static CustomAdapter adapter;
     public static int index = 0;
+
+    private String TAG = PlanCreator.class.getSimpleName();
 
     static ArrayList<ArrayList> days;
     static ArrayList<DataModel> dataModels;
@@ -73,7 +79,7 @@ public class PlanCreator extends AppCompatActivity {
                 String toAddSets = sets.getText().toString();
                 String toAddReps = reps.getText().toString();
                 boolean passed = true;
-                if (toAddActivity.equals("")){
+                if (toAddActivity.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             PlanCreator.this);
                     alert.setTitle("No activity entered.");
@@ -86,7 +92,7 @@ public class PlanCreator extends AppCompatActivity {
                     alert.show();
                     passed = false;
                 }
-                if (toAddSets.equals("") || toAddReps.equals("")){
+                if (toAddSets.equals("") || toAddReps.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             PlanCreator.this);
                     alert.setTitle("Amount entered isn't a number.");
@@ -99,7 +105,7 @@ public class PlanCreator extends AppCompatActivity {
                     alert.show();
                     passed = false;
                 }
-                if (passed){
+                if (passed) {
                     dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, ""));
                     activity.setText("");
                     sets.setText("");
@@ -114,47 +120,72 @@ public class PlanCreator extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         PlanCreator.this);
-                alert.setTitle("Are you sure about that?");
-                alert.setMessage("This will save the plan to the server you won't be able to change it.");
+                alert.setTitle("Are you sure about that");
                 final EditText alertInput = new EditText(PlanCreator.this);
                 alert.setView(alertInput);
                 alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (days.size() <= PlanCreator.index)
-                            days.add(dataModels);
-                        else
-                            days.set(PlanCreator.index, dataModels);
-
-                        JSONArray toSend = new JSONArray();
                         String planName = alertInput.getText().toString();
-                        for (int i=0; i<days.size(); i++){
-                            ArrayList temp = days.get(i);
-                            for (int j=0; j<temp.size(); j++){
-                                DataModel tempActivity = (DataModel) temp.get(j);
-                                JSONObject toPut = new JSONObject();
-                                try {
-                                    toPut.put("userId", "userId");
-                                    toPut.put("planName", planName);
-                                    toPut.put("day", (i+1));
-                                    toPut.put("exercise", tempActivity.getActivity());
-                                    toPut.put("sets", tempActivity.getSets());
-                                    toPut.put("reps", tempActivity.getReps());
-                                    toPut.put("saveDate", "");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                        if (planName.equals("")){
+                            AlertDialog.Builder alert2 = new AlertDialog.Builder(
+                                    PlanCreator.this);
+                            alert2.setTitle("Are you sure about that");
+                            alert2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alert2.show();
+                        } else {
+                            if (days.size() <= PlanCreator.index)
+                                days.add(dataModels);
+                            else
+                                days.set(PlanCreator.index, dataModels);
+
+                            JSONArray toSend = new JSONArray();
+                            for (int i=0; i<days.size(); i++){
+                                ArrayList temp = days.get(i);
+                                for (int j=0; j<temp.size(); j++){
+                                    DataModel tempActivity = (DataModel) temp.get(j);
+                                    JSONObject toPut = new JSONObject();
+                                    try {
+                                        toPut.put("userId", "userId");
+                                        toPut.put("planName", planName);
+                                        toPut.put("day", (i+1));
+                                        toPut.put("exercise", tempActivity.getActivity());
+                                        toPut.put("sets", tempActivity.getSets());
+                                        toPut.put("reps", tempActivity.getReps());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
-                        }
 
-                        dialog.dismiss();
+                            String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
+                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                                    planURL, toSend, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.d(TAG, response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.d(TAG, "Error; " + error.toString());
+                                }
+                            });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
+                            dialog.dismiss();
+                        }
                     }
                 });
                 alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+
                     }
                 });
                 alert.show();
@@ -168,7 +199,7 @@ public class PlanCreator extends AppCompatActivity {
                     days.add(dataModels);
                 else
                     days.set(PlanCreator.index, dataModels);
-                if (PlanCreator.index > 0){
+                if (PlanCreator.index > 0) {
                     PlanCreator.index--;
                     dataModels = days.get(PlanCreator.index);
                     Day.setText("Day: " + (PlanCreator.index + 1));
@@ -193,14 +224,14 @@ public class PlanCreator extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (days.size() <= PlanCreator.index){
+                if (days.size() <= PlanCreator.index) {
                     days.add(dataModels);
                 } else {
                     days.set(PlanCreator.index, dataModels);
                 }
                 PlanCreator.index++;
                 Day.setText("Day: " + (PlanCreator.index + 1));
-                if (days.size()-1 < index){
+                if (days.size() - 1 < index) {
                     dataModels = new ArrayList<>();
 //                    days.add(dataModels);
                 } else {
