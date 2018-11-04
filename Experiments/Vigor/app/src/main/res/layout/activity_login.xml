@@ -24,7 +24,9 @@
             android:id="@+id/etPass"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="password"/>
+            android:hint="Password"
+            android:password="true"
+            android:inputType="textPassword"/>
         
         <Button
             android:id="@+id/loginButt"

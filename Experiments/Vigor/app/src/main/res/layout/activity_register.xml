@@ -36,13 +36,17 @@
             android:id="@+id/passET"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Password" />
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:password="true"/>
 
         <EditText
             android:id="@+id/confirmET"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Confirm Password"/>
+            android:hint="Confirm Password"
+            android:password="true"
+            android:inputType="textPassword"/>
 
         <EditText
             android:id="@+id/roleET"
