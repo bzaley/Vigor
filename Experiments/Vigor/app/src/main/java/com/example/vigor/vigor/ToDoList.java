@@ -68,19 +68,21 @@ public class ToDoList extends AppCompatActivity {
                 String enteredItem = toAddItem.getText().toString();
                 String enteredSets = toAddSets.getText().toString();
                 String enteredReps = toAddReps.getText().toString();
-                if (TrainerToDoList.isTrainer) {
-                    addToList(enteredItem, enteredSets, enteredReps, "Trainer");
-                } else {
-                    addToList(enteredItem, enteredSets, enteredReps, "Me");
-                }
-                toAddItem.setText("");
-                toAddSets.setText("");
-                toAddReps.setText("");
-
                 if (!(TrainerToDoList.isTrainer)) {
-                    JSONObject toSend = null;
-                    String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/add";
-                    toSend = makeJSONobj(1, "yyyy-mm-dd", enteredItem, enteredSets, enteredReps, false);
+                    addToList(enteredItem, enteredSets, enteredReps, "single");
+                    //Send new activity to server as a single
+                    JSONObject toSend = new JSONObject();
+                    String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addSingle";
+                    try {
+                        toSend.put("userID", 1);
+                        toSend.put("plan", "");
+                        toSend.put("exercise", enteredItem);
+                        toSend.put("sets", Integer.parseInt(enteredSets));
+                        toSend.put("reps", Integer.parseInt(enteredReps));
+                        toSend.put("savedDate", "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                             jsonUrlAddNew, toSend, new Response.Listener<JSONObject>() {
                         @Override
@@ -95,6 +97,9 @@ public class ToDoList extends AppCompatActivity {
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                 }
+                toAddItem.setText("");
+                toAddSets.setText("");
+                toAddReps.setText("");
             }
         });
 
@@ -114,7 +119,22 @@ public class ToDoList extends AppCompatActivity {
                             dataModels.remove(position);
                             adapter.notifyDataSetChanged();
                             dialog.dismiss();
-                            JSONObject toSend = makeJSONobj(1, "yyyy-mm-dd", temp.getActivity(), temp.getSets(), temp.getReps(), true);
+                            JSONObject toSend = new JSONObject();
+                            try {
+                                toSend.put("userId","");
+                                if (temp.getAssignedBy().equals("plan")) {
+                                    toSend.put("plan","plan");
+                                } else {
+
+                                    toSend.put("plan","");
+                                }
+                                toSend.put("exercise","");
+                                toSend.put("sets","");
+                                toSend.put("reps","");
+                                toSend.put("savedDate","");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             String jsonUrlComplete = "http://proj309-ad-07.misc.iastate.edu:8080//userxercise/markcomplete";
                             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                                     jsonUrlComplete, toSend, new Response.Listener<JSONObject>() {
@@ -152,7 +172,7 @@ public class ToDoList extends AppCompatActivity {
     private void setUpInitialData() {
         addToList("Trainer Goals", "Sets", "Reps", "null");
         addToList("Personal Goals", "", "", "null");
-        //Load activities from server
+//        Load activities from server
         String jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise" + "userID" + "/date";
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
@@ -167,38 +187,7 @@ public class ToDoList extends AppCompatActivity {
                                 String sets = element.getInt("sets") + "";
                                 String reps = element.getInt("reps") + "";
                                 element.getInt("complete");
-                                String assignedby = "Me";
-                                addToList(activity, sets, reps, assignedby);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
-
-        jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/trainerExercise" + "userID";
-
-        jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject element = (JSONObject) response.getJSONObject(i);
-                                element.getInt("userId");
-                                String activity = element.getString("exerciseId");
-                                element.getInt("date");
-                                String sets = element.getInt("sets") + "";
-                                String reps = element.getInt("reps") + "";
-                                element.getInt("complete");
-                                String assignedby = "Trainer";
+                                String assignedby = "Plan";
                                 addToList(activity, sets, reps, assignedby);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -242,7 +231,7 @@ public class ToDoList extends AppCompatActivity {
         if (AssignedBy.equals("null")) {
             dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy));
             adapter.notifyDataSetChanged();
-        } else if (AssignedBy.equals("Me") || AssignedBy.equals("Trainer")) {
+        } else if (AssignedBy.equals("plan") || AssignedBy.equals("single")) {
             if (isInt(Sets) || isInt(Reps)) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         ToDoList.this);
@@ -262,7 +251,7 @@ public class ToDoList extends AppCompatActivity {
                     }
                 }
             } else {
-                if (AssignedBy.equals("Trainer")) {
+                if (AssignedBy.equals("plan")) {
                     int index = 0;
                     for (int i = 0; i < dataModels.size(); i++) {
                         if (dataModels.get(i).getAssignedBy().equals("null"))
@@ -278,20 +267,5 @@ public class ToDoList extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    public JSONObject makeJSONobj(int userID, String Date, String exercise, String sets, String reps, boolean complete){
-        JSONObject toSend = new JSONObject();
-        try {
-            toSend.put("userID", userID);
-            toSend.put("date",Date);
-            toSend.put("exercise", exercise);
-            toSend.put("sets", Integer.parseInt(sets));
-            toSend.put("reps", Integer.parseInt(reps));
-            toSend.put("complete", complete);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return toSend;
     }
 }
