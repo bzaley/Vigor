@@ -39,6 +39,7 @@ public class PlanCreator extends AppCompatActivity {
     public static int index = 0;
 
     private String TAG = PlanCreator.class.getSimpleName();
+    private SessionController session;
 
     static ArrayList<ArrayList> days;
     static ArrayList<DataModel> dataModels;
@@ -47,6 +48,8 @@ public class PlanCreator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_creator);
+
+        session = new SessionController(getApplicationContext());
 
         activity = (EditText) findViewById(R.id.etActivity);
         sets = (EditText) findViewById(R.id.etSets);
@@ -152,7 +155,7 @@ public class PlanCreator extends AppCompatActivity {
                                     DataModel tempActivity = (DataModel) temp.get(j);
                                     JSONObject toPut = new JSONObject();
                                     try {
-                                        toPut.put("userId", "userId");
+                                        toPut.put("userId", session.returnUserID());
                                         toPut.put("planName", planName);
                                         toPut.put("day", (i+1));
                                         toPut.put("exercise", tempActivity.getActivity());

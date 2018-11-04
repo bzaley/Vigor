@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class Graphing extends AppCompatActivity {
@@ -40,6 +41,9 @@ public class Graphing extends AppCompatActivity {
 //    JSONObject data;
 
     RequestQueue requestQue;
+    private SessionController session;
+    private DateController dateController;
+    private Date currentDate;
 
 
     @Override
@@ -47,18 +51,21 @@ public class Graphing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphing);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        final String dateS = sdf.format(Calendar.getInstance().getTime());
-        final String dateString = dateS;
-
         jsonresults = (TextView) findViewById(R.id.jsonData);
+        //initialize session controller
+        session = new SessionController(getApplicationContext());
+
+        //initialize date controller
+        dateController = new DateController();
+        currentDate = dateController.dateOfToday();
 
         Button results = (Button) findViewById(R.id.averageBTN);
         results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int[] ids = new int[]{R.id.numEditText1, R.id.numEditText2, R.id.numEditText3, R.id.numEditText4, R.id.numEditText5, R.id.numEditText6, R.id.numEditText7};
-                int dateNew;
+                int[] ids = new int[]{R.id.numEditText1, R.id.numEditText2, R.id.numEditText3,
+                        R.id.numEditText4, R.id.numEditText5, R.id.numEditText6, R.id.numEditText7};
+
                 //Read in Values
                 int j = 0;
                 for (int id : ids) {
@@ -78,9 +85,10 @@ public class Graphing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //hardcoded for testing
-                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/1/week/181021";
-                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
-                        new Response.Listener<JSONArray>() {
+                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/" +
+                        session.returnUserID() + "/7/" + dateController.returnWorkingDateAsString();
+                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
+                        null, new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
                                 for (int i = 0; i < response.length(); i++) {

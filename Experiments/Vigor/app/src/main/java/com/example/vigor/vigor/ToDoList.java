@@ -59,9 +59,6 @@ public class ToDoList extends AppCompatActivity {
         nextBtn = (Button) findViewById(R.id.ToDoBtnNext);
         prevBtn = (Button) findViewById(R.id.ToDoBtnLast);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        final String dateS = sdf.format(Calendar.getInstance().getTime());
-
         dataModels = new ArrayList<>();
 
         adapter = new CustomAdapter(dataModels, getApplicationContext());
@@ -82,7 +79,7 @@ public class ToDoList extends AppCompatActivity {
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
                     try {
-                        toSend.put("userID", 1);
+                        toSend.put("userID", session.returnUserID());
                         toSend.put("plan", "");
                         toSend.put("day", -1);
                         toSend.put("exercise", enteredItem);
@@ -115,7 +112,9 @@ public class ToDoList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/userId/planName", new JSONObject(), new Response.Listener<JSONObject>() {
+                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
+                                session.returnUserID() + "/planName", new JSONObject(),
+                        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
@@ -138,7 +137,9 @@ public class ToDoList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/userId/planNamee", new JSONObject(), new Response.Listener<JSONObject>() {
+                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
+                                session.returnUserID() + "/planName", new JSONObject(),
+                        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
@@ -175,7 +176,7 @@ public class ToDoList extends AppCompatActivity {
                             dialog.dismiss();
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("userId",1);
+                                toSend.put("userId",session.returnUserID());
                                 if (!(temp.getAssignedBy().equals("single"))) {
                                     toSend.put("plan","plan");
                                 } else {
@@ -187,7 +188,7 @@ public class ToDoList extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            String jsonUrlComplete = "http://proj309-ad-07.misc.iastate.edu:8080//userExercise/save";
+                            String jsonUrlComplete = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/save";
                             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                                     jsonUrlComplete, toSend, new Response.Listener<JSONObject>() {
                                 @Override
@@ -226,9 +227,10 @@ public class ToDoList extends AppCompatActivity {
         addToList("Trainer Goals", "Sets", "Reps", "null");
         addToList("Personal Goals", "", "", "null");
 //        Load activities from server
-        String jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" + "userID" + "/planName";
-        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
-                new Response.Listener<JSONArray>() {
+        String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
+                session.returnUserID() + "/planName";
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
+                null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
@@ -254,7 +256,8 @@ public class ToDoList extends AppCompatActivity {
                 });
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
 
-        jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" + "userID";
+        jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" +
+                session.returnUserID();
         jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
                     @Override
