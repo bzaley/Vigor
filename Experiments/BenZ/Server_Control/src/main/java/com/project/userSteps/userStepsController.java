@@ -1,5 +1,6 @@
 package com.project.userSteps;
 
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,9 @@ public class userStepsController {
 
 	}
 	
-	@RequestMapping("/{userID}/{StartingDate}/{numDays}")
-	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int startingDate, @PathVariable int numDays) {
-		return stepsService.getMultipleDays(userId, startingDate, numDays);
+	@RequestMapping("/multiple/{userID}/{numDays}")
+	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int numDays) {
+		return stepsService.getMultipleDays(userId, numDays);
 	}
 
 
