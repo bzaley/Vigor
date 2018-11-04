@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class userExercise {
 
 	@Id
-	@GeneratedValue //auto increments the value when a new row is created
+	@GeneratedValue 
 	@Column(columnDefinition ="serial")
 	private int entry;
 	private int userId;

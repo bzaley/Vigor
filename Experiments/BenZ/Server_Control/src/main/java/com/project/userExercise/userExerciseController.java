@@ -48,16 +48,19 @@ public class userExerciseController {
 		userExerciseService.removeUserExercise(userEntry);
 	}
 	
-	/*
-	@RequestMapping(method = RequestMethod.POST, value = "/update")
-	public void updateUserExercise(@RequestBody userEntry userEntry) {
-		userExerciseService.updateUserExercise(userEntry);
-	}*/
+	@RequestMapping(method = RequestMethod.POST, value = "/save")
+	public void markSave(@RequestBody userEntry userEntry) {
+		userExerciseService.markSave(userEntry);
+	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/next/{userId}/{planName}")
+	public void nextDay(@PathVariable int userId, @PathVariable String planName) {
+		userExerciseService.nextDay(userId, planName);
+	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/complete/{remove}/{saveDate}")
-	public void markComplete(@RequestBody userEntry userEntry, @PathVariable boolean remove, @PathVariable String saveDate) {
-		userExerciseService.markComplete(userEntry, remove, saveDate);
+	@RequestMapping(method = RequestMethod.GET, value = "/last/{userId}/{planName}")
+	public void prevDay(@PathVariable int userId, @PathVariable String planName) {
+		userExerciseService.prevDay(userId, planName);
 	}
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 import com.project.Exercise.*;
 import com.project.plan.*;
+import com.project.utilities.DateController;
 import com.project.historian.*;
 
 import com.project.Exercise.Exercise;
@@ -50,26 +51,34 @@ public class userExerciseService {
 	
 	public void addUserPlanExercises(List<userAddEntry> plan) {
 		
+		int max = 0;
+		
 		for(userAddEntry tmp : plan) { // Selects each individual exercise in plan and puts them into tmp
 			
-			Exercise exercise = exerciseRepo.findByName(tmp.getExercise()); // Retrieves exercise object based off the userAddEntry
-			int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object 
-			userExercise userExercise = new userExercise( // Creates a userExercise object with the correct info
-					tmp.getUserId(),
-					tmp.getPlanName(),
-					tmp.getDay(),
-					id,
-					tmp.getSets(),
-					tmp.getReps());
-			
+				Exercise exercise = exerciseRepo.findByName(tmp.getExercise()); // Retrieves exercise object based off the userAddEntry
+				int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object 
+				
+				userExercise userExercise = new userExercise( // Creates a userExercise object with the correct info
+						tmp.getUserId(),
+						tmp.getPlanName(),
+						tmp.getDay(),
+						id,
+						tmp.getSets(),
+						tmp.getReps());
+				
 			userExerciseRepo.addUserExercise(userExercise.getUserId(), userExercise.getPlanName(), userExercise.getDay(), userExercise.getExerciseId(), userExercise.getSets(), userExercise.getReps());
+		
 		}
+		
+		// Get the value of maxDay
+		max = plan.get(plan.size()-1).getDay();
 		
 		// Enters in the new plan and starts the day at 1
 		plan day_track = new plan(
 				plan.get(0).getUserId(),
 				plan.get(0).getPlanName(),
-				1);
+				1,
+				max);
 		planRepo.save(day_track);
 	}
 	
@@ -149,39 +158,68 @@ public class userExerciseService {
 	}
 	
 	
-	//@RequestBody /userExercise/update
-	//public void updateUserExercise(userEntry userEntry) {
-		
-		
-	//}
-	
-	// pull from bens project
-	public void markComplete(userEntry userEntry, boolean remove) { // uses dateController
+	/*
+	 * USE CASE: user completes and exercise and checks it off
+	 * Function takes in the user exercise that is done
+	 * The current date is found using date controller
+	 * The exercise id is found
+	 * The plan name is grabbed to determine if the exercise should be removed
+	 * The if statement is executed based off plan name
+	 */
+	public void markSave(userEntry userEntry) { // uses dateController
 		
 		// Date controller saves current date in saveDate
-		String saveDate = "yyyy-mm-dd";
+		DateController controller = new DateController();
+		String saveDate = controller.returnWorkingDateAsString();
 		
 		Exercise exercise = exerciseRepo.findByName(userEntry.getExercise()); // Retrieves exercise object based off the userAddEntry
-		int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object 
+		int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object
+
+		String plan = userEntry.getPlanName();
 		
-		if (remove) {
+		if (plan == "") {
 			historianRepo.addHistory(userEntry.getUserId(), id, userEntry.getSets(), userEntry.getReps(), saveDate);
-			
-			//removeUserExercise(userEntry.getUserId(), id);
-			removeUserExercise(userEntry);
-			
+			userExerciseRepo.removeExercise(userEntry.getUserId(), id);
 		} else {
 			historianRepo.addHistory(userEntry.getUserId(), id, userEntry.getSets(), userEntry.getReps(), saveDate);
 		}
-		
 	}
 	
-	public void nextDay() {
+	
+	/*
+	 * Increments the current day the user is on of the plan
+	 */
+	public void nextDay(int userId, String planName) {
 		
+		int new_day = 0;
+		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
+		
+		if (plan.getCurrentDay() == plan.getMaxDay()) {
+			new_day = 1;
+		} else {
+			new_day = plan.getCurrentDay() + 1;
+		}
+		
+		
+		planRepo.updateDay(userId, planName, new_day);
 	}
 	
-	public void prevDay() {
+	
+	/*
+	 * Decrements the current day the user is on of the plan
+	 */
+	public void prevDay(int userId, String planName) {
+
+		int new_day = 0;
+		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
 		
+		if (plan.getCurrentDay() == 1) {
+			new_day = plan.getMaxDay();
+		} else {
+			new_day = plan.getCurrentDay() - 1;
+		}
+		
+		planRepo.updateDay(userId, planName, new_day);
 	}
 	
 

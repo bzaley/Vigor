@@ -8,9 +8,10 @@ import javax.persistence.Id;
 @Entity
 public class historian {
 
+	
 	@Id
-	@GeneratedValue
-	@Column(columnDefinition = "serial")
+	@GeneratedValue 
+	@Column(columnDefinition ="serial")
 	private int entry;
 	private int userId;
 	private int exerciseId;
@@ -22,21 +23,24 @@ public class historian {
 		
 	}
 	
-	public historian(int entry, int userId, int exerciseId, int sets, int reps, String saveDate) {
+	public historian(int userId, int exerciseId, int sets, int reps, String saveDate) {
 		super();
-		this.entry = entry;
 		this.userId = userId;
 		this.exerciseId = exerciseId;
 		this.sets = sets;
 		this.reps = reps;
 		this.saveDate = saveDate;
 	}
+	
+	
 	public int getEntry() {
 		return entry;
 	}
+
 	public void setEntry(int entry) {
 		this.entry = entry;
 	}
+
 	public int getUserId() {
 		return userId;
 	}
