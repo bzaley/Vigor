@@ -113,7 +113,7 @@ public class ToDoList extends AppCompatActivity {
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
-                                session.returnUserID() + "/planName", new JSONObject(),
+                                session.returnUserID() + "/plan", new JSONObject(),
                         new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -138,7 +138,7 @@ public class ToDoList extends AppCompatActivity {
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
-                                session.returnUserID() + "/planName", new JSONObject(),
+                                session.returnUserID() + "/plan", new JSONObject(),
                         new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
