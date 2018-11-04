@@ -64,5 +64,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btnMakePlan = (Button) findViewById(R.id.btnMakePlan);
+        btnMakePlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, PlanCreator.class));
+            }
+        });
+
     }
 }

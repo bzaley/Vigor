@@ -11,7 +11,7 @@
     tools:context="com.example.vigor.vigor.MainActivity">
 
     <Button
-        android:id="@+id/btnDUMMY1"
+        android:id="@+id/btnMakePlan"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_alignTop="@+id/graphButton"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:text="Trainer to do"
-        app:layout_constraintBottom_toTopOf="@+id/btnDUMMY1"
+        app:layout_constraintBottom_toTopOf="@+id/btnMakePlan"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_marginBottom="8dp"
         android:text="ToDo List"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnDUMMY1"
+        app:layout_constraintEnd_toStartOf="@+id/btnMakePlan"
         app:layout_constraintStart_toEndOf="@+id/pedometer" />
 
     <Button
