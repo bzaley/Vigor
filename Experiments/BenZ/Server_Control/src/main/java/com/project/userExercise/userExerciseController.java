@@ -3,6 +3,7 @@ package com.project.userExercise;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,19 +49,20 @@ public class userExerciseController {
 		userExerciseService.removeUserExercise(userEntry);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/save")
+	@RequestMapping(method = RequestMethod.GET, value = "/save")
 	public void markSave(@RequestBody userEntry userEntry) {
 		userExerciseService.markSave(userEntry);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/next/{userId}/{planName}")
-	public void nextDay(@PathVariable int userId, @PathVariable String planName) {
-		userExerciseService.nextDay(userId, planName);
+	public ResponseEntity<?> nextDay(@PathVariable int userId, @PathVariable String planName) {
+		return ResponseEntity.ok().body(userExerciseService.nextDay(userId, planName));
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/last/{userId}/{planName}")
-	public void prevDay(@PathVariable int userId, @PathVariable String planName) {
-		userExerciseService.prevDay(userId, planName);
+	public ResponseEntity<?> prevDay(@PathVariable int userId, @PathVariable String planName) {
+		return ResponseEntity.ok().body(userExerciseService.prevDay(userId, planName));
 	}
 	
 }

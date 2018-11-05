@@ -189,7 +189,7 @@ public class userExerciseService {
 	/*
 	 * Increments the current day the user is on of the plan
 	 */
-	public void nextDay(int userId, String planName) {
+	public good nextDay(int userId, String planName) {
 		
 		int new_day = 0;
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
@@ -202,13 +202,17 @@ public class userExerciseService {
 		
 		
 		planRepo.updateDay(userId, planName, new_day);
+		
+		
+		good sendBack = new good("success");
+		return sendBack;
 	}
 	
 	
 	/*
 	 * Decrements the current day the user is on of the plan
 	 */
-	public void prevDay(int userId, String planName) {
+	public good prevDay(int userId, String planName) {
 
 		int new_day = 0;
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
@@ -220,6 +224,9 @@ public class userExerciseService {
 		}
 		
 		planRepo.updateDay(userId, planName, new_day);
+		
+		good sendBack = new good("success");
+		return sendBack;
 	}
 	
 
