@@ -2,4 +2,6 @@
     <string name="app_name">Vigor</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_to_do_list">ToDoList</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_user_table">UserTable</string>
 </resources>

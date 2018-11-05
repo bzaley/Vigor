@@ -109,7 +109,7 @@ public class PlanCreator extends AppCompatActivity {
                     passed = false;
                 }
                 if (passed) {
-                    dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, ""));
+                    dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, "", ""));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -147,41 +147,78 @@ public class PlanCreator extends AppCompatActivity {
                                 days.add(dataModels);
                             else
                                 days.set(PlanCreator.index, dataModels);
-
-                            JSONArray toSend = new JSONArray();
-                            for (int i=0; i<days.size(); i++){
-                                ArrayList temp = days.get(i);
-                                for (int j=0; j<temp.size(); j++){
-                                    DataModel tempActivity = (DataModel) temp.get(j);
-                                    JSONObject toPut = new JSONObject();
-                                    try {
-                                        toPut.put("userId", session.returnUserID());
-                                        toPut.put("planName", planName);
-                                        toPut.put("day", (i+1));
-                                        toPut.put("exercise", tempActivity.getActivity());
-                                        toPut.put("sets", tempActivity.getSets());
-                                        toPut.put("reps", tempActivity.getReps());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                            if (session.returnUserRole().equals("trainer")){
+                                JSONArray toSend = new JSONArray();
+                                for (int i=0; i<days.size(); i++){
+                                    ArrayList temp = days.get(i);
+                                    for (int j=0; j<temp.size(); j++){
+                                        DataModel tempActivity = (DataModel) temp.get(j);
+                                        JSONObject toPut = new JSONObject();
+                                        try {
+                                            toPut.put("userId", session.returnUserID());
+                                            toPut.put("eamil", UserTable.UserEmailString);
+                                            toPut.put("planName", planName);
+                                            toPut.put("day", (i+1));
+                                            toPut.put("exercise", tempActivity.getActivity());
+                                            toPut.put("sets", tempActivity.getSets());
+                                            toPut.put("reps", tempActivity.getReps());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
-                            }
 
-                            String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
-                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
-                                    planURL, toSend, new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    Log.d(TAG, response.toString());
+                                String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerPlan";
+                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                                        planURL, toSend, new Response.Listener<JSONArray>() {
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        Log.d(TAG, response.toString());
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "Error; " + error.toString());
+                                    }
+                                });
+                                VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
+                                dialog.dismiss();
+                            } else {
+                                JSONArray toSend = new JSONArray();
+                                for (int i=0; i<days.size(); i++){
+                                    ArrayList temp = days.get(i);
+                                    for (int j=0; j<temp.size(); j++){
+                                        DataModel tempActivity = (DataModel) temp.get(j);
+                                        JSONObject toPut = new JSONObject();
+                                        try {
+                                            toPut.put("userId", session.returnUserID());
+                                            toPut.put("planName", planName);
+                                            toPut.put("day", (i+1));
+                                            toPut.put("exercise", tempActivity.getActivity());
+                                            toPut.put("sets", tempActivity.getSets());
+                                            toPut.put("reps", tempActivity.getReps());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                 }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.d(TAG, "Error; " + error.toString());
-                                }
-                            });
-                            VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
-                            dialog.dismiss();
+
+                                String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
+                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                                        planURL, toSend, new Response.Listener<JSONArray>() {
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        Log.d(TAG, response.toString());
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(TAG, "Error; " + error.toString());
+                                    }
+                                });
+                                VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
+                                dialog.dismiss();
+                            }
                         }
                     }
                 });
