@@ -24,4 +24,9 @@ public interface userStepsRepository extends JpaRepository<userSteps, Integer>, 
 	@Transactional
 	@Query(value = "UPDATE user_steps us SET us.steps = :newSteps WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
 	public void updateSteps(@Param("userID")int userId, @Param("uDate")String date, @Param("newSteps")int steps);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE user_steps us SET us.step_goal = :newStepGoal WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
+	public void updateStepGoal(@Param("userID")int userId, @Param("uDate")String date, @Param("newStepGoal")int stepGoal);
 }

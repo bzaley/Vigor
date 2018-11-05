@@ -37,9 +37,14 @@ public class userStepsController {
 
 	}
 	
-	@RequestMapping("/multiple/{userID}/{numDays}")
+	@RequestMapping("/multiple/{userId}/{numDays}")
 	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int numDays) {
 		return stepsService.getMultipleDays(userId, numDays);
+	}
+	
+	@RequestMapping("/updateStepGoal/{userId}/{date}/{stepGoal}")
+	public void updateStepGoal(@PathVariable int userId, @PathVariable String date, @PathVariable int stepGoal) {
+		stepsService.updateStepGoal(userId, date, stepGoal);
 	}
 
 

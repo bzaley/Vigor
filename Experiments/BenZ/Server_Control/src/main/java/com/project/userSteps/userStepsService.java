@@ -4,7 +4,6 @@ package com.project.userSteps;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,14 @@ public class userStepsService {
 	public userSteps getToday(int userId, String date) {
 		this.checkForEntry(userId, date);
 		return stepsRepo.findByUserIdAndDate(userId, date);
-
 	}
 
 	public void updateStepEntry(int userId, String date, int steps) {
 		stepsRepo.updateSteps(userId, date, steps);
-
+	}
+	
+	public void updateStepGoal(int userId, String date, int stepGoal) {
+		stepsRepo.updateStepGoal(userId, date, stepGoal);
 	}
 
 	public void addNewEntry(userSteps newEntry) {
@@ -34,7 +35,7 @@ public class userStepsService {
 
 	public void checkForEntry(int userId, String date) {
 		if(!stepsRepo.existsByUserIdAndDate(userId, date)) {
-			userSteps u = new userSteps(userId, date, 0);
+			userSteps u = new userSteps(userId, date, 0, 1000);
 			this.addNewEntry(u);
 		}
 	}
@@ -49,5 +50,16 @@ public class userStepsService {
 			dateController.subtractDay();
 		}
 		return stepsOfUser;
+	}
+	
+	public boolean compareStepsVsGoal(int userId, String date) {
+		userSteps user = stepsRepo.findByUserIdAndDate(userId, date);
+		if(user.getSteps()>=user.getStepGoal()) {
+			return true;
+		}else {
+			return false;
+		}
+		
+		
 	}
 }

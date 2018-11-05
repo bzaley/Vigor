@@ -17,18 +17,29 @@ public class userSteps {
 	private int userId;
 	private String date;
 	private int steps;
+	private int stepGoal;
 	
 	public userSteps() {
 	}
 	
-	public userSteps(int userId, String date, int steps) {
+	public userSteps(int userId, String date, int steps, int stepGoal) {
 		super();
 		
 		this.userId = userId;
 		this.date = date;
 		this.steps = steps;
+		this.stepGoal = stepGoal;
+		
 	}
 
+
+	public int getStepGoal() {
+		return stepGoal;
+	}
+
+	public void setStepGoal(int stepGoal) {
+		this.stepGoal = stepGoal;
+	}
 
 	public int getUserId() {
 		return userId;
