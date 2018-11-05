@@ -165,6 +165,7 @@ public class PlanCreator extends AppCompatActivity {
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                        toSend.put(toPut);
                                     }
                                 }
 
@@ -200,6 +201,7 @@ public class PlanCreator extends AppCompatActivity {
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                        toSend.put(toPut);
                                     }
                                 }
 

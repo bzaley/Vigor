@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -153,23 +154,28 @@ public class ToDoList extends AppCompatActivity {
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
-                                session.returnUserID() + "/plan", new JSONObject(),
+                                session.returnUserID() + "/plan", null,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-
+                                try {
+                                    Toast.makeText(ToDoList.this, response.getString("success"), Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                dataModels = new ArrayList<>();
+                                adapter = new CustomAdapter(dataModels, getApplicationContext());
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                                setUpInitialData();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toast.makeText(ToDoList.this, "Fail", Toast.LENGTH_SHORT).show();
                     }
                 });
-                dataModels = new ArrayList<>();
-                adapter = new CustomAdapter(dataModels, getApplicationContext());
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                setUpInitialData();
+                VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
             }
         });
 
@@ -178,23 +184,28 @@ public class ToDoList extends AppCompatActivity {
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
-                                session.returnUserID() + "/plan", new JSONObject(),
+                                session.returnUserID() + "/plan", null,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-
+                                try {
+                                    Toast.makeText(ToDoList.this, response.getString("success"), Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                dataModels = new ArrayList<>();
+                                adapter = new CustomAdapter(dataModels, getApplicationContext());
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                                setUpInitialData();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toast.makeText(ToDoList.this, "Fail", Toast.LENGTH_SHORT).show();
                     }
                 });
-                dataModels = new ArrayList<>();
-                adapter = new CustomAdapter(dataModels, getApplicationContext());
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                setUpInitialData();
+                VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
             }
         });
 
@@ -222,9 +233,9 @@ public class ToDoList extends AppCompatActivity {
                                 } else {
                                     toSend.put("plan", "");
                                 }
-                                toSend.put("exercise", "");
-                                toSend.put("sets", "");
-                                toSend.put("reps", "");
+                                toSend.put("exercise", temp.getActivity());
+                                toSend.put("sets", temp.getSets());
+                                toSend.put("reps", temp.getReps());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
