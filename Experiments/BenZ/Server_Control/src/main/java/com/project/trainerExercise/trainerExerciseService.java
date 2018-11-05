@@ -46,7 +46,7 @@ public class trainerExerciseService {
 				trainerAddEntry.getTrainerId(),
 				uid,
 				"",
-				-1,
+				trainerAddEntry.getDay(),
 				exid,
 				trainerAddEntry.getSets(),
 				trainerAddEntry.getReps());

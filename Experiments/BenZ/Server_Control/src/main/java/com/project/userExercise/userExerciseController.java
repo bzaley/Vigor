@@ -49,7 +49,7 @@ public class userExerciseController {
 		userExerciseService.removeUserExercise(userEntry);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/save")
+	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	public void markSave(@RequestBody userEntry userEntry) {
 		userExerciseService.markSave(userEntry);
 	}
