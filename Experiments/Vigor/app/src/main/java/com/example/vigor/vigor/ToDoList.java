@@ -70,11 +70,11 @@ public class ToDoList extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String enteredItem = toAddItem.getText().toString();
-                String enteredSets = toAddSets.getText().toString();
-                String enteredReps = toAddReps.getText().toString();
+                String enteredItem = toAddItem.getText().toString(),
+                        enteredSets = toAddSets.getText().toString(),
+                        enteredReps = toAddReps.getText().toString();
                 if (!(TrainerToDoList.isTrainer)) {
-                    addToList(enteredItem, enteredSets, enteredReps, "single");
+                    addToList(enteredItem, enteredSets, enteredReps, "individual", "single");
                     //Send new activity to server as a single
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
@@ -174,7 +174,7 @@ public class ToDoList extends AppCompatActivity {
                             try {
                                 toSend.put("userId",1);
                                 if (!(temp.getAssignedBy().equals("single"))) {
-                                    toSend.put("plan","plan");
+                                    toSend.put("plan",temp.getPlanName());
                                 } else {
                                     toSend.put("plan","");
                                 }
@@ -184,7 +184,7 @@ public class ToDoList extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            String jsonUrlComplete = "http://proj309-ad-07.misc.iastate.edu:8080//userExercise/save";
+                            String jsonUrlComplete = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/save";
                             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                                     jsonUrlComplete, toSend, new Response.Listener<JSONObject>() {
                                 @Override
@@ -197,6 +197,7 @@ public class ToDoList extends AppCompatActivity {
                                     VolleyLog.d(TAG, "Error:" + error.getMessage());
                                 }
                             });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
                         }
 
                     });
@@ -220,10 +221,10 @@ public class ToDoList extends AppCompatActivity {
 
     private void setUpInitialData() {
 
-        addToList("Trainer Goals", "Sets", "Reps", "null");
-        addToList("Personal Goals", "", "", "null");
+        addToList("Trainer Goals", "Sets", "Reps", "null", "");
+        addToList("Personal Goals", "", "", "null", "");
 //        Load activities from server
-        String jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" + "userID" + "/planName";
+        String jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" + "userID" + "/plan";
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -232,11 +233,11 @@ public class ToDoList extends AppCompatActivity {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
                                 element.getInt("userId");
-                                String assignedby = element.getString("planName");
+                                String PlanName = element.getString("planName");
                                 String activity = element.getString("exercise");
                                 String sets = element.getInt("sets") + "";
                                 String reps = element.getInt("reps") + "";
-                                addToList(activity, sets, reps, assignedby);
+                                addToList(activity, sets, reps, "individual", PlanName);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -264,7 +265,7 @@ public class ToDoList extends AppCompatActivity {
                                 String activity = element.getString("exercise");
                                 String sets = element.getInt("sets") + "";
                                 String reps = element.getInt("reps") + "";
-                                addToList(activity, sets, reps, assignedby);
+                                addToList(activity, sets, reps, assignedby, "");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -303,11 +304,11 @@ public class ToDoList extends AppCompatActivity {
         return false;
     }
 
-    public void addToList(String Activity, String Sets, String Reps, String AssignedBy) {
+    public void addToList(String Activity, String Sets, String Reps, String AssignedBy, String PlanName) {
         if (AssignedBy.equals("null")) {
-            dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy));
+            dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, ""));
             adapter.notifyDataSetChanged();
-        } else if (AssignedBy.equals("plan") || AssignedBy.equals("single")) {
+        } else if (AssignedBy.equals("individual") || AssignedBy.equals("trainer")) {
             if (isInt(Sets) || isInt(Reps)) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         ToDoList.this);
@@ -327,7 +328,7 @@ public class ToDoList extends AppCompatActivity {
                     }
                 }
             } else {
-                if (AssignedBy.equals("plan")) {
+                if (AssignedBy.equals("trainer")) {
                     int index = 0;
                     for (int i = 0; i < dataModels.size(); i++) {
                         if (dataModels.get(i).getAssignedBy().equals("null"))
@@ -335,10 +336,10 @@ public class ToDoList extends AppCompatActivity {
                         if (index == 2) ;
                         index = i;
                     }
-                    dataModels.add(index - 1, new DataModel(Activity, Sets, Reps, AssignedBy));
+                    dataModels.add(index - 1, new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 } else {
-                    dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy));
+                    dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 }
             }
