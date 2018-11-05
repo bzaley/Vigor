@@ -34,6 +34,7 @@ public class ToDoList extends AppCompatActivity {
     ArrayList<DataModel> dataModels;
     ListView listView;
     private static CustomAdapter adapter;
+    private SessionController session;
     private EditText toAddItem;
     private EditText toAddSets;
     private EditText toAddReps;
@@ -47,6 +48,8 @@ public class ToDoList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
 
+        session = new SessionController(getApplicationContext());
+
         listView = (ListView) findViewById(R.id.list);
         toAddItem = (EditText) findViewById(R.id.etNewItem2);
         toAddSets = (EditText) findViewById(R.id.etNewSets);
@@ -55,9 +58,6 @@ public class ToDoList extends AppCompatActivity {
         addBtn = (Button) findViewById(R.id.btnAddItem2);
         nextBtn = (Button) findViewById(R.id.ToDoBtnNext);
         prevBtn = (Button) findViewById(R.id.ToDoBtnLast);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        final String dateS = sdf.format(Calendar.getInstance().getTime());
 
         dataModels = new ArrayList<>();
 
@@ -70,11 +70,11 @@ public class ToDoList extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String enteredItem = toAddItem.getText().toString(),
-                        enteredSets = toAddSets.getText().toString(),
-                        enteredReps = toAddReps.getText().toString();
-                if (!(TrainerToDoList.isTrainer)) {
-                    addToList(enteredItem, enteredSets, enteredReps, "individual", "single");
+                String enteredItem = toAddItem.getText().toString();
+                String enteredSets = toAddSets.getText().toString();
+                String enteredReps = toAddReps.getText().toString();
+                if (!(session.returnUserRole().equals("trainer"))) {
+                    addToList(enteredItem, enteredSets, enteredReps, "single");
                     //Send new activity to server as a single
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
@@ -112,7 +112,9 @@ public class ToDoList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/userId/planName", new JSONObject(), new Response.Listener<JSONObject>() {
+                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
+                                session.returnUserID() + "/plan", new JSONObject(),
+                        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
@@ -135,7 +137,9 @@ public class ToDoList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/userId/planNamee", new JSONObject(), new Response.Listener<JSONObject>() {
+                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
+                                session.returnUserID() + "/plan", new JSONObject(),
+                        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
@@ -172,7 +176,7 @@ public class ToDoList extends AppCompatActivity {
                             dialog.dismiss();
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("userId",1);
+                                toSend.put("userId",session.returnUserID());
                                 if (!(temp.getAssignedBy().equals("single"))) {
                                     toSend.put("plan",temp.getPlanName());
                                 } else {
@@ -224,9 +228,10 @@ public class ToDoList extends AppCompatActivity {
         addToList("Trainer Goals", "Sets", "Reps", "null", "");
         addToList("Personal Goals", "", "", "null", "");
 //        Load activities from server
-        String jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" + "userID" + "/plan";
-        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
-                new Response.Listener<JSONArray>() {
+        String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
+                session.returnUserID() + "/plan";
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
+                null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
@@ -252,7 +257,8 @@ public class ToDoList extends AppCompatActivity {
                 });
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
 
-        jsonUrl = "http: //proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" + "userID";
+        jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" +
+                session.returnUserID();
         jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
                     @Override

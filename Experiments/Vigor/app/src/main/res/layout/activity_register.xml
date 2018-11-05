@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        >
+
+        <EditText
+            android:id="@+id/firstNameET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"/>
+
+        <EditText
+            android:id="@+id/lastNameET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"/>
+
+        <EditText
+            android:id="@+id/emailET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/passET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:password="true"/>
+
+        <EditText
+            android:id="@+id/confirmET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:password="true"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/roleET"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Role"/>
+
+        <Button
+            android:id="@+id/regButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"/>
+
+        <Button
+            android:id="@+id/logButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Already registered? Login instead!"/>
+
+    </LinearLayout>
+
+</LinearLayout>

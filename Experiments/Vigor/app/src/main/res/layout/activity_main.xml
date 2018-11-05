@@ -11,27 +11,27 @@
     tools:context="com.example.vigor.vigor.MainActivity">
 
     <Button
-        android:id="@+id/btnMakePlan"
+        android:id="@+id/logoutButt"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_alignTop="@+id/graphButton"
         android:layout_alignEnd="@+id/imageView3"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Dummy"
+        android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/TrainerToDo"
+        android:id="@+id/btnMakePlan"
         android:layout_width="117dp"
         android:layout_height="97dp"
         android:layout_above="@+id/graphButton"
         android:layout_alignEnd="@+id/imageView3"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Trainer to do"
-        app:layout_constraintBottom_toTopOf="@+id/btnMakePlan"
+        android:text="Make Plan"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButt"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_marginBottom="8dp"
         android:text="ToDo List"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMakePlan"
+        app:layout_constraintEnd_toStartOf="@+id/logoutButt"
         app:layout_constraintStart_toEndOf="@+id/pedometer" />
 
     <Button
@@ -83,7 +83,7 @@
         android:layout_marginBottom="5dp"
         android:text="Graphing"
         app:layout_constraintBottom_toTopOf="@+id/toDoButton"
-        app:layout_constraintEnd_toStartOf="@+id/TrainerToDo"
+        app:layout_constraintEnd_toStartOf="@+id/btnMakePlan"
         app:layout_constraintStart_toEndOf="@+id/btnViewProfile" />
 
     <Button
