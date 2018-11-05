@@ -7,6 +7,8 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,8 +35,16 @@ public class MainActivity extends AppCompatActivity {
         temp.setText(content);
 
         temp = (TextView) findViewById(R.id.WelcomeText);
-        mystring=new String("Welcome Back " + "!");
+        mystring=new String("Welcome Back " + session.returnFirstName() + "!");
         temp.setText(mystring);
+
+        ImageView profile = (ImageView) findViewById(R.id.imageView2);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
 
         Button graphButton = (Button) findViewById(R.id.graphButton);
         graphButton.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +84,11 @@ public class MainActivity extends AppCompatActivity {
         btnMakePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PlanCreator.class));
+                if (session.returnUserRole().equals("trainer")){
+                    startActivity(new Intent(MainActivity.this, UserTable.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, PlanCreator.class));
+                }
             }
         });
 

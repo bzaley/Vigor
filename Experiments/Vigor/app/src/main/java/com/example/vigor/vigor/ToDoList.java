@@ -1,10 +1,10 @@
 package com.example.vigor.vigor;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,9 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class ToDoList extends AppCompatActivity {
 
@@ -74,7 +72,7 @@ public class ToDoList extends AppCompatActivity {
                 String enteredSets = toAddSets.getText().toString();
                 String enteredReps = toAddReps.getText().toString();
                 if (!(session.returnUserRole().equals("trainer"))) {
-                    addToList(enteredItem, enteredSets, enteredReps, "single");
+                    addToList(enteredItem, enteredSets, enteredReps, "single", "");
                     //Send new activity to server as a single
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
@@ -82,6 +80,48 @@ public class ToDoList extends AppCompatActivity {
                         toSend.put("userID", session.returnUserID());
                         toSend.put("plan", "");
                         toSend.put("day", -1);
+                        toSend.put("exercise", enteredItem);
+                        toSend.put("sets", Integer.parseInt(enteredSets));
+                        toSend.put("reps", Integer.parseInt(enteredReps));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                            jsonUrlAddNew, toSend, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        }
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            ToDoList.this);
+                    alert.setTitle("Are you sure about that");
+                    final EditText alertInput = new EditText(ToDoList.this);
+                    alert.setView(alertInput);
+                    alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+                    addToList(enteredItem, enteredSets, enteredReps, "trainer", "");
+                    //Send new activity to server as a single
+                    JSONObject toSend = new JSONObject();
+                    String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerSingle";
+                    try {
+                        toSend.put("trainerId", session.returnUserID());
+                        toSend.put("userEmail", alertInput.getText().toString());
+                        toSend.put("plan", "");
+                        toSend.put("day", -2);
                         toSend.put("exercise", enteredItem);
                         toSend.put("sets", Integer.parseInt(enteredSets));
                         toSend.put("reps", Integer.parseInt(enteredReps));
@@ -115,11 +155,11 @@ public class ToDoList extends AppCompatActivity {
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
                                 session.returnUserID() + "/plan", new JSONObject(),
                         new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                    }
-                }, new Response.ErrorListener() {
+                            }
+                        }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
@@ -140,11 +180,11 @@ public class ToDoList extends AppCompatActivity {
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
                                 session.returnUserID() + "/plan", new JSONObject(),
                         new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
-                    }
-                }, new Response.ErrorListener() {
+                            }
+                        }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
@@ -176,15 +216,15 @@ public class ToDoList extends AppCompatActivity {
                             dialog.dismiss();
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("userId",session.returnUserID());
+                                toSend.put("userId", session.returnUserID());
                                 if (!(temp.getAssignedBy().equals("single"))) {
-                                    toSend.put("plan","plan");
+                                    toSend.put("plan", temp.getPlanName());
                                 } else {
-                                    toSend.put("plan","");
+                                    toSend.put("plan", "");
                                 }
-                                toSend.put("exercise","");
-                                toSend.put("sets","");
-                                toSend.put("reps","");
+                                toSend.put("exercise", "");
+                                toSend.put("sets", "");
+                                toSend.put("reps", "");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -201,6 +241,7 @@ public class ToDoList extends AppCompatActivity {
                                     VolleyLog.d(TAG, "Error:" + error.getMessage());
                                 }
                             });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
                         }
 
                     });
@@ -224,24 +265,32 @@ public class ToDoList extends AppCompatActivity {
 
     private void setUpInitialData() {
 
-        addToList("Trainer Goals", "Sets", "Reps", "null");
-        addToList("Personal Goals", "", "", "null");
-//        Load activities from server
-        String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
-                session.returnUserID() + "/planName";
-        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
-                null, new Response.Listener<JSONArray>() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                ToDoList.this);
+        alert.setTitle("Would you like to select a plan?");
+        final EditText alertInput = new EditText(ToDoList.this);
+        alert.setView(alertInput);
+        alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                addToList("Trainer Goals", "Sets", "Reps", "null", "");
+                String PlanName = alertInput.getText().toString();
+                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
+                        session.returnUserID() + "/" + PlanName;
+                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
+                        null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
                                 element.getInt("userId");
-                                String assignedby = element.getString("planName");
+                                String PlanName = element.getString("planName");
                                 String activity = element.getString("exercise");
                                 String sets = element.getInt("sets") + "";
                                 String reps = element.getInt("reps") + "";
-                                addToList(activity, sets, reps, assignedby);
+                                addToList(activity, sets, reps, "individual", PlanName);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -249,16 +298,30 @@ public class ToDoList extends AppCompatActivity {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
+                VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
 
-        jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" +
+                dialog.dismiss();
+            }
+        });
+        alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+            }
+        });
+        alert.show();
+        addToList("Personal Goals", "", "", "null", "");
+
+//        Load activities from server
+        String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" +
                 session.returnUserID();
-        jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -270,7 +333,7 @@ public class ToDoList extends AppCompatActivity {
                                 String activity = element.getString("exercise");
                                 String sets = element.getInt("sets") + "";
                                 String reps = element.getInt("reps") + "";
-                                addToList(activity, sets, reps, assignedby);
+                                addToList(activity, sets, reps, assignedby, "");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -309,11 +372,11 @@ public class ToDoList extends AppCompatActivity {
         return false;
     }
 
-    public void addToList(String Activity, String Sets, String Reps, String AssignedBy) {
+    public void addToList(String Activity, String Sets, String Reps, String AssignedBy, String PlanName) {
         if (AssignedBy.equals("null")) {
-            dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy));
+            dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, ""));
             adapter.notifyDataSetChanged();
-        } else if (AssignedBy.equals("plan") || AssignedBy.equals("single")) {
+        } else if (AssignedBy.equals("individual") || AssignedBy.equals("trainer")) {
             if (isInt(Sets) || isInt(Reps)) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         ToDoList.this);
@@ -333,7 +396,7 @@ public class ToDoList extends AppCompatActivity {
                     }
                 }
             } else {
-                if (AssignedBy.equals("plan")) {
+                if (AssignedBy.equals("trainer")) {
                     int index = 0;
                     for (int i = 0; i < dataModels.size(); i++) {
                         if (dataModels.get(i).getAssignedBy().equals("null"))
@@ -341,10 +404,10 @@ public class ToDoList extends AppCompatActivity {
                         if (index == 2) ;
                         index = i;
                     }
-                    dataModels.add(index - 1, new DataModel(Activity, Sets, Reps, AssignedBy));
+                    dataModels.add(index - 1, new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 } else {
-                    dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy));
+                    dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 }
             }
