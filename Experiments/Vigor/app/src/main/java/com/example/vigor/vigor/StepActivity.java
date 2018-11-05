@@ -1,5 +1,8 @@
 package com.example.vigor.vigor;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +31,6 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class StepActivity extends AppCompatActivity implements SensorEventListener,
@@ -58,6 +60,9 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     Button BtnPrev;
     Button BtnNext;
 
+    EditText EtGoalSteps;
+    Button BtnGoals;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,39 +86,51 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         userID = session.returnUserID();
 
         //websocket link and draft
-//        String ws;
-//        Draft[] drafts = {new Draft_6455()};
-//
-//        //Initialize and start the websocket
-//        try {
-//            socketClient = new WebSocketClient(new URI(ws), drafts[0]) {
-//                @Override
-//                public void onOpen(ServerHandshake serverHandshake) {
-//                    Log.d("OPEN", "run() returned: " + "is connecting");
-//                }
-//
-//                @Override
-//                public void onMessage(String message) {
-//                    Log.d("", "run() returned: " + message);
-//                }
-//
-//                @Override
-//                public void onClose(int i, String s, boolean b) {
-//                    Log.d("CLOSE", "onClose() returned: " + s);
-//                }
-//
-//                @Override
-//                public void onError(Exception e) {
-//                    Log.d("Exception:", e.toString());
-//                }
-//            };
-//        } catch (URISyntaxException e) {
-//            Log.d("Exception:", e.getMessage().toString());
-//            e.printStackTrace();
-//        }
-//
-//        //Connect websocket
-//        socketClient.connect();
+        String ws = "ws://proj309-ad-07.misc.iastate.edu:8080/websocket/steps/"
+                + session.returnUserID() + "/" + dateController.returnWorkingDateAsString();
+        // Draft[] drafts = {new Draft_6455()};
+
+        // Initialize and start the websocket
+        try {
+            socketClient = new WebSocketClient(new URI(ws)) {
+                @Override
+                public void onOpen(ServerHandshake serverHandshake) {
+                    Log.d("OPEN", "run() returned: " + "is connecting");
+                    Toast.makeText(getApplicationContext(), "Connection is made with URI",
+                            Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onMessage(String message) {
+                    Log.d("", "run() returned: " + message);
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    Notification notify = new Notification.Builder(getApplicationContext()).
+                            setContentTitle("Vigor").setContentText(message).
+                            setContentTitle("Step Update!").
+                            setSmallIcon(R.drawable.ic_launcher_foreground).build();
+                    notify.flags |= Notification.FLAG_AUTO_CANCEL;
+                    notificationManager.notify(0, notify);
+                }
+
+                @Override
+                public void onClose(int i, String s, boolean b) {
+                    Log.d("CLOSE", "onClose() returned: " + s);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("Exception:", e.toString());
+                }
+            };
+        } catch (URISyntaxException e) {
+            Log.d("Exception:", e.getMessage().toString());
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+        //Connect websocket
+        socketClient.connect();
 
         // Pair buttons with their given variables.
         TvSteps = findViewById(R.id.tv_steps);
@@ -123,12 +140,14 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         BtnPrev = findViewById(R.id.btn_prev);
         BtnNext = findViewById(R.id.btn_next);
 
+        EtGoalSteps = findViewById(R.id.stepsGoalET);
+        BtnGoals = findViewById(R.id.btn_goal);
+
         TvDate.setText(dateController.returnWorkingDateAsString());
 
         BtnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                // currentDate = currentDate - 1;
                 dateController.subtractDay();
                 workingDate = dateController.returnWorkingDateAsString();
                 String testURL = serverURL + "/steps/" + userID + "/" + workingDate;
@@ -191,6 +210,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View arg0) {
                 dateController.setWorkingDateToToday();
+                Toast.makeText(getApplicationContext(), "Connected: " + socketClient.isOpen(),
+                        Toast.LENGTH_LONG).show();
                 workingDate = dateController.returnWorkingDateAsString();
                 String receiveJsonURL = serverURL + "/steps/" + userID + "/" + workingDate;
 
@@ -247,6 +268,30 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
             }
         });
+
+        BtnGoals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                dateController.setWorkingDateToToday();
+                workingDate = dateController.returnWorkingDateAsString();
+                String strStepsGoal = EtGoalSteps.getText().toString();
+                String goalURL = serverURL + "/steps/updateStepGoal/" + session.returnUserID()
+                        + "/" + workingDate + "/" + strStepsGoal;
+                JsonObjectRequest goalRequest = new JsonObjectRequest(Request.Method.POST,
+                        goalURL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error:" + error.getMessage());
+                    }
+                });
+                VolleySingleton.getInstance().addToRequestQueue(goalRequest, "goal_req");
+            }
+        });
     }
 
     @Override
@@ -265,7 +310,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     public void step(long timeNs) {
         numSteps++;
         TvSteps.setText(TEXT_NUM_STEPS + numSteps);
-        if(numSteps >= (tempSteps + 3)) {
+        if(numSteps >= (tempSteps + 5)) {
             tempSteps = numSteps;
             JSONObject updateData = null;
             try {
@@ -286,6 +331,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
             VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_mid_req");
+         //   socketClient.send("");
         }
     }
 }

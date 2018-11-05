@@ -52,4 +52,26 @@
         android:text="Stop Pedometer"
     />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/stepsGoalET"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:hint="Today's Step Goal"
+            android:digits="0123456789"
+            android:inputType="number"/>
+
+        <Button
+            android:id="@+id/btn_goal"
+            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Send Goal" />
+    </LinearLayout>
+
 </LinearLayout>
