@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
         temp.setText(content);
 
-        temp = (TextView) findViewById(R.id.WelcomeText);
+        temp = (TextView) findViewById(R.id.MainTvWelcome);
         mystring=new String("Welcome Back " + session.returnFirstName() + "!");
         temp.setText(mystring);
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btnMakePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (session.returnUserRole().equals("trainer")){
+                if (session.returnUserRole().equals("personaltrainer")){
                     startActivity(new Intent(MainActivity.this, UserTable.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, PlanCreator.class));

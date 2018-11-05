@@ -7,13 +7,15 @@ public class DataModel {
     String Reps;
     String AssignedBy;
     String PlanName;
+    String TrainerId;
 
-    public DataModel(String Activity, String Sets, String Reps, String AssignedBy, String PlanName) {
+    public DataModel(String Activity, String Sets, String Reps, String AssignedBy, String PlanName, String TrainerId) {
         this.Activity = Activity;
         this.Sets = Sets;
         this.Reps = Reps;
         this.AssignedBy = AssignedBy;
         this.PlanName = PlanName;
+        this.TrainerId = TrainerId;
     }
 
     public String getActivity() {
@@ -34,5 +36,9 @@ public class DataModel {
 
     public String getPlanName() {
         return PlanName;
+    }
+
+    public String getTrainerId() {
+        return TrainerId;
     }
 }

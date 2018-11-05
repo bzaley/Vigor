@@ -60,10 +60,10 @@ public class PlanCreator extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.list);
 
-        savePlan = (Button) findViewById(R.id.savePlan);
+        savePlan = (Button) findViewById(R.id.PlanCreatorBtnsavePlan);
         addToPlan = (Button) findViewById(R.id.PlanCreatorBtnaddToPlan);
         prev = (Button) findViewById(R.id.PlanCreatorBtnPrev);
-        next = (Button) findViewById(R.id.btnNext);
+        next = (Button) findViewById(R.id.PlanCreatorBtnNext);
 
         days = new ArrayList<>();
         dataModels = new ArrayList<>();
@@ -111,7 +111,7 @@ public class PlanCreator extends AppCompatActivity {
                 }
                 //Add the activity
                 if (passed) {
-                    dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, "", ""));
+                    dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, "", "", session.returnUserID() + ""));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -220,7 +220,7 @@ public class PlanCreator extends AppCompatActivity {
                         if (planName.equals("")){
                             AlertDialog.Builder alert2 = new AlertDialog.Builder(
                                     PlanCreator.this);
-                            alert2.setTitle("Are you sure about that");
+                            alert2.setTitle("No Plan Name entered.");
                             alert2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -235,7 +235,7 @@ public class PlanCreator extends AppCompatActivity {
                             else
                                 days.set(PlanCreator.index, dataModels);
                             //If it's a trainer entering the plan
-                            if (session.returnUserRole().equals("trainer")){
+                            if (session.returnUserRole().equals("personaltrainer")){
                                 JSONArray toSend = new JSONArray();
                                 for (int i=0; i<days.size(); i++){
                                     ArrayList temp = days.get(i);
@@ -243,8 +243,8 @@ public class PlanCreator extends AppCompatActivity {
                                         DataModel tempActivity = (DataModel) temp.get(j);
                                         JSONObject toPut = new JSONObject();
                                         try {
-                                            toPut.put("userId", session.returnUserID());
-                                            toPut.put("eamil", UserTable.UserEmailString);
+                                            toPut.put("trainerId", session.returnUserID());
+                                            toPut.put("email", UserTable.UserEmailString);
                                             toPut.put("planName", planName);
                                             toPut.put("day", (i+1));
                                             toPut.put("exercise", tempActivity.getActivity());
