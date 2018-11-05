@@ -40,41 +40,70 @@ public class ToDoList extends AppCompatActivity {
     private Button addBtn;
     private Button nextBtn;
     private Button prevBtn;
+    private Button changePlanBtn;
     private String TAG = ToDoList.class.getSimpleName();
+    private String planName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
 
+        //Ask user if they'd like to load in one of their plans
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                ToDoList.this);
+        alert.setTitle("Would you like to Load a plan?");
+        final EditText alertInput = new EditText(ToDoList.this);
+        alert.setView(alertInput);
+        alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                planName = alertInput.getText().toString();
+                dialog.dismiss();
+            }
+        });
+        alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+
+        //initialize the variables for this activity
         session = new SessionController(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.list);
-        toAddItem = (EditText) findViewById(R.id.etNewItem2);
-        toAddSets = (EditText) findViewById(R.id.etNewSets);
+        toAddItem = (EditText) findViewById(R.id.ToDoEtNewItem);
+        toAddSets = (EditText) findViewById(R.id.ToDoEtNewSets);
         toAddReps = (EditText) findViewById(R.id.etNewReps);
 
-        addBtn = (Button) findViewById(R.id.btnAddItem2);
+        addBtn = (Button) findViewById(R.id.ToDoBtnAddItem);
         nextBtn = (Button) findViewById(R.id.ToDoBtnNext);
         prevBtn = (Button) findViewById(R.id.ToDoBtnLast);
+        changePlanBtn = (Button) findViewById(R.id.ToDoBtnChangePlan);
 
         dataModels = new ArrayList<>();
 
         adapter = new CustomAdapter(dataModels, getApplicationContext());
 
         listView.setAdapter(adapter);
-        setUpInitialData();
+        setUpInitialData(planName);
 
         //Listen for a user to add an activity
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get all the aspects of what is being added
                 String enteredItem = toAddItem.getText().toString();
                 String enteredSets = toAddSets.getText().toString();
                 String enteredReps = toAddReps.getText().toString();
+                //Check if it's a trainer adding thing a single activity
                 if (!(session.returnUserRole().equals("trainer"))) {
+                    //Add the single activity to the list
                     addToList(enteredItem, enteredSets, enteredReps, "single", "");
-                    //Send new activity to server as a single
+                    //Send new activity to server as a single from a user
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
                     try {
@@ -101,21 +130,9 @@ public class ToDoList extends AppCompatActivity {
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(
-                            ToDoList.this);
-                    alert.setTitle("Are you sure about that");
-                    final EditText alertInput = new EditText(ToDoList.this);
-                    alert.setView(alertInput);
-                    alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.show();
+                    //Add the single activity to the list
                     addToList(enteredItem, enteredSets, enteredReps, "trainer", "");
-                    //Send new activity to server as a single
+                    //Send new activity to server as a single from a trainer
                     JSONObject toSend = new JSONObject();
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerSingle";
                     try {
@@ -143,21 +160,26 @@ public class ToDoList extends AppCompatActivity {
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                 }
+
+                //Clear the entered fields
                 toAddItem.setText("");
                 toAddSets.setText("");
                 toAddReps.setText("");
             }
         });
 
+        //Increment which day the plan you are using is on
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Send the server a request to Increment
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/next/" +
-                                session.returnUserID() + "/plan", null,
+                                session.returnUserID() + "/" + planName, null,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                //When the server responds, update the data the user sees
                                 try {
                                     Toast.makeText(ToDoList.this, response.getString("success"), Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
@@ -167,7 +189,7 @@ public class ToDoList extends AppCompatActivity {
                                 adapter = new CustomAdapter(dataModels, getApplicationContext());
                                 listView.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
-                                setUpInitialData();
+                                setUpInitialData(planName);
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -179,15 +201,18 @@ public class ToDoList extends AppCompatActivity {
             }
         });
 
+        //Decrement which day the plan you are using is on
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Send the server a request to Decrement
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercis/last/" +
-                                session.returnUserID() + "/plan", null,
+                        "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/last/" +
+                                session.returnUserID() + "/" + planName, null,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                //When the server responds, update the data the user sees
                                 try {
                                     Toast.makeText(ToDoList.this, response.getString("success"), Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
@@ -197,7 +222,7 @@ public class ToDoList extends AppCompatActivity {
                                 adapter = new CustomAdapter(dataModels, getApplicationContext());
                                 listView.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
-                                setUpInitialData();
+                                setUpInitialData(planName);
                             }
                         }, new Response.ErrorListener() {
                     @Override
@@ -206,6 +231,36 @@ public class ToDoList extends AppCompatActivity {
                     }
                 });
                 VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
+            }
+        });
+
+        //Listen for if the user what's to change what plan they're on.
+        changePlanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Ask them which plan they'd like to change to
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        ToDoList.this);
+                alert.setTitle("Would you like to change your plan?");
+                final EditText alertInput = new EditText(ToDoList.this);
+                alert.setView(alertInput);
+                alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //record the result in planName and update the data the user sees
+                        planName = alertInput.getText().toString();
+                        setUpInitialData(planName);
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
             }
         });
 
@@ -217,10 +272,11 @@ public class ToDoList extends AppCompatActivity {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoList.this);
                     alert.setTitle("Are you sure about that?");
-                    alert.setMessage("Are you sure to delete record?");
-                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    alert.setMessage("Would you like to mark this as complete?");
+                    alert.setPositiveButton("COMPLETE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //pull the current item out of the list and send it to the server.
                             DataModel temp = dataModels.get(position);
                             dataModels.remove(position);
                             adapter.notifyDataSetChanged();
@@ -256,6 +312,12 @@ public class ToDoList extends AppCompatActivity {
                         }
 
                     });
+//                    alert.setNegativeButton("EDIT", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
                     alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -274,62 +336,42 @@ public class ToDoList extends AppCompatActivity {
         });
     }
 
-    private void setUpInitialData() {
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(
-                ToDoList.this);
-        alert.setTitle("Would you like to select a plan?");
-        final EditText alertInput = new EditText(ToDoList.this);
-        alert.setView(alertInput);
-        alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                addToList("Trainer Goals", "Sets", "Reps", "null", "");
-                String PlanName = alertInput.getText().toString();
-                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
-                        session.returnUserID() + "/" + PlanName;
-                JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
-                        null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject element = (JSONObject) response.getJSONObject(i);
-                                element.getInt("userId");
-                                String PlanName = element.getString("planName");
-                                String activity = element.getString("exercise");
-                                String sets = element.getInt("sets") + "";
-                                String reps = element.getInt("reps") + "";
-                                addToList(activity, sets, reps, "individual", PlanName);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
+    private void setUpInitialData(String PlanName) {
+        //If the user decided to load a plan execute this.
+        if (!(PlanName.equals(""))){
+            addToList("Trainer Goals", "Sets", "Reps", "null", "");
+            String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/getPlan/" +
+                    session.returnUserID() + "/" + PlanName;
+            JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
+                    null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject element = (JSONObject) response.getJSONObject(i);
+                            element.getInt("userId");
+                            String PlanName = element.getString("planName");
+                            String activity = element.getString("exercise");
+                            String sets = element.getInt("sets") + "";
+                            String reps = element.getInt("reps") + "";
+                            addToList(activity, sets, reps, "individual", PlanName);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
                     }
-                },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        });
-                VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+        }
 
-                dialog.dismiss();
-            }
-        });
-        alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-
-            }
-        });
-        alert.show();
         addToList("Personal Goals", "", "", "null", "");
 
-//        Load activities from server
+        //Load singular activities from server
         String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/get/" +
                 session.returnUserID();
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null,
@@ -384,11 +426,15 @@ public class ToDoList extends AppCompatActivity {
     }
 
     public void addToList(String Activity, String Sets, String Reps, String AssignedBy, String PlanName) {
+        //If the list item is just a divider.
         if (AssignedBy.equals("null")) {
             dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, ""));
             adapter.notifyDataSetChanged();
-        } else if (AssignedBy.equals("individual") || AssignedBy.equals("trainer")) {
-            if (isInt(Sets) || isInt(Reps)) {
+        }
+        //If the List item is assigned by someone.
+        else if (AssignedBy.equals("individual") || AssignedBy.equals("trainer")) {
+            //if the sets and reps are actually entered
+            if (isInt(Sets) || isInt(Reps) || Sets.equals("") || Reps.equals("")) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         ToDoList.this);
                 alert.setTitle("Amount entered isn't a number.");
@@ -399,14 +445,8 @@ public class ToDoList extends AppCompatActivity {
                     }
                 });
                 alert.show();
-                if (!(Activity.equals("")) || !(AssignedBy.equals("null"))) {
-                    if (Sets.equals("")) {
-                        Sets = "0";
-                    } else if (Reps.equals("")) {
-                        Reps = "0";
-                    }
-                }
             } else {
+                //if the Triner is assigning an activity
                 if (AssignedBy.equals("trainer")) {
                     int index = 0;
                     for (int i = 0; i < dataModels.size(); i++) {
@@ -418,6 +458,7 @@ public class ToDoList extends AppCompatActivity {
                     dataModels.add(index - 1, new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 } else {
+                //If the user is assigning an activity
                     dataModels.add(new DataModel(Activity, Sets, Reps, AssignedBy, PlanName));
                     adapter.notifyDataSetChanged();
                 }

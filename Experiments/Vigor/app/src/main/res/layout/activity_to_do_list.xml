@@ -12,51 +12,51 @@
     tools:context="com.example.vigor.vigor.MainActivity">
 
     <EditText
-        android:id="@+id/etNewItem2"
+        android:id="@+id/ToDoEtNewItem"
         android:layout_width="157dp"
         android:layout_height="51dp"
-        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignTop="@+id/ToDoBtnAddItem"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnAddItem2"
-        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:layout_toStartOf="@+id/ToDoBtnAddItem"
+        android:layout_toLeftOf="@+id/ToDoBtnAddItem"
         android:hint="Enter an Activity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etNewSets"
+        android:id="@+id/ToDoEtNewSets"
         android:layout_width="70dp"
         android:layout_height="51dp"
-        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignTop="@+id/ToDoBtnAddItem"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnAddItem2"
-        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:layout_toStartOf="@+id/ToDoBtnAddItem"
+        android:layout_toLeftOf="@+id/ToDoBtnAddItem"
         android:hint="Sets"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/etNewItem2"
+        app:layout_constraintStart_toEndOf="@+id/ToDoEtNewItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etNewReps"
+        android:id="@+id/ToDoEtNewReps"
         android:layout_width="70dp"
         android:layout_height="51dp"
-        android:layout_alignTop="@+id/btnAddItem2"
+        android:layout_alignTop="@+id/ToDoBtnAddItem"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnAddItem2"
-        android:layout_toLeftOf="@+id/btnAddItem2"
+        android:layout_toStartOf="@+id/ToDoBtnAddItem"
+        android:layout_toLeftOf="@+id/ToDoBtnAddItem"
         android:hint="Reps"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/etNewSets"
+        app:layout_constraintStart_toEndOf="@+id/ToDoEtNewSets"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnAddItem2"
+        android:id="@+id/ToDoBtnAddItem"
         android:layout_width="0dp"
         android:layout_height="51dp"
         android:text="Add Item"
@@ -79,13 +79,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/ToDoBtnChangePlan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Change Plan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ToDoBtnNext"
+        app:layout_constraintStart_toEndOf="@+id/ToDoBtnLast" />
+
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/ToDoBtnLast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNewItem2"
+        app:layout_constraintTop_toBottomOf="@+id/ToDoEtNewItem"
         tools:context=".ToDoList">
 
         <include layout="@layout/content_to_do_list" />
@@ -99,4 +111,5 @@
             app:srcCompat="@android:drawable/ic_dialog_email" />
 
     </android.support.design.widget.CoordinatorLayout>
+
 </android.support.constraint.ConstraintLayout>
