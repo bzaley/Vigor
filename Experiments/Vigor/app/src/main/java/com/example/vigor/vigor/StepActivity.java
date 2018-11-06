@@ -50,8 +50,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     private int numSteps;
     private int tempSteps;
     private int userID;
-    private int dateI;
-    private Date currentDate;
     private String TAG = StepActivity.class.getSimpleName();
     private String tempMessage;
 
@@ -79,7 +77,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         session = new SessionController(getApplicationContext());
 
         dateController = new DateController();
-        currentDate = dateController.dateOfToday();
+        dateController.dateOfToday();
 
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();
@@ -140,7 +138,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         //Connect websocket
         socketClient.connect();
 
-        // Pair buttons with their given variables.
+        // Pair buttons with their given XML IDs
         TvSteps = findViewById(R.id.tv_steps);
         TvDate = findViewById(R.id.disdate);
         BtnStart = findViewById(R.id.btn_start);
@@ -153,6 +151,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
 
         TvDate.setText(dateController.returnWorkingDateAsString());
 
+        // Previous Button allows you to view the previous day's step count by
+        // retrieving the data through a JSON request
         BtnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -281,8 +281,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 dateController.setWorkingDateToToday();
                 workingDate = dateController.returnWorkingDateAsString();
                 String strStepsGoal = EtGoalSteps.getText().toString();
-                String goalURL = serverURL + "/steps/updateStepGoal/" + session.returnUserID()
-                        + "/" + workingDate + "/" + strStepsGoal;
+                String goalURL = serverURL + "/steps/updateStepGoal/" + userID + "/" + workingDate
+                        + "/" + strStepsGoal;
                 JsonObjectRequest goalRequest = new JsonObjectRequest(Request.Method.POST,
                         goalURL, null, new Response.Listener<JSONObject>() {
                     @Override

@@ -71,8 +71,14 @@ public class RegisterActivity extends Activity {
                         && !strConfirmPass.isEmpty()) {
                     try {
                         if (strRegPass.equals(strConfirmPass)) {
-                            registerInfo = makeRegisterJsonObject(strRegFirstName, strRegLastName,
-                                    strRegEmail, strRegPass, strRegRole);
+                            if (strRegPass.length() >= 6) {
+                                registerInfo = makeRegisterJsonObject(strRegFirstName,
+                                        strRegLastName, strRegEmail, strRegPass, strRegRole);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Your password needs" +
+                                        " to at least 6 characters in length!",
+                                        Toast.LENGTH_LONG).show();
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), "Your password fields" +
                                             " do not match",
