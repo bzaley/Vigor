@@ -87,12 +87,12 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
 
         //websocket link and draft
         String ws = "ws://proj309-ad-07.misc.iastate.edu:8080/websocket/steps/"
-                + session.returnUserID() + "/" + dateController.returnWorkingDateAsString();
-        // Draft[] drafts = {new Draft_6455()};
+                + session.returnUserID();
+        Draft[] drafts = {new Draft_6455()};
 
         // Initialize and start the websocket
         try {
-            socketClient = new WebSocketClient(new URI(ws)) {
+            socketClient = new WebSocketClient(new URI(ws), drafts[0]) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     Log.d("OPEN", "run() returned: " + "is connecting");
@@ -103,6 +103,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 @Override
                 public void onMessage(String message) {
                     Log.d("", "run() returned: " + message);
+                    Toast.makeText(getApplicationContext(), message,
+                            Toast.LENGTH_LONG).show();
                     NotificationManager notificationManager =
                             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     Notification notify = new Notification.Builder(getApplicationContext()).
@@ -124,13 +126,15 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 }
             };
         } catch (URISyntaxException e) {
-            Log.d("Exception:", e.getMessage().toString());
+            Log.d("Exception:", e.getMessage());
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
         //Connect websocket
         socketClient.connect();
+//        Toast.makeText(getApplicationContext(), "Connection?:" + socketClient.isOpen(),
+//                Toast.LENGTH_LONG).show();
 
         // Pair buttons with their given variables.
         TvSteps = findViewById(R.id.tv_steps);
@@ -331,7 +335,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
             VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_mid_req");
-         //   socketClient.send("");
         }
     }
 }
