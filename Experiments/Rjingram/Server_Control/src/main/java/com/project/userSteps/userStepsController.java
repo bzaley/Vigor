@@ -1,5 +1,8 @@
 package com.project.userSteps;
 
+
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +18,7 @@ public class userStepsController {
 	private userStepsService stepsService;
 
 	@RequestMapping("/{userId}/{date}")
-	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable int date) {
+	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable String date) {
 		return stepsService.getToday(userId, date);
 	}
 
@@ -27,11 +30,21 @@ public class userStepsController {
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/update")
 	public void updateStepsToUser(@RequestBody userSteps user) {
-		int date = user.getDate();
+		String date = user.getDate();
 		int userId = user.getUserId();
 		int steps = user.getSteps();
 		stepsService.updateStepEntry(userId, date, steps);
 
+	}
+	
+	@RequestMapping("/multiple/{userId}/{numDays}")
+	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int numDays) {
+		return stepsService.getMultipleDays(userId, numDays);
+	}
+	
+	@RequestMapping("/updateStepGoal/{userId}/{date}/{stepGoal}")
+	public void updateStepGoal(@PathVariable int userId, @PathVariable String date, @PathVariable int stepGoal) {
+		stepsService.updateStepGoal(userId, date, stepGoal);
 	}
 
 

@@ -2,16 +2,16 @@ package com.project.userExercise;
 
 public class good {
 
+	
 	private String success;
-	
-	
+
 	
 	public good() {
 		
 	}
 	
 	public good(String success) {
-		//super();
+		super();
 		this.success = success;
 	}
 
@@ -22,7 +22,6 @@ public class good {
 	public void setSuccess(String success) {
 		this.success = success;
 	}
-	
 	
 	
 }

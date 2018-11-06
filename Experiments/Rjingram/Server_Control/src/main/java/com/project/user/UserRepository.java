@@ -5,7 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 //Extension is CrudRepository<Class being used, id type>
 public interface UserRepository extends CrudRepository<User, Integer>{
 	
-	public User findByUserEmail(String email);
-	
+	public User findByUserEmailAndPassword(String userEmail, String password);
+	public User findByUserEmail(String userEmail);
+	public boolean existsByUserEmail(String userEmail);
 	public User findByUserId(int userId);
 }

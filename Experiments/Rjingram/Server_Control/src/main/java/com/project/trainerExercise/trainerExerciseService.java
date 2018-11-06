@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.project.Exercise.*;
 import com.project.plan.*;
 import com.project.user.*;
-import com.project.userExercise.*;
 import com.project.userExercise.good;
 import com.project.utilities.*;
 import com.project.historian.*;
@@ -47,7 +46,7 @@ public class trainerExerciseService {
 				trainerAddEntry.getTrainerId(),
 				uid,
 				"",
-				-1,
+				trainerAddEntry.getDay(),
 				exid,
 				trainerAddEntry.getSets(),
 				trainerAddEntry.getReps());
@@ -123,7 +122,7 @@ public class trainerExerciseService {
 			exercise_name = exercise.getName();
 			
 			user = userRepo.findByUserId(tmp.getUserId());
-			email = user.getUserEmail();
+			email = user.getuserEmail();
 			
 			trainerEntry trainerEntry = new trainerEntry(
 					tmp.getTrainerId(),
@@ -159,7 +158,7 @@ public class trainerExerciseService {
 			exercise_name = exercise.getName();
 			
 			user = userRepo.findByUserId(tmp.getUserId());
-			email = user.getUserEmail();
+			email = user.getuserEmail();
 					
 			trainerEntry trainerEntry = new trainerEntry(
 					tmp.getTrainerId(),
@@ -187,7 +186,7 @@ public class trainerExerciseService {
 		int uid = user.getuserId();
 		
 		// userId, exerciseId
-		trainerExerciseRepo.removeTrainerExercise(uid, exid);
+		trainerExerciseRepo.removeTrainerExercise(uid, exid, trainerEntry.getPlanName());
 		
 	}
 
@@ -210,7 +209,7 @@ public class trainerExerciseService {
 				
 		if (plan == "") {
 			historianRepo.addHistory(uid, exid, trainerEntry.getSets(), trainerEntry.getReps(), saveDate);
-			trainerExerciseRepo.removeTrainerExercise(uid, exid);
+			trainerExerciseRepo.removeTrainerExercise(uid, exid, trainerEntry.getPlanName());
 		} else {
 			historianRepo.addHistory(uid, exid, trainerEntry.getSets(), trainerEntry.getReps(), saveDate);
 		}

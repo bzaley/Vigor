@@ -1,12 +1,16 @@
 package com.project.user;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity //JPA knows to create table of this type
 public class User {
 
 	@Id //Tells JPA what the primary key is
+	@GeneratedValue //auto increments the value when a new row is created
+	@Column(columnDefinition ="serial")
 	private int userId;
 	private String userEmail;
 	private String firstname;
@@ -29,17 +33,16 @@ public class User {
 	}
 	
 	
-	
 	public int getuserId() {
 		return userId;
 	}
 	public void setuserId(int userId) {
 		this.userId = userId;
 	}
-	public String getUserEmail() {
+	public String getuserEmail() {
 		return userEmail;
 	}
-	public void setUser_email(String userEmail) {
+	public void setuserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
 	public String getFirstname() {
