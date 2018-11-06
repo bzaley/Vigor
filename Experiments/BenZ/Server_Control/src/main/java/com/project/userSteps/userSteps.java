@@ -18,6 +18,7 @@ public class userSteps {
 	private String date;
 	private int steps;
 	private int stepGoal;
+	private boolean goalMet;
 	
 	public userSteps() {
 	}
@@ -29,9 +30,19 @@ public class userSteps {
 		this.date = date;
 		this.steps = steps;
 		this.stepGoal = stepGoal;
-		
+		this.goalMet = false;
 	}
 
+
+	
+
+	public boolean isGoalMet() {
+		return goalMet;
+	}
+
+	public void setGoalMet(boolean goalMet) {
+		this.goalMet = goalMet;
+	}
 
 	public int getStepGoal() {
 		return stepGoal;

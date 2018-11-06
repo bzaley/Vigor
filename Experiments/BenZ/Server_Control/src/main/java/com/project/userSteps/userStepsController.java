@@ -1,6 +1,7 @@
 package com.project.userSteps;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.websocket.WebSocketServer;
+
 @RestController
 @RequestMapping("/steps")
 public class userStepsController {
 
 	@Autowired
 	private userStepsService stepsService;
+
+	@Autowired
+	private WebSocketServer socket;
 
 	@RequestMapping("/{userId}/{date}")
 	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable String date) {
@@ -29,22 +35,32 @@ public class userStepsController {
 
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/update")
-	public void updateStepsToUser(@RequestBody userSteps user) {
+	public void updateStepsToUser(@RequestBody userSteps user) throws IOException{
 		String date = user.getDate();
 		int userId = user.getUserId();
 		int steps = user.getSteps();
 		stepsService.updateStepEntry(userId, date, steps);
 
+		if(!stepsService.getToday(userId, date).isGoalMet()) {
+			boolean compare = stepsService.compareStepsVsGoal(userId, date);
+			if(compare) {
+				socket.sendMessageToParticularUser(userId, "Congrats");
+				stepsService.updateIsGoalMet(userId, date, true);
+			}
+		}
+
 	}
-	
+
 	@RequestMapping("/multiple/{userId}/{numDays}")
 	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int numDays) {
 		return stepsService.getMultipleDays(userId, numDays);
 	}
-	
+
 	@RequestMapping("/updateStepGoal/{userId}/{date}/{stepGoal}")
 	public void updateStepGoal(@PathVariable int userId, @PathVariable String date, @PathVariable int stepGoal) {
 		stepsService.updateStepGoal(userId, date, stepGoal);
+		stepsService.updateIsGoalMet(userId, date, false);
+		
 	}
 
 

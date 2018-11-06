@@ -20,6 +20,9 @@ public interface userStepsRepository extends JpaRepository<userSteps, Integer>, 
 	public boolean existsByUserIdAndDate(int userId, String date);
 	
 	
+	
+	
+	
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE user_steps us SET us.steps = :newSteps WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
@@ -29,4 +32,9 @@ public interface userStepsRepository extends JpaRepository<userSteps, Integer>, 
 	@Transactional
 	@Query(value = "UPDATE user_steps us SET us.step_goal = :newStepGoal WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
 	public void updateStepGoal(@Param("userID")int userId, @Param("uDate")String date, @Param("newStepGoal")int stepGoal);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE user_steps us SET us.goal_met = :newMetGoal WHERE(us.user_id = :userID AND us.date = :uDate)", nativeQuery = true)
+	public void setGoalsMet(@Param("userID")int userId, @Param("uDate")String date, @Param("newMetGoal")boolean metGoal);
 }

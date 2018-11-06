@@ -6,11 +6,11 @@
 
 	<groupId>com.project</groupId>
 	<artifactId>VigorSpringBoot</artifactId>
-	<version>1.2.7</version>
+	<version>1.2.9.5</version>
 	<packaging>jar</packaging>
 
 	<name>Server_Control</name>
-	<description>All of Ryan's stuff added 11/4/18</description>
+	<description>Working socket connection for userSteps</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -57,6 +57,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-messaging</artifactId>
 		</dependency>
 	</dependencies>
 
