@@ -29,22 +29,13 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.mContext = context;
-
     }
 
     @Override
     public void onClick(View v) {
-
         int position = (Integer) v.getTag();
         Object object = getItem(position);
         DataModel dataModel = (DataModel) object;
-
-//        switch (v.getId()) {
-//            case R.id.item_info:
-//                Snackbar.make(v, "Release date ", Snackbar.LENGTH_LONG)
-//                        .setAction("No action", null).show();
-//                break;
-//        }
     }
 
     private int lastPosition = -1;

@@ -11,11 +11,11 @@
     tools:context="com.example.vigor.vigor.MainActivity">
 
     <Button
-        android:id="@+id/logoutButt"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
-        android:layout_alignTop="@+id/graphButton"
-        android:layout_alignEnd="@+id/imageView3"
+        android:id="@+id/MainBtnlogoutButt"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/MainBtnGraphing"
+        android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Logout"
@@ -23,36 +23,36 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btnMakePlan"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
-        android:layout_above="@+id/graphButton"
-        android:layout_alignEnd="@+id/imageView3"
-        android:layout_marginBottom="8dp"
+        android:id="@+id/MainBtnMakePlan"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/MainBtnGraphing"
+        android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Make Plan"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButt"
+        app:layout_constraintBottom_toTopOf="@+id/MainBtnlogoutButt"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/toDoButton"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
-        android:layout_alignTop="@+id/graphButton"
+        android:id="@+id/MainBtnToDo"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/MainBtnGraphing"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="ToDo List"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/logoutButt"
-        app:layout_constraintStart_toEndOf="@+id/pedometer" />
+        app:layout_constraintEnd_toStartOf="@+id/MainBtnlogoutButt"
+        app:layout_constraintStart_toEndOf="@+id/MainBtnPedometer" />
 
     <Button
-        android:id="@+id/pedometer"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
-        android:layout_above="@+id/graphButton"
+        android:id="@+id/MainBtnPedometer"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/MainBtnGraphing"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/MainProfileImage"
         android:clickable="true"
         android:layout_width="58dp"
         android:layout_height="60dp"
@@ -74,45 +74,46 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <Button
-        android:id="@+id/graphButton"
-        android:layout_width="112dp"
-        android:layout_height="99dp"
-        android:layout_below="@+id/btnViewProfile"
-        android:layout_alignStart="@+id/btnViewProfile"
+        android:id="@+id/MainBtnGraphing"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/MainBtnViewProfile"
+        android:layout_alignStart="@+id/MainBtnViewProfile"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
         android:text="Graphing"
-        app:layout_constraintBottom_toTopOf="@+id/toDoButton"
-        app:layout_constraintEnd_toStartOf="@+id/btnMakePlan"
-        app:layout_constraintStart_toEndOf="@+id/btnViewProfile" />
+        app:layout_constraintBottom_toTopOf="@+id/MainBtnToDo"
+        app:layout_constraintEnd_toStartOf="@+id/MainBtnMakePlan"
+        app:layout_constraintStart_toEndOf="@+id/MainBtnViewProfile" />
 
     <Button
-        android:id="@+id/btnViewProfile"
-        android:layout_width="114dp"
-        android:layout_height="97dp"
-        android:layout_below="@+id/QuickAccessText"
-        android:layout_alignStart="@+id/imageView2"
+        android:id="@+id/MainBtnViewProfile"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/MainTvQuickAccess"
+        android:layout_alignStart="@+id/MainProfileImage"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text="View Profile"
-        app:layout_constraintBottom_toTopOf="@+id/pedometer"
+        app:layout_constraintBottom_toTopOf="@+id/MainBtnPedometer"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="368dp"
-        android:layout_height="176dp"
+        android:id="@+id/MainIvGraph"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/QuickAccessText"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/MainTvQuickAccess"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuickViewText"
+        app:layout_constraintTop_toBottomOf="@+id/MainTvQuickView"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <TextView
-        android:id="@+id/QuickAccessText"
+        android:id="@+id/MainTvQuickAccess"
         android:layout_width="wrap_content"
         android:layout_height="28sp"
         android:layout_marginStart="8dp"
@@ -120,11 +121,11 @@
         android:inputType="textPersonName"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnViewProfile"
+        app:layout_constraintBottom_toTopOf="@+id/MainBtnViewProfile"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/QuickViewText"
+        android:id="@+id/MainTvQuickView"
         android:layout_width="99dp"
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
@@ -134,17 +135,17 @@
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/MainProfileImage" />
 
     <TextView
-        android:id="@+id/WelcomeText"
+        android:id="@+id/MainTvWelcome"
         android:layout_width="270dp"
         android:layout_height="30dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="23dp"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/MainProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -7,7 +7,6 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,23 +21,23 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionController(getApplicationContext());
 
-        TextView temp = (TextView) findViewById(R.id.QuickViewText);
+        TextView temp = (TextView) findViewById(R.id.MainTvQuickView);
         String mystring=new String("Quick View");
         SpannableString content = new SpannableString(mystring);
         content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
         temp.setText(content);
 
-        temp = (TextView) findViewById(R.id.QuickAccessText);
+        temp = (TextView) findViewById(R.id.MainTvQuickAccess);
         mystring=new String("Quick Access");
         content = new SpannableString(mystring);
         content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
         temp.setText(content);
 
-        temp = (TextView) findViewById(R.id.WelcomeText);
+        temp = (TextView) findViewById(R.id.MainTvWelcome);
         mystring=new String("Welcome Back " + session.returnFirstName() + "!");
         temp.setText(mystring);
 
-        ImageView profile = (ImageView) findViewById(R.id.imageView2);
+        ImageView profile = (ImageView) findViewById(R.id.MainProfileImage);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button graphButton = (Button) findViewById(R.id.graphButton);
+        Button graphButton = (Button) findViewById(R.id.MainBtnGraphing);
         graphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button todoButton = (Button) findViewById(R.id.toDoButton);
+        Button todoButton = (Button) findViewById(R.id.MainBtnToDo);
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button stepButton = (Button) findViewById(R.id.pedometer);
+        Button stepButton = (Button) findViewById(R.id.MainBtnPedometer);
         stepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button logoutButton = (Button) findViewById(R.id.logoutButt);
+        Button logoutButton = (Button) findViewById(R.id.MainBtnlogoutButt);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnMakePlan = (Button) findViewById(R.id.btnMakePlan);
+        Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
         btnMakePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (session.returnUserRole().equals("trainer")){
+                if (session.returnUserRole().equals("personaltrainer")){
                     startActivity(new Intent(MainActivity.this, UserTable.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, PlanCreator.class));
