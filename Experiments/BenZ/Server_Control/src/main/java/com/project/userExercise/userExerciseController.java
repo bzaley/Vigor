@@ -49,7 +49,7 @@ public class userExerciseController {
 		userExerciseService.removeUserExercise(userEntry);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/save")
+	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	public void markSave(@RequestBody userEntry userEntry) {
 		userExerciseService.markSave(userEntry);
 	}
@@ -57,7 +57,6 @@ public class userExerciseController {
 	@RequestMapping(method = RequestMethod.GET, value = "/next/{userId}/{planName}")
 	public ResponseEntity<?> nextDay(@PathVariable int userId, @PathVariable String planName) {
 		return ResponseEntity.ok().body(userExerciseService.nextDay(userId, planName));
-		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/last/{userId}/{planName}")

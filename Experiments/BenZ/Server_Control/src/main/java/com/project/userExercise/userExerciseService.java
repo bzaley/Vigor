@@ -203,7 +203,6 @@ public class userExerciseService {
 		
 		planRepo.updateDay(userId, planName, new_day);
 		
-		
 		good sendBack = new good("success");
 		return sendBack;
 	}
@@ -226,6 +225,7 @@ public class userExerciseService {
 		planRepo.updateDay(userId, planName, new_day);
 		
 		good sendBack = new good("success");
+		
 		return sendBack;
 	}
 	
