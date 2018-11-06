@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     private int dateI;
     private Date currentDate;
     private String TAG = StepActivity.class.getSimpleName();
+    private String tempMessage;
 
     TextView TvSteps;
     TextView TvDate;
@@ -95,24 +97,26 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
             socketClient = new WebSocketClient(new URI(ws), drafts[0]) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
+                    Looper.prepare();
                     Log.d("OPEN", "run() returned: " + "is connecting");
-                    Toast.makeText(getApplicationContext(), "Connection is made with URI",
-                            Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onMessage(String message) {
                     Log.d("", "run() returned: " + message);
-                    Toast.makeText(getApplicationContext(), message,
-                            Toast.LENGTH_LONG).show();
-                    NotificationManager notificationManager =
-                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    Notification notify = new Notification.Builder(getApplicationContext()).
-                            setContentTitle("Vigor").setContentText(message).
-                            setContentTitle("Step Update!").
-                            setSmallIcon(R.drawable.ic_launcher_foreground).build();
-                    notify.flags |= Notification.FLAG_AUTO_CANCEL;
-                    notificationManager.notify(0, notify);
+                    tempMessage = message;
+                    StepActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), tempMessage
+                                            + " You have reached your goal for total steps today!" +
+                                            " Keep going!", Toast.LENGTH_LONG).show();
+                            sendNotification(tempMessage + " You have reached your goal for total" +
+                                    " steps today! Keep going!");
+                        }
+                    });
+                    sendNotification(tempMessage + " You have reached your goal for total" +
+                            " steps today! Keep going!");
                 }
 
                 @Override
@@ -123,6 +127,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 @Override
                 public void onError(Exception e) {
                     Log.d("Exception:", e.toString());
+                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
                 }
             };
         } catch (URISyntaxException e) {
@@ -133,8 +139,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         }
         //Connect websocket
         socketClient.connect();
-//        Toast.makeText(getApplicationContext(), "Connection?:" + socketClient.isOpen(),
-//                Toast.LENGTH_LONG).show();
 
         // Pair buttons with their given variables.
         TvSteps = findViewById(R.id.tv_steps);
@@ -214,8 +218,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View arg0) {
                 dateController.setWorkingDateToToday();
-                Toast.makeText(getApplicationContext(), "Connected: " + socketClient.isOpen(),
-                        Toast.LENGTH_LONG).show();
                 workingDate = dateController.returnWorkingDateAsString();
                 String receiveJsonURL = serverURL + "/steps/" + userID + "/" + workingDate;
 
@@ -336,5 +338,15 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
             });
             VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_mid_req");
         }
+    }
+
+    public void sendNotification(String message) {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notify = new Notification.Builder(getApplicationContext()).
+                setContentTitle("Vigor").setContentText(message).
+                setContentTitle("Step Update!").setSmallIcon(R.drawable.ic_launcher_foreground).build();
+        notify.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, notify);
     }
 }
