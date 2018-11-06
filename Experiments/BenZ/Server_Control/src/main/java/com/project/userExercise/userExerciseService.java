@@ -152,9 +152,9 @@ public class userExerciseService {
 	public void removeUserExercise(userEntry userEntry) {
 		
 		Exercise exercise = exerciseRepo.findByName(userEntry.getExercise()); // Retrieves exercise object based off the userAddEntry
-		int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object
+		int exid = exercise.getExerciseId(); // Stores the exerciseId of the exercise object
 		// userId, exerciseId
-		userExerciseRepo.removeExercise(userEntry.getUserId(), id);
+		userExerciseRepo.removeExercise(userEntry.getUserId(), exid, userEntry.getPlanName());
 	}
 	
 	
@@ -173,15 +173,15 @@ public class userExerciseService {
 		String saveDate = controller.returnWorkingDateAsString();
 		
 		Exercise exercise = exerciseRepo.findByName(userEntry.getExercise()); // Retrieves exercise object based off the userAddEntry
-		int id = exercise.getExerciseId(); // Stores the exerciseId of the exercise object
+		int exid = exercise.getExerciseId(); // Stores the exerciseId of the exercise object
 
 		String plan = userEntry.getPlanName();
 		
 		if (plan == "") {
-			historianRepo.addHistory(userEntry.getUserId(), id, userEntry.getSets(), userEntry.getReps(), saveDate);
-			userExerciseRepo.removeExercise(userEntry.getUserId(), id);
+			historianRepo.addHistory(userEntry.getUserId(), exid, userEntry.getSets(), userEntry.getReps(), saveDate);
+			userExerciseRepo.removeExercise(userEntry.getUserId(), exid, userEntry.getPlanName());
 		} else {
-			historianRepo.addHistory(userEntry.getUserId(), id, userEntry.getSets(), userEntry.getReps(), saveDate);
+			historianRepo.addHistory(userEntry.getUserId(), exid, userEntry.getSets(), userEntry.getReps(), saveDate);
 		}
 	}
 	

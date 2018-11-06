@@ -29,7 +29,7 @@ public interface trainerExerciseRepository extends CrudRepository<trainerExercis
 	
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM trainer_exercise WHERE (user_id = :userId AND exercise_id = :exerciseId)", nativeQuery = true)
-	public void removeTrainerExercise(@Param("userId") int userId, @Param("exerciseId") int exerciseId);
+	@Query(value = "DELETE FROM trainer_exercise WHERE (user_id = :userId AND exercise_id = :exerciseId AND plan_name = :planName)", nativeQuery = true)
+	public void removeTrainerExercise(@Param("userId") int userId, @Param("exerciseId") int exerciseId, @Param("planName") String planName);
 	
 }

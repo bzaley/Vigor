@@ -186,7 +186,7 @@ public class trainerExerciseService {
 		int uid = user.getuserId();
 		
 		// userId, exerciseId
-		trainerExerciseRepo.removeTrainerExercise(uid, exid);
+		trainerExerciseRepo.removeTrainerExercise(uid, exid, trainerEntry.getPlanName());
 		
 	}
 
@@ -209,7 +209,7 @@ public class trainerExerciseService {
 				
 		if (plan == "") {
 			historianRepo.addHistory(uid, exid, trainerEntry.getSets(), trainerEntry.getReps(), saveDate);
-			trainerExerciseRepo.removeTrainerExercise(uid, exid);
+			trainerExerciseRepo.removeTrainerExercise(uid, exid, trainerEntry.getPlanName());
 		} else {
 			historianRepo.addHistory(uid, exid, trainerEntry.getSets(), trainerEntry.getReps(), saveDate);
 		}
