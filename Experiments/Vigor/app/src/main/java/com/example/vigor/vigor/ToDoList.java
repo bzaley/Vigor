@@ -32,7 +32,7 @@ public class ToDoList extends AppCompatActivity {
 
     ArrayList<DataModel> dataModels;
     ListView listView;
-    private static CustomAdapter adapter;
+    private CustomAdapter adapter;
     private SessionController session;
     private EditText toAddItem;
     private EditText toAddSets;
@@ -49,6 +49,26 @@ public class ToDoList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
+
+        //initialize the variables for this activity
+        session = new SessionController(getApplicationContext());
+
+        listView = (ListView) findViewById(R.id.list);
+        toAddItem = (EditText) findViewById(R.id.ToDoEtNewItem);
+        toAddSets = (EditText) findViewById(R.id.ToDoEtNewSets);
+        toAddReps = (EditText) findViewById(R.id.ToDoEtNewReps);
+
+        addBtn = (Button) findViewById(R.id.ToDoBtnAddItem);
+        nextBtn = (Button) findViewById(R.id.ToDoBtnNext);
+        prevBtn = (Button) findViewById(R.id.ToDoBtnLast);
+        changePlanBtn = (Button) findViewById(R.id.ToDoBtnChangePlan);
+
+        dataModels = new ArrayList<>();
+
+        adapter = new CustomAdapter(dataModels, getApplicationContext());
+
+        listView.setAdapter(adapter);
+        setUpInitialData(planName, trainerPlanName);
 
         //Ask user if they'd like to load in one of their plans
         AlertDialog.Builder alert = new AlertDialog.Builder(
@@ -96,26 +116,6 @@ public class ToDoList extends AppCompatActivity {
         });
         alert.show();
 
-        //initialize the variables for this activity
-        session = new SessionController(getApplicationContext());
-
-        listView = (ListView) findViewById(R.id.list);
-        toAddItem = (EditText) findViewById(R.id.ToDoEtNewItem);
-        toAddSets = (EditText) findViewById(R.id.ToDoEtNewSets);
-        toAddReps = (EditText) findViewById(R.id.ToDoEtNewReps);
-
-        addBtn = (Button) findViewById(R.id.ToDoBtnAddItem);
-        nextBtn = (Button) findViewById(R.id.ToDoBtnNext);
-        prevBtn = (Button) findViewById(R.id.ToDoBtnLast);
-        changePlanBtn = (Button) findViewById(R.id.ToDoBtnChangePlan);
-
-        dataModels = new ArrayList<>();
-
-        adapter = new CustomAdapter(dataModels, getApplicationContext());
-
-        listView.setAdapter(adapter);
-        setUpInitialData(planName, trainerPlanName);
-
         //Listen for a user to add an activity
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +124,7 @@ public class ToDoList extends AppCompatActivity {
                 final String enteredItem = toAddItem.getText().toString();
                 final String enteredSets = toAddSets.getText().toString();
                 final String enteredReps = toAddReps.getText().toString();
-                //Check if it's a trainer adding thing a single activity
+                //Check if it's a trainer adding thing or a trainee
                 if (!(session.returnUserRole().equals("personaltrainer"))) {
                     //Add the single activity to the list
                     addToList(enteredItem, enteredSets, enteredReps, "individual", "", "");
@@ -133,6 +133,7 @@ public class ToDoList extends AppCompatActivity {
                     String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserSingle";
                     try {
                         toSend.put("userId", session.returnUserID());
+                        //Server recognises single activities from users as activities with no plan name and day = -1
                         toSend.put("plan", "");
                         toSend.put("day", -1);
                         toSend.put("exercise", enteredItem);
@@ -171,6 +172,7 @@ public class ToDoList extends AppCompatActivity {
                             try {
                                 toSend.put("trainerId", session.returnUserID());
                                 toSend.put("email", alertInput3.getText().toString());
+                                //Server recognises single activities from trainers as activities with no plan name and  day = -2
                                 toSend.put("planName", "");
                                 toSend.put("day", -2);
                                 toSend.put("exercise", enteredItem);
@@ -205,7 +207,7 @@ public class ToDoList extends AppCompatActivity {
             }
         });
 
-        //Increment which day the plan you are using is on
+        //Listen for the user to increment which day the plan is on
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,7 +248,7 @@ public class ToDoList extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-                alert.setNegativeButton("USER", new DialogInterface.OnClickListener() {
+                alert.setNeutralButton("USER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Send the server a request to Increment
@@ -278,16 +280,22 @@ public class ToDoList extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 alert.show();
 
             }
         });
 
-        //Decrement which day the plan you are using is on
+        //Listen for the user to decrement which day the plan is on
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Ask them which plan they'd like to Increment
+                //Ask them which plan they'd like to decrement
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         ToDoList.this);
                 alert.setTitle("Which plan would you like to Increment");
@@ -295,7 +303,7 @@ public class ToDoList extends AppCompatActivity {
                 alert.setPositiveButton("TRAINER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Send the server a request to Decrement
+                        //Send the server a request to decrement
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                                 "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/last/" +
                                         session.returnUserID() + "/" + trainerPlanName, null,
@@ -324,10 +332,10 @@ public class ToDoList extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-                alert.setNegativeButton("USER", new DialogInterface.OnClickListener() {
+                alert.setNeutralButton("USER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Send the server a request to Decrement
+                        //Send the server a request to decrement
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                                 "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/last/" +
                                         session.returnUserID() + "/" + planName, null,
@@ -353,6 +361,12 @@ public class ToDoList extends AppCompatActivity {
                             }
                         });
                         VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });

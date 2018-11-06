@@ -12,8 +12,8 @@
 
     <Button
         android:id="@+id/MainBtnlogoutButt"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_alignTop="@+id/MainBtnGraphing"
         android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
@@ -24,8 +24,8 @@
 
     <Button
         android:id="@+id/MainBtnMakePlan"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_above="@+id/MainBtnGraphing"
         android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
@@ -36,8 +36,8 @@
 
     <Button
         android:id="@+id/MainBtnToDo"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_alignTop="@+id/MainBtnGraphing"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
@@ -50,8 +50,8 @@
 
     <Button
         android:id="@+id/MainBtnPedometer"
-        android:layout_width="117dp"
-        android:layout_height="97dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_above="@+id/MainBtnGraphing"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
@@ -75,13 +75,13 @@
 
     <Button
         android:id="@+id/MainBtnGraphing"
-        android:layout_width="112dp"
-        android:layout_height="99dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/MainBtnViewProfile"
         android:layout_alignStart="@+id/MainBtnViewProfile"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
         android:text="Graphing"
         app:layout_constraintBottom_toTopOf="@+id/MainBtnToDo"
         app:layout_constraintEnd_toStartOf="@+id/MainBtnMakePlan"
@@ -89,8 +89,8 @@
 
     <Button
         android:id="@+id/MainBtnViewProfile"
-        android:layout_width="114dp"
-        android:layout_height="97dp"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/MainTvQuickAccess"
         android:layout_alignStart="@+id/MainProfileImage"
         android:layout_marginStart="8dp"
@@ -116,6 +116,7 @@
         android:id="@+id/MainTvQuickAccess"
         android:layout_width="wrap_content"
         android:layout_height="28sp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textColor="@color/colorPrimary"
