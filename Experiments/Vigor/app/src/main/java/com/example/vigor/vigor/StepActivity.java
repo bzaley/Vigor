@@ -50,8 +50,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     private int numSteps;
     private int tempSteps;
     private int userID;
-    private int dateI;
-    private Date currentDate;
     private String TAG = StepActivity.class.getSimpleName();
     private String tempMessage;
 
@@ -79,7 +77,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         session = new SessionController(getApplicationContext());
 
         dateController = new DateController();
-        currentDate = dateController.dateOfToday();
 
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();

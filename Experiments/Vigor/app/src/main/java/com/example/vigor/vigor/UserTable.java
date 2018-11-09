@@ -44,7 +44,7 @@ public class UserTable extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    startActivity(new Intent(UserTable.this, PlanCreator.class));
+                    startActivity(new Intent(UserTable.this, TrainerTools.class));
                 }
             }
         });

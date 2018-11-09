@@ -37,6 +37,7 @@ public class PlanCreator extends AppCompatActivity {
     private ListView listView;
     private static CustomAdapter adapter;
     public static int index = 0;
+    public static String PlanName;
 
     private String TAG = PlanCreator.class.getSimpleName();
     private SessionController session;
@@ -68,6 +69,21 @@ public class PlanCreator extends AppCompatActivity {
         days = new ArrayList<>();
         dataModels = new ArrayList<>();
 
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                PlanCreator.this);
+        alert.setTitle("What would you like to name this plan?");
+        final EditText alertInput = new EditText(PlanCreator.this);
+        alert.setView(alertInput);
+        alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlanName = alertInput.getText().toString();
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+
         Day.setText("Day: 1");
 
         adapter = new CustomAdapter(dataModels, getApplicationContext());
@@ -81,7 +97,6 @@ public class PlanCreator extends AppCompatActivity {
                 String toAddActivity = activity.getText().toString();
                 String toAddSets = sets.getText().toString();
                 String toAddReps = reps.getText().toString();
-                boolean passed = true;
                 //make sure the activity is entered correctly
                 if (toAddActivity.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
@@ -94,9 +109,7 @@ public class PlanCreator extends AppCompatActivity {
                         }
                     });
                     alert.show();
-                    passed = false;
-                }
-                if (toAddSets.equals("") || toAddReps.equals("")) {
+                } else if (toAddSets.equals("") || toAddReps.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             PlanCreator.this);
                     alert.setTitle("Amount entered isn't a number.");
@@ -107,11 +120,8 @@ public class PlanCreator extends AppCompatActivity {
                         }
                     });
                     alert.show();
-                    passed = false;
-                }
-                //Add the activity
-                if (passed) {
-                    dataModels.add(new DataModel(toAddActivity, toAddSets, toAddReps, "", "", session.returnUserID() + ""));
+                } else {
+                    dataModels.add(new DataModel("", "", toAddActivity, toAddSets, toAddReps, ""));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -208,16 +218,12 @@ public class PlanCreator extends AppCompatActivity {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         PlanCreator.this);
                 alert.setTitle("Are you sure about that");
-                final EditText alertInput = new EditText(PlanCreator.this);
-                alert.setView(alertInput);
-                alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //get the plan name
-                        String planName = alertInput.getText().toString();
                         //make sure the plan name is correctly entered
-                        if (planName.equals("")){
+                        if (PlanName.equals("")) {
                             AlertDialog.Builder alert2 = new AlertDialog.Builder(
                                     PlanCreator.this);
                             alert2.setTitle("No Plan Name entered.");
@@ -230,87 +236,53 @@ public class PlanCreator extends AppCompatActivity {
                             alert2.show();
                         } else {
                             //add the last day entered to the plan name
-                            if (days.size() <= PlanCreator.index)
+                            if (days.size() <= PlanCreator.index) {
                                 days.add(dataModels);
-                            else
+                            } else {
                                 days.set(PlanCreator.index, dataModels);
-                            //If it's a trainer entering the plan
-                            if (session.returnUserRole().equals("personaltrainer")){
-                                JSONArray toSend = new JSONArray();
-                                for (int i=0; i<days.size(); i++){
-                                    ArrayList temp = days.get(i);
-                                    for (int j=0; j<temp.size(); j++){
-                                        DataModel tempActivity = (DataModel) temp.get(j);
-                                        JSONObject toPut = new JSONObject();
-                                        try {
+                            }
+                            JSONArray toSend = new JSONArray();
+                            String planURL = "";
+                            for (int i = 0; i < days.size(); i++) {
+                                ArrayList temp = days.get(i);
+                                for (int j = 0; j < temp.size(); j++) {
+                                    DataModel tempActivity = (DataModel) temp.get(j);
+                                    JSONObject toPut = new JSONObject();
+                                    try {
+                                        if (session.returnUserRole().equals("trainee")) {
+                                            toPut.put("userId", session.returnUserID());
+                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
+                                        } else {
                                             toPut.put("trainerId", session.returnUserID());
                                             toPut.put("email", UserTable.UserEmailString);
-                                            toPut.put("planName", planName);
-                                            toPut.put("day", (i+1));
-                                            toPut.put("exercise", tempActivity.getActivity());
-                                            toPut.put("sets", tempActivity.getSets());
-                                            toPut.put("reps", tempActivity.getReps());
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerPlan";
                                         }
-                                        toSend.put(toPut);
+                                        toPut.put("planName", PlanName);
+                                        toPut.put("day", (i + 1));
+                                        toPut.put("exercise", tempActivity.getExercise());
+                                        toPut.put("sets", tempActivity.getSets());
+                                        toPut.put("reps", tempActivity.getReps());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
+                                    toSend.put(toPut);
                                 }
-                                //send the plan to the server
-                                String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerPlan";
-                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
-                                        planURL, toSend, new Response.Listener<JSONArray>() {
-                                    @Override
-                                    public void onResponse(JSONArray response) {
-                                        Log.d(TAG, response.toString());
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.d(TAG, "Error; " + error.toString());
-                                    }
-                                });
-                                VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
-                                dialog.dismiss();
                             }
-                            //If it's an individual entering the plan
-                            else {
-                                JSONArray toSend = new JSONArray();
-                                for (int i=0; i<days.size(); i++){
-                                    ArrayList temp = days.get(i);
-                                    for (int j=0; j<temp.size(); j++){
-                                        DataModel tempActivity = (DataModel) temp.get(j);
-                                        JSONObject toPut = new JSONObject();
-                                        try {
-                                            toPut.put("userId", session.returnUserID());
-                                            toPut.put("planName", planName);
-                                            toPut.put("day", (i+1));
-                                            toPut.put("exercise", tempActivity.getActivity());
-                                            toPut.put("sets", tempActivity.getSets());
-                                            toPut.put("reps", tempActivity.getReps());
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        toSend.put(toPut);
-                                    }
+                            //send the plan to the server
+                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                                    planURL, toSend, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.d(TAG, response.toString());
                                 }
-                                //send the plan
-                                String planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
-                                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
-                                        planURL, toSend, new Response.Listener<JSONArray>() {
-                                    @Override
-                                    public void onResponse(JSONArray response) {
-                                        Log.d(TAG, response.toString());
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.d(TAG, "Error; " + error.toString());
-                                    }
-                                });
-                                VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
-                                dialog.dismiss();
-                            }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.d(TAG, "Error; " + error.toString());
+                                }
+                            });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
+                            dialog.dismiss();
                             //clear all the data from the current plan and reset the data the user sees
                             dataModels = new ArrayList<>();
                             days = new ArrayList<>();
@@ -319,6 +291,21 @@ public class PlanCreator extends AppCompatActivity {
                             adapter = new CustomAdapter(dataModels, getApplicationContext());
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+
+                            AlertDialog.Builder alert = new AlertDialog.Builder(
+                                    PlanCreator.this);
+                            alert.setTitle("What would you like to name this plan?.");
+                            final EditText alertInput = new EditText(PlanCreator.this);
+                            alert.setView(alertInput);
+                            alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    PlanName = alertInput.getText().toString();
+                                    dialog.dismiss();
+                                }
+                            });
+                            alert.show();
                         }
                     }
                 });

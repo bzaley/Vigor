@@ -70,7 +70,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtActivity.setText(dataModel.getActivity());
+        viewHolder.txtActivity.setText(dataModel.getExercise());
         viewHolder.txtSets.setText(dataModel.getSets());
         viewHolder.txtReps.setText(dataModel.getReps());
         // Return the completed view to render on screen
