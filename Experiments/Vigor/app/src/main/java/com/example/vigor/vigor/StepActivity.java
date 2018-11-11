@@ -50,6 +50,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
     private int numSteps;
     private int tempSteps;
     private int userID;
+    private int dateI;
+    private Date currentDate;
     private String TAG = StepActivity.class.getSimpleName();
     private String tempMessage;
 
@@ -77,6 +79,7 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         session = new SessionController(getApplicationContext());
 
         dateController = new DateController();
+        currentDate = dateController.dateOfToday();
 
         // Create instance of JSON request class
         jsonRequest = new JsonRequest();
@@ -106,8 +109,8 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), tempMessage
-                                            + " You have reached your goal for total steps today!" +
-                                            " Keep going!", Toast.LENGTH_LONG).show();
+                                    + " You have reached your goal for total steps today!" +
+                                    " Keep going!", Toast.LENGTH_LONG).show();
                             sendNotification(tempMessage + " You have reached your goal for total" +
                                     " steps today! Keep going!");
                         }

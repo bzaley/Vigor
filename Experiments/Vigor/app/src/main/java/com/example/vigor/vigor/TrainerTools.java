@@ -20,5 +20,13 @@ public class TrainerTools extends AppCompatActivity {
                 startActivity(new Intent(TrainerTools.this, PlanCreator.class));
             }
         });
+
+        Button Single = (Button) findViewById(R.id.TrainerToolsBtnAddSingle);
+        Single.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TrainerTools.this, TrainerAddSingles.class));
+            }
+        });
     }
 }

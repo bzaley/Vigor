@@ -21,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionController(getApplicationContext());
 
+        Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
+        if (session.returnUserRole().equals("personaltrainer")){
+            btnMakePlan.setText("Trainer Tools");
+        }
+
         TextView temp = (TextView) findViewById(R.id.MainTvQuickView);
         String mystring=new String("Quick View");
         SpannableString content = new SpannableString(mystring);
@@ -79,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
         btnMakePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,7 +26,7 @@ public class TrainerAddSingles extends AppCompatActivity {
 
     static ArrayList<DataModel> dataModels;
     private ListView listView;
-    private static CustomAdapter adapter;
+    private CustomAdapter adapter;
 
     private EditText activity;
     private EditText sets;
@@ -51,6 +51,8 @@ public class TrainerAddSingles extends AppCompatActivity {
 
         addToPlan = (Button) findViewById(R.id.TrainerAddSingleBtnAddItem);
         saveItems = (Button) findViewById(R.id.TrainerAddSingleBtnSaveitems);
+
+        dataModels = new ArrayList<>();
 
         listView = (ListView) findViewById(R.id.list);
         adapter = new CustomAdapter(dataModels, getApplicationContext());
