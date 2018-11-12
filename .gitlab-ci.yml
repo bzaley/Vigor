@@ -16,7 +16,7 @@ stages:
 maven-build:
  stage: mavenbuild
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn package -B
@@ -28,7 +28,7 @@ maven-build:
 maven-test:
  stage: maventest
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn test
@@ -43,7 +43,7 @@ maven-test:
 autoDeploy:
  stage: autodeploy
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn package
@@ -63,7 +63,7 @@ android-build:
  - export GRADLE_USER_HOME=`pwd`/.gradle
  - chmod +x ./Frontend/Vigor/gradlew
  tags:
- - android_tag1
+ - android_tag
  script:
  - cd Frontend/Vigor
  - ./gradlew assemble
@@ -79,7 +79,7 @@ unitTests:
  - export GRADLE_USER_HOME=`pwd`/.gradle
  - chmod +x ./Vigor/gradlew
  tags:
- - android_tag1
+ - android_tag
  script:
  - cd Frontend/Vigor
  - ./gradlew test
