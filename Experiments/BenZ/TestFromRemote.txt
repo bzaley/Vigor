@@ -1,3 +1,0 @@
-Created a test document from the remote repository.
-Used git fetch to see file update,
-used git merge to pull update to local repository
