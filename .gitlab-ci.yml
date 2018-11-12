@@ -33,8 +33,8 @@ maven-test:
  - cd Backend/Server_Control
  - mvn test
  artifacts:
- paths:
- - /var/www/*.jar 
+    paths:
+    - Backend/Server_Control/target/*.jar
 
 # Below stage builds, deploys and executes the jar as service.
 # Make sure there is /target directory in your server, else script will fail, or use any
@@ -68,8 +68,8 @@ android-build:
  - cd Frontend/Vigor
  - ./gradlew assemble
  artifacts:
- paths:
- - Frontend/Vigor/app/build/outputs/
+    paths:
+    - Frontend/Vigor/app/build/outputs/
  
 # To run Android unit tests.
 unitTests:
