@@ -12,20 +12,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnClickListener {
+public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements View.OnClickListener {
 
-    private ArrayList<DataModel> dataSet;
+    private ArrayList<ClassDataModel> dataSet;
     Context mContext;
 
     // View lookup cache
     private static class ViewHolder {
-        TextView txtActivity;
-        TextView txtSets;
-        TextView txtReps;
+        TextView txtClassName;
+        TextView txtClassId;
+        TextView txtClassDescription;
     }
 
-    public CustomAdapter(ArrayList<DataModel> data, Context context) {
-        super(context, R.layout.row_item, data);
+    public CustomClassAdapter(ArrayList<ClassDataModel> data, Context context) {
+        super(context, R.layout.class_row_item, data);
         this.dataSet = data;
         this.mContext = context;
     }
@@ -34,7 +34,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         Object object = getItem(position);
-        DataModel dataModel = (DataModel) object;
+        ClassDataModel classdataModel = (ClassDataModel) object;
     }
 
     private int lastPosition = -1;
@@ -42,7 +42,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        DataModel dataModel = getItem(position);
+        ClassDataModel classdataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -52,10 +52,10 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.txtActivity = (TextView) convertView.findViewById(R.id.ClassName);
-            viewHolder.txtSets = (TextView) convertView.findViewById(R.id.sets);
-            viewHolder.txtReps = (TextView) convertView.findViewById(R.id.reps);
+            convertView = inflater.inflate(R.layout.class_row_item, parent, false);
+            viewHolder.txtClassName = (TextView) convertView.findViewById(R.id.ClassName);
+            viewHolder.txtClassId = (TextView) convertView.findViewById(R.id.ClassId);
+            viewHolder.txtClassDescription = (TextView) convertView.findViewById(R.id.ClassDescription);
 
             result = convertView;
 
@@ -69,9 +69,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtActivity.setText(dataModel.getExercise());
-        viewHolder.txtSets.setText(dataModel.getSets());
-        viewHolder.txtReps.setText(dataModel.getReps());
+        viewHolder.txtClassName.setText(classdataModel.getClassName());
+        viewHolder.txtClassId.setText(classdataModel.getClassId());
+        viewHolder.txtClassDescription.setText(classdataModel.getBillboard());
         // Return the completed view to render on screen
         return convertView;
     }

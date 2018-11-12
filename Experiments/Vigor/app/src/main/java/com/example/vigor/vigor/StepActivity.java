@@ -127,8 +127,6 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
                 @Override
                 public void onError(Exception e) {
                     Log.d("Exception:", e.toString());
-                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
                 }
             };
         } catch (URISyntaxException e) {

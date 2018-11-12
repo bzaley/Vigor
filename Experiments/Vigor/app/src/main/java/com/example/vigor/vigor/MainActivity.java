@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
         if (session.returnUserRole().equals("personaltrainer")){
             btnMakePlan.setText("Trainer Tools");
+        } else if (session.returnUserRole().equals("instructor")){
+            btnMakePlan.setText("Class Creator");
         }
 
         TextView temp = (TextView) findViewById(R.id.MainTvQuickView);
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (session.returnUserRole().equals("personaltrainer")){
                     startActivity(new Intent(MainActivity.this, UserTable.class));
+                } else if (session.returnUserRole().equals("instructor")) {
+                    startActivity(new Intent(MainActivity.this, ClassTable.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, PlanCreator.class));
                 }
