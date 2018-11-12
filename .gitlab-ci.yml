@@ -47,7 +47,7 @@ autoDeploy:
  script:
  - cd Backend/Server_Control
  - mvn package
- - sudo mv /var/www/*.jar /var/www/web-demo.jar
+ - sudo mv target/*.jar /target/web-demo.jar
  - sudo systemctl stop systemd-web-demo
  - sudo systemctl start systemd-web-demo
  
@@ -61,7 +61,7 @@ android-build:
  stage: androidbuild
  before_script:
  - export GRADLE_USER_HOME=`pwd`/.gradle
- - chmod +x /home/Git/AD_7_Vigor/Frontend/Vigor/gradlew
+ - chmod +x ./Frontend/Vigor/gradlew
  tags:
  - android_tag1
  script:
