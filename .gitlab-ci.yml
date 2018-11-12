@@ -1,0 +1,85 @@
+# Stages of pipeline, should match with stage tag inside each job.
+# Each stages executes in sequence, if previous job fails, then all the preceeding jobs
+# are skipped.
+stages:
+ - mavenbuild
+ - maventest
+ - autodeploy
+ - androidbuild
+ - androidtest 
+
+# tags: "shell" should match with the tag name provided to runner, for spring runner
+# should execute in shell.
+# Notice that in petclinic project, the spring project is in root of master, if yours is in
+# folder then cd to that folder.
+# maven -B means batch mode (i.e. not interactive)
+maven-build:
+ stage: mavenbuild
+ tags:
+ - shell
+ script:
+ - cd Backend/Server_Control
+ - mvn package -B
+
+# artifacts are created when job executes successfully, and can be manually
+# downloaded from GitLab GUI.
+# artifacts are not mandatory, but it is good practice, in case auto deploy fails, you
+# can manually download the jar.
+maven-test:
+ stage: maventest
+ tags:
+ - shell
+ script:
+ - cd Backend/Server_Control
+ - mvn test
+ artifacts:
+ paths:
+ - Spring/var/www/*.jar 
+
+# Below stage builds, deploys and executes the jar as service.
+# Make sure there is /target directory in your server, else script will fail, or use any
+# other folder you like.
+# If you are changing the folder, reflect the change in systemd-web-demo service
+autoDeploy:
+ stage: autodeploy
+ tags:
+ - shell
+ script:
+ - cd Backend/Server_Control
+ - mvn package
+ - sudo mv /var/www/*.jar /var/www/web-demo.jar
+ - sudo systemctl stop systemd-web-demo
+ - sudo systemctl start systemd-web-demo
+ 
+# To build android projects
+# Notice that we cd into Android_test folder which contains all Android files before
+# building apk.
+# Ensure the tag matches with the tag created for Android runner
+# Android runner should have docker as executor.
+android-build:
+ image: javiersantos/android-ci:latest
+ stage: androidbuild
+ before_script:
+ - export GRADLE_USER_HOME=`pwd`/.gradle
+ - chmod +x /home/Git/AD_7_Vigor/Frontend/Vigor/gradlew
+ tags:
+ - android_tag1
+ script:
+ - cd Frontend/Vigor
+ - ./gradlew assemble
+ artifacts:
+ paths:
+ - Frontend/Vigor/app/build/outputs/
+ 
+# To run Android unit tests.
+unitTests:
+ image: javiersantos/android-ci:latest
+ stage: androidtest
+ before_script:
+ - export GRADLE_USER_HOME=`pwd`/.gradle
+ - chmod +x ./Vigor/gradlew
+ tags:
+ - android_tag1
+ script:
+ - cd Frontend/Vigor
+ - ./gradlew test
