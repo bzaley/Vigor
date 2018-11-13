@@ -16,7 +16,7 @@ stages:
 maven-build:
  stage: mavenbuild
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn package -B
@@ -28,7 +28,7 @@ maven-build:
 maven-test:
  stage: maventest
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn test
@@ -43,13 +43,13 @@ maven-test:
 autoDeploy:
  stage: autodeploy
  tags:
- - shell
+ - spring_tag
  script:
  - cd Backend/Server_Control
  - mvn package
  - sudo mv target/*.jar /target/web-demo.jar
- - sudo systemctl stop systemd-web-demo
- - sudo systemctl start systemd-web-demo
+ - sudo systemctl stop system-web-demo
+ - sudo systemctl start system-web-demo
  
 # To build android projects
 # Notice that we cd into Android_test folder which contains all Android files before
@@ -63,7 +63,7 @@ android-build:
  - export GRADLE_USER_HOME=`pwd`/.gradle
  - chmod +x ./Frontend/Vigor/gradlew
  tags:
- - android_tag1
+ - android_tag
  script:
  - cd Frontend/Vigor
  - ./gradlew assemble
@@ -77,9 +77,9 @@ unitTests:
  stage: androidtest
  before_script:
  - export GRADLE_USER_HOME=`pwd`/.gradle
- - chmod +x ./Vigor/gradlew
+ - chmod +x ./Frontend/Vigor/gradlew
  tags:
- - android_tag1
+ - android_tag
  script:
  - cd Frontend/Vigor
  - ./gradlew test
