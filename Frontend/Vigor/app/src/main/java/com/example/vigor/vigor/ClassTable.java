@@ -31,7 +31,7 @@ public class ClassTable extends AppCompatActivity {
         setContentView(R.layout.activity_class_table);
 
         addClass = (Button) findViewById(R.id.classTableBtnEnter);
-        newClassName = (EditText) findViewById(R.id.classTableEtManagedClass);
+//        newClassName = (EditText) findViewById(R.id.classTableEtManagedClass);
 
         classes = (ListView) findViewById(R.id.list);
         classDataModels = new ArrayList<>();
@@ -53,7 +53,8 @@ public class ClassTable extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1){
             if (resultCode == RESULT_OK){
-                classDataModels.add(new ClassDataModel(1, data.getStringExtra("ClassName"), session.returnUserID(), "", "", "", false));
+                classDataModels.add(new ClassDataModel(1, data.getStringExtra("classname"),
+                        session.returnUserID(), data.getStringExtra("schedule"), "", "", false));
             }
         }
 
