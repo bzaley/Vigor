@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (session.returnUserRole().equals("instructor")) {
                     startActivity(new Intent(MainActivity.this, ClassTable.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, PlanCreator.class));
+                    startActivity(new Intent(MainActivity.this, PlanManager.class));
                 }
             }
         });

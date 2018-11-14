@@ -76,6 +76,7 @@
             android:name=".ClassBuilder"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".PlanManager"></activity>
     </application>
 
 </manifest>

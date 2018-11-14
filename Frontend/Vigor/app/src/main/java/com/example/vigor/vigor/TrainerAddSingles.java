@@ -88,7 +88,7 @@ public class TrainerAddSingles extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    dataModels.add(new DataModel(session.returnUserID() + "", UserTable.UserEmailString, toAddActivity, toAddSets, toAddReps, ""));
+                    dataModels.add(new DataModel(UserTable.UserEmailString, "", toAddActivity, toAddSets, toAddReps));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -110,19 +110,15 @@ public class TrainerAddSingles extends AppCompatActivity {
                             DataModel temp = dataModels.get(i);
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("trainerId", session.returnUserID());
-                                toSend.put("email",temp.getEmail());
-                                //Server recognises single activities from trainers as activities with no plan name and  day = -2
-                                toSend.put("planName", "");
-                                toSend.put("day", -2);
-                                toSend.put("exercise", temp.getExercise());
-                                toSend.put("sets", Integer.parseInt(temp.getSets()));
-                                toSend.put("reps", Integer.parseInt(temp.getReps()));
+                                toSend.put("userEmail", UserTable.UserEmailString);
+                                toSend.put("exercise", temp.getexercise());
+                                toSend.put("sets", Integer.parseInt(temp.getsets()));
+                                toSend.put("reps", Integer.parseInt(temp.getreps()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                    "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerSingle", toSend, new Response.Listener<JSONObject>() {
+                                    "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/addSingle", toSend, new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Log.d(TAG, response.toString());

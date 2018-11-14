@@ -7,25 +7,24 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements View.OnClickListener {
+public class CustomPlanAdapter extends ArrayAdapter<PlanDataModel> implements View.OnClickListener {
 
-    private ArrayList<ClassDataModel> dataSet;
+    private ArrayList<PlanDataModel> dataSet;
     Context mContext;
 
     // View lookup cache
     private static class ViewHolder {
-        TextView txtClassName;
-        TextView txtClassId;
-        TextView txtClassDescription;
+        CheckBox active;
     }
 
-    public CustomClassAdapter(ArrayList<ClassDataModel> data, Context context) {
-        super(context, R.layout.class_row_item, data);
+    public CustomPlanAdapter(ArrayList<PlanDataModel> data, Context context) {
+        super(context, R.layout.plan_row_item, data);
         this.dataSet = data;
         this.mContext = context;
     }
@@ -34,7 +33,7 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         Object object = getItem(position);
-        ClassDataModel classdataModel = (ClassDataModel) object;
+        PlanDataModel plandataModel = (PlanDataModel) object;
     }
 
     private int lastPosition = -1;
@@ -42,7 +41,7 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        ClassDataModel classdataModel = getItem(position);
+        PlanDataModel classdataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -53,9 +52,9 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.class_row_item, parent, false);
-            viewHolder.txtClassName = (TextView) convertView.findViewById(R.id.Activity);
-            viewHolder.txtClassId = (TextView) convertView.findViewById(R.id.ClassId);
-            viewHolder.txtClassDescription = (TextView) convertView.findViewById(R.id.ClassDescription);
+            viewHolder.active = (CheckBox) convertView.findViewById(R.id.PlanName);
+//            viewHolder.active.setText(classdataModel.getPlanName());
+//            viewHolder.active.setSelected(classdataModel.getIsChecked());
 
             result = convertView;
 
@@ -69,9 +68,8 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtClassName.setText(classdataModel.getClassName());
-        viewHolder.txtClassId.setText(classdataModel.getClassId());
-        viewHolder.txtClassDescription.setText(classdataModel.getBillboard());
+        viewHolder.active.setText(classdataModel.getPlanName());
+        viewHolder.active.setSelected(classdataModel.getIsChecked());
         // Return the completed view to render on screen
         return convertView;
     }

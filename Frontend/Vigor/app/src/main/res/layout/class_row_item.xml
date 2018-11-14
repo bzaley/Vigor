@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/ClassName"
+        android:id="@+id/Activity"
         android:layout_width="225dp"
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
@@ -25,19 +25,19 @@
         android:id="@+id/ClassId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ClassName"
+        android:layout_below="@+id/Activity"
         android:layout_marginEnd="8dp"
         android:text="ClassId"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/ClassName"
+        app:layout_constraintBottom_toBottomOf="@id/Activity"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/ClassDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ClassName"
+        android:layout_below="@+id/Activity"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -48,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ClassName" />
+        app:layout_constraintTop_toBottomOf="@+id/Activity" />
 
 
 </android.support.constraint.ConstraintLayout>

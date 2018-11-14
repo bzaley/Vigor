@@ -16,7 +16,7 @@ public class ClassTable extends AppCompatActivity {
 
     private Button addClass;
     private EditText newClassName;
-    private ListAdapter adapter;
+    ListAdapter adapter;
 
     ArrayList<ClassDataModel> classDataModels;
 
@@ -34,7 +34,7 @@ public class ClassTable extends AppCompatActivity {
 //        newClassName = (EditText) findViewById(R.id.classTableEtManagedClass);
 
         classes = (ListView) findViewById(R.id.list);
-        classDataModels = new ArrayList<>();
+        classDataModels = ClassFileHelper.readData(this);
         adapter = new CustomClassAdapter(classDataModels, getApplicationContext());
         classes.setAdapter(adapter);
 
@@ -55,6 +55,8 @@ public class ClassTable extends AppCompatActivity {
             if (resultCode == RESULT_OK){
                 classDataModels.add(new ClassDataModel(1, data.getStringExtra("classname"),
                         session.returnUserID(), data.getStringExtra("schedule"), "", "", false));
+                ClassFileHelper.writeData(classDataModels, ClassTable.this);
+//                adapter.notifyDataSetChanged();
             }
         }
 

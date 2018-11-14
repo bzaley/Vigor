@@ -121,7 +121,7 @@ public class PlanCreator extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    dataModels.add(new DataModel("", "", toAddActivity, toAddSets, toAddReps, ""));
+                    dataModels.add(new DataModel(UserTable.UserEmailString, PlanName, toAddActivity, toAddSets, toAddReps));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -251,17 +251,17 @@ public class PlanCreator extends AppCompatActivity {
                                     try {
                                         if (session.returnUserRole().equals("trainee")) {
                                             toPut.put("userId", session.returnUserID());
-                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userExercise/addUserPlan";
+                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userPlan/add";
                                         } else {
                                             toPut.put("trainerId", session.returnUserID());
                                             toPut.put("email", UserTable.UserEmailString);
-                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerExercise/addTrainerPlan";
+                                            planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerPlan/add";
                                         }
                                         toPut.put("planName", PlanName);
                                         toPut.put("day", (i + 1));
-                                        toPut.put("exercise", tempActivity.getExercise());
-                                        toPut.put("sets", tempActivity.getSets());
-                                        toPut.put("reps", tempActivity.getReps());
+                                        toPut.put("exercise", tempActivity.getexercise());
+                                        toPut.put("sets", Integer.parseInt(tempActivity.getsets()));
+                                        toPut.put("reps", Integer.parseInt(tempActivity.getreps()));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

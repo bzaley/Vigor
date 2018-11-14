@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/ClassName"
+        android:id="@+id/Activity"
         android:layout_width="225dp"
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
@@ -25,9 +25,9 @@
         android:id="@+id/sets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ClassName"
+        android:layout_below="@+id/Activity"
         android:layout_marginEnd="80dp"
-        app:layout_constraintBottom_toBottomOf="@id/ClassName"
+        app:layout_constraintBottom_toBottomOf="@id/Activity"
         android:text="Sets"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -38,9 +38,9 @@
         android:id="@+id/reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ClassName"
+        android:layout_below="@+id/Activity"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/ClassName"
+        app:layout_constraintBottom_toBottomOf="@id/Activity"
         android:text="Reps"
         android:textColor="@android:color/black"
         android:textSize="18sp"
