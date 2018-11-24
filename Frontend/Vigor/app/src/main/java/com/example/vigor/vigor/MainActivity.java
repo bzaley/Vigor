@@ -52,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button graphButton = (Button) findViewById(R.id.MainBtnGraphing);
+        Button graphButton = (Button) findViewById(R.id.MainBtnClassView);
         graphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Graphing.class));
+                startActivity(new Intent(MainActivity.this, ClassViewActivity.class));
             }
         });
 

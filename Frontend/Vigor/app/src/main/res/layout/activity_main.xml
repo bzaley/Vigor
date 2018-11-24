@@ -14,7 +14,7 @@
         android:id="@+id/MainBtnlogoutButt"
         android:layout_width="110dp"
         android:layout_height="100dp"
-        android:layout_alignTop="@+id/MainBtnGraphing"
+        android:layout_alignTop="@+id/MainBtnClassView"
         android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -26,7 +26,7 @@
         android:id="@+id/MainBtnMakePlan"
         android:layout_width="110dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/MainBtnGraphing"
+        android:layout_above="@+id/MainBtnClassView"
         android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -38,7 +38,7 @@
         android:id="@+id/MainBtnToDo"
         android:layout_width="110dp"
         android:layout_height="100dp"
-        android:layout_alignTop="@+id/MainBtnGraphing"
+        android:layout_alignTop="@+id/MainBtnClassView"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -52,7 +52,7 @@
         android:id="@+id/MainBtnPedometer"
         android:layout_width="110dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/MainBtnGraphing"
+        android:layout_above="@+id/MainBtnClassView"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
@@ -74,7 +74,7 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <Button
-        android:id="@+id/MainBtnGraphing"
+        android:id="@+id/MainBtnClassView"
         android:layout_width="110dp"
         android:layout_height="100dp"
         android:layout_below="@+id/MainBtnViewProfile"
@@ -82,7 +82,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Graphing"
+        android:text="View Classes"
         app:layout_constraintBottom_toTopOf="@+id/MainBtnToDo"
         app:layout_constraintEnd_toStartOf="@+id/MainBtnMakePlan"
         app:layout_constraintStart_toEndOf="@+id/MainBtnViewProfile" />
