@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class TrainerTools extends AppCompatActivity {
+public class TrainerToolsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class TrainerTools extends AppCompatActivity {
         Plan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(TrainerTools.this, PlanCreator.class));
+                startActivity(new Intent(TrainerToolsActivity.this, PlanCreatorActivity.class));
             }
         });
 
@@ -25,7 +25,7 @@ public class TrainerTools extends AppCompatActivity {
         Single.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TrainerTools.this, TrainerAddSingles.class));
+                startActivity(new Intent(TrainerToolsActivity.this, TrainerAddSinglesActivity.class));
             }
         });
     }

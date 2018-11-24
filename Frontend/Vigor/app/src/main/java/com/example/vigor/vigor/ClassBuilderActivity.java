@@ -5,12 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,9 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Random;
-
-public class ClassBuilder extends AppCompatActivity {
+public class ClassBuilderActivity extends AppCompatActivity {
 
     private EditText Name, Description, Start, End;
 
@@ -31,7 +27,7 @@ public class ClassBuilder extends AppCompatActivity {
 
     private CheckBox Mon, Tues, Wed, Thurs, Fri, Sat, Sun;
 
-    private String TAG = ToDoList.class.getSimpleName();
+    private String TAG = ClassBuilderActivity.class.getSimpleName();
     private SessionController session;
 
     @Override
@@ -61,7 +57,7 @@ public class ClassBuilder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                        ClassBuilder.this);
+                        ClassBuilderActivity.this);
                 alert.setTitle("Are you sure about that?");
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
@@ -104,7 +100,7 @@ public class ClassBuilder extends AppCompatActivity {
                                 }
                                 final int finalint = id;
                                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                                        ClassBuilder.this);
+                                        ClassBuilderActivity.this);
                                 alert.setTitle("New ClassID; " + finalint);
                                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
@@ -123,8 +119,8 @@ public class ClassBuilder extends AppCompatActivity {
                                         //Put Status
                                         intent.putExtra("status", "");
                                         setResult(RESULT_OK, intent);
-                                        finish();
                                         dialog.dismiss();
+                                        finish();
                                     }
                                 });
                                 alert.show();

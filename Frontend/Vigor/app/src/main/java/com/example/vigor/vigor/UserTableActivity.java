@@ -4,24 +4,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class UserTable extends AppCompatActivity {
+public class UserTableActivity extends AppCompatActivity {
     private EditText userEmail;
     private Button enter;
     private ListView emailList;
@@ -52,7 +45,7 @@ public class UserTable extends AppCompatActivity {
             public void onClick(View v) {
                 if (userEmail.getText().toString().equals("")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            UserTable.this);
+                            UserTableActivity.this);
                     alert.setTitle("No email entered.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -65,8 +58,8 @@ public class UserTable extends AppCompatActivity {
                     UserEmailString = userEmail.getText().toString();
                     adapter.add(UserEmailString);
                     userEmail.setText("");
-                    FileHelper.writeData(emails, UserTable.this);
-                    startActivity(new Intent(UserTable.this, TrainerTools.class));
+                    FileHelper.writeData(emails, UserTableActivity.this);
+                    startActivity(new Intent(UserTableActivity.this, TrainerToolsActivity.class));
                 }
             }
         });
@@ -75,13 +68,13 @@ public class UserTable extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                        UserTable.this);
+                        UserTableActivity.this);
                 alert.setTitle("Would you like to delete or select this user?");
                 alert.setPositiveButton("SELECT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         UserEmailString = emails.get(position);
-                        startActivity(new Intent(UserTable.this, TrainerTools.class));
+                        startActivity(new Intent(UserTableActivity.this, TrainerToolsActivity.class));
                         dialog.dismiss();
                     }
                 });

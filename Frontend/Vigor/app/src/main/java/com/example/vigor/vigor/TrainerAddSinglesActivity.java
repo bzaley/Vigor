@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TrainerAddSingles extends AppCompatActivity {
+public class TrainerAddSinglesActivity extends AppCompatActivity {
 
     static ArrayList<DataModel> dataModels;
     private ListView listView;
@@ -35,7 +34,7 @@ public class TrainerAddSingles extends AppCompatActivity {
     private Button addToPlan;
     private Button saveItems;
 
-    private String TAG = TrainerAddSingles.class.getSimpleName();
+    private String TAG = TrainerAddSinglesActivity.class.getSimpleName();
     private SessionController session;
 
     @Override
@@ -67,7 +66,7 @@ public class TrainerAddSingles extends AppCompatActivity {
                 //make sure the activity is entered correctly
                 if (toAddActivity.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            TrainerAddSingles.this);
+                            TrainerAddSinglesActivity.this);
                     alert.setTitle("No activity entered.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -78,7 +77,7 @@ public class TrainerAddSingles extends AppCompatActivity {
                     alert.show();
                 } else if (toAddSets.equals("") || toAddReps.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            TrainerAddSingles.this);
+                            TrainerAddSinglesActivity.this);
                     alert.setTitle("Amount entered isn't a number.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -88,7 +87,7 @@ public class TrainerAddSingles extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    dataModels.add(new DataModel(UserTable.UserEmailString, "", toAddActivity, toAddSets, toAddReps));
+                    dataModels.add(new DataModel(UserTableActivity.UserEmailString, "", toAddActivity, toAddSets, toAddReps));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -101,7 +100,7 @@ public class TrainerAddSingles extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                        TrainerAddSingles.this);
+                        TrainerAddSinglesActivity.this);
                 alert.setTitle("Are you sure you'd like to save?");
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
@@ -110,7 +109,7 @@ public class TrainerAddSingles extends AppCompatActivity {
                             DataModel temp = dataModels.get(i);
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("userEmail", UserTable.UserEmailString);
+                                toSend.put("userEmail", UserTableActivity.UserEmailString);
                                 toSend.put("exercise", temp.getexercise());
                                 toSend.put("sets", Integer.parseInt(temp.getsets()));
                                 toSend.put("reps", Integer.parseInt(temp.getreps()));

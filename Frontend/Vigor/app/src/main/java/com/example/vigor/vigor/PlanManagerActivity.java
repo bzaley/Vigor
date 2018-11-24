@@ -1,7 +1,5 @@
 package com.example.vigor.vigor;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,26 +7,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlanManager extends AppCompatActivity {
+public class PlanManagerActivity extends AppCompatActivity {
 
     private ListView planList;
     private Button Continue;
 
     private SessionController session;
-    private String TAG = ToDoList.class.getSimpleName();
+    private String TAG = PlanManagerActivity.class.getSimpleName();
 
     private ArrayList<PlanDataModel> plans;
     private CustomPlanAdapter adapter;
@@ -43,19 +43,15 @@ public class PlanManager extends AppCompatActivity {
 
         planList = (ListView) findViewById(R.id.PlanManagerLvPlans);
 
-        Continue = (Button) findViewById(R.id.PlanManagerBtnContinue);
-
         plans = new ArrayList<>();
         adapter = new CustomPlanAdapter(plans, getApplicationContext());
         planList.setAdapter(adapter);
         setUpInitialData();
 
-
-
-
         planList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toggle the Checkbox
                 PlanDataModel temp = plans.get(position);
                 if (temp.isChecked)
                     temp.unCheck();
@@ -64,7 +60,7 @@ public class PlanManager extends AppCompatActivity {
                 plans.set(position, temp);
                 adapter.notifyDataSetChanged();
 
-                //then tell server plan is now current
+                //then tell server plan is now current or not current
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                         "http://proj309-ad-07.misc.iastate.edu:8080/plan/toggle/"
                                 + session.returnUserID()
@@ -82,17 +78,32 @@ public class PlanManager extends AppCompatActivity {
                 VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
             }
         });
-
-        Continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PlanManager.this, ToDoList.class));
-            }
-        });
     }
 
     private void setUpInitialData() {
-        //request all plans and whether they're current from server and add them to our list
+        //TODO get plan request URL
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
+                "http://proj309-ad-07.misc.iastate.edu:8080", null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject element = (JSONObject) response.getJSONObject(i);
+                                plans.add(new PlanDataModel(element.getString("planNmae"), element.getBoolean("current")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
     }
 
     public boolean isInt(String name) {

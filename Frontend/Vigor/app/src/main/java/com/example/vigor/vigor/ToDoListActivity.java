@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ToDoList extends AppCompatActivity {
+public class ToDoListActivity extends AppCompatActivity {
 
     ArrayList<DataModel> dataModels;
     ListView listView;
@@ -38,7 +36,7 @@ public class ToDoList extends AppCompatActivity {
     private EditText toAddSets;
     private EditText toAddReps;
     private Button addBtn;
-    private String TAG = ToDoList.class.getSimpleName();
+    private String TAG = ToDoListActivity.class.getSimpleName();
     private String planName = "";
     private String trainerPlanName = "";
 
@@ -62,7 +60,7 @@ public class ToDoList extends AppCompatActivity {
         dataModels = new ArrayList<>();
         adapter = new CustomAdapter(dataModels, getApplicationContext());
         listView.setAdapter(adapter);
-        setUpInitialData(planName, trainerPlanName);
+        setUpInitialData();
 
         //Listen for a user to add an activity
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +73,7 @@ public class ToDoList extends AppCompatActivity {
 
                 if (enteredItem.equals("")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            ToDoList.this);
+                            ToDoListActivity.this);
                     alert.setTitle("No Exercise Entered.");
                             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -86,7 +84,7 @@ public class ToDoList extends AppCompatActivity {
                     alert.show();
                 } else if (enteredSets.equals("") | enteredReps.equals("") | !isInt(enteredSets) | !isInt(enteredReps)){
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            ToDoList.this);
+                            ToDoListActivity.this);
                     alert.setTitle("Amount not entered correctly.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -137,7 +135,7 @@ public class ToDoList extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if(dataModels.get(position).getexercise().equals("null")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            ToDoList.this);
+                            ToDoListActivity.this);
                     alert.setTitle("Would you like to go to the next or last day?");
                     alert.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
                         @Override
@@ -182,7 +180,7 @@ public class ToDoList extends AppCompatActivity {
                     Direction = 0;
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            ToDoList.this);
+                            ToDoListActivity.this);
                     alert.setTitle("Would you like to mark this as complete?");
                     alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
@@ -228,7 +226,7 @@ public class ToDoList extends AppCompatActivity {
         });
     }
 
-    private void setUpInitialData(String PlanName, String TrainerPlanName) {
+    private void setUpInitialData() {
         //Load singular activities from server
         String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/get/" +
                 session.returnUserID();
@@ -248,19 +246,23 @@ public class ToDoList extends AppCompatActivity {
                                     }
                                 }
                                 if (!exists) {
-                                    dataModels.add(new DataModel(""
-                                            , element.getString("planName"),
-                                            "null", "Sets", "Reps"));
+                                    // Add Spacer
+                                    dataModels.add(new DataModel(
+                                            "",
+                                            element.getString("planName"),
+                                            "null",
+                                            "Sets",
+                                            "Reps"));
                                 }
-                                dataModels.add(position, new DataModel(element.getString("userEmail")
-                                        , element.getString("planName")
-                                        , element.getString("exercise")
-                                        , element.get("sets") + ""
-                                        , element.get("reps") + ""));
+                                dataModels.add(position, new DataModel(
+                                        element.getString("userEmail"),
+                                        element.getString("planName"),
+                                        element.getString("exercise"),
+                                        element.get("sets") + "",
+                                        element.get("reps") + ""));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
                         adapter.notifyDataSetChanged();
                     }
