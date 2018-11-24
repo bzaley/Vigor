@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ToDoList.class));
+                startActivity(new Intent(MainActivity.this, ToDoListActivity.class));
             }
         });
 
@@ -90,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (session.returnUserRole().equals("personaltrainer")){
-                    startActivity(new Intent(MainActivity.this, UserTable.class));
+                    startActivity(new Intent(MainActivity.this, UserTableActivity.class));
                 } else if (session.returnUserRole().equals("instructor")) {
-                    startActivity(new Intent(MainActivity.this, ClassTable.class));
+                    startActivity(new Intent(MainActivity.this, ClassTableActivity.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, PlanManager.class));
+                    startActivity(new Intent(MainActivity.this, PlanManagerActivity.class));
                 }
             }
         });

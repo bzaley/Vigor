@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlanCreator extends AppCompatActivity {
+public class PlanCreatorActivity extends AppCompatActivity {
 
     private EditText activity;
     private EditText sets;
@@ -39,7 +39,7 @@ public class PlanCreator extends AppCompatActivity {
     public static int index = 0;
     public static String PlanName;
 
-    private String TAG = PlanCreator.class.getSimpleName();
+    private String TAG = PlanCreatorActivity.class.getSimpleName();
     private SessionController session;
 
     static ArrayList<ArrayList> days;
@@ -70,9 +70,9 @@ public class PlanCreator extends AppCompatActivity {
         dataModels = new ArrayList<>();
 
         AlertDialog.Builder alert = new AlertDialog.Builder(
-                PlanCreator.this);
+                PlanCreatorActivity.this);
         alert.setTitle("What would you like to name this plan?");
-        final EditText alertInput = new EditText(PlanCreator.this);
+        final EditText alertInput = new EditText(PlanCreatorActivity.this);
         alert.setView(alertInput);
         alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -100,7 +100,7 @@ public class PlanCreator extends AppCompatActivity {
                 //make sure the activity is entered correctly
                 if (toAddActivity.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            PlanCreator.this);
+                            PlanCreatorActivity.this);
                     alert.setTitle("No activity entered.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -111,7 +111,7 @@ public class PlanCreator extends AppCompatActivity {
                     alert.show();
                 } else if (toAddSets.equals("") || toAddReps.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            PlanCreator.this);
+                            PlanCreatorActivity.this);
                     alert.setTitle("Amount entered isn't a number.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -121,7 +121,7 @@ public class PlanCreator extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    dataModels.add(new DataModel(UserTable.UserEmailString, PlanName, toAddActivity, toAddSets, toAddReps));
+                    dataModels.add(new DataModel(UserTableActivity.UserEmailString, PlanName, toAddActivity, toAddSets, toAddReps));
                     activity.setText("");
                     sets.setText("");
                     reps.setText("");
@@ -134,18 +134,18 @@ public class PlanCreator extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (days.size() <= PlanCreator.index) {
+                if (days.size() <= PlanCreatorActivity.index) {
                     days.add(dataModels);
                 } else {
-                    days.set(PlanCreator.index, dataModels);
+                    days.set(PlanCreatorActivity.index, dataModels);
                 }
-                PlanCreator.index++;
-                Day.setText("Day: " + (PlanCreator.index + 1));
+                PlanCreatorActivity.index++;
+                Day.setText("Day: " + (PlanCreatorActivity.index + 1));
                 if (days.size() - 1 < index) {
                     dataModels = new ArrayList<>();
 //                    days.add(dataModels);
                 } else {
-                    dataModels = days.get(PlanCreator.index);
+                    dataModels = days.get(PlanCreatorActivity.index);
                 }
                 adapter = new CustomAdapter(dataModels, getApplicationContext());
                 listView.setAdapter(adapter);
@@ -157,20 +157,20 @@ public class PlanCreator extends AppCompatActivity {
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (days.size() <= PlanCreator.index)
+                if (days.size() <= PlanCreatorActivity.index)
                     days.add(dataModels);
                 else
-                    days.set(PlanCreator.index, dataModels);
-                if (PlanCreator.index > 0) {
-                    PlanCreator.index--;
-                    dataModels = days.get(PlanCreator.index);
-                    Day.setText("Day: " + (PlanCreator.index + 1));
+                    days.set(PlanCreatorActivity.index, dataModels);
+                if (PlanCreatorActivity.index > 0) {
+                    PlanCreatorActivity.index--;
+                    dataModels = days.get(PlanCreatorActivity.index);
+                    Day.setText("Day: " + (PlanCreatorActivity.index + 1));
                     adapter = new CustomAdapter(dataModels, getApplicationContext());
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
-                            PlanCreator.this);
+                            PlanCreatorActivity.this);
                     alert.setTitle("Already on first day.");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -188,7 +188,7 @@ public class PlanCreator extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                        PlanCreator.this);
+                        PlanCreatorActivity.this);
                 alert.setTitle("Are you sure about that?");
                 alert.setMessage("Are you sure to delete record?");
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -216,7 +216,7 @@ public class PlanCreator extends AppCompatActivity {
             public void onClick(View v) {
                 //Ask user for a plan name
                 AlertDialog.Builder alert = new AlertDialog.Builder(
-                        PlanCreator.this);
+                        PlanCreatorActivity.this);
                 alert.setTitle("Are you sure about that");
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
@@ -225,7 +225,7 @@ public class PlanCreator extends AppCompatActivity {
                         //make sure the plan name is correctly entered
                         if (PlanName.equals("")) {
                             AlertDialog.Builder alert2 = new AlertDialog.Builder(
-                                    PlanCreator.this);
+                                    PlanCreatorActivity.this);
                             alert2.setTitle("No Plan Name entered.");
                             alert2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -236,10 +236,10 @@ public class PlanCreator extends AppCompatActivity {
                             alert2.show();
                         } else {
                             //add the last day entered to the plan name
-                            if (days.size() <= PlanCreator.index) {
+                            if (days.size() <= PlanCreatorActivity.index) {
                                 days.add(dataModels);
                             } else {
-                                days.set(PlanCreator.index, dataModels);
+                                days.set(PlanCreatorActivity.index, dataModels);
                             }
                             JSONArray toSend = new JSONArray();
                             String planURL = "";
@@ -254,7 +254,7 @@ public class PlanCreator extends AppCompatActivity {
                                             planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userPlan/add";
                                         } else {
                                             toPut.put("trainerId", session.returnUserID());
-                                            toPut.put("email", UserTable.UserEmailString);
+                                            toPut.put("email", UserTableActivity.UserEmailString);
                                             planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerPlan/add";
                                         }
                                         toPut.put("planName", PlanName);
@@ -286,16 +286,16 @@ public class PlanCreator extends AppCompatActivity {
                             //clear all the data from the current plan and reset the data the user sees
                             dataModels = new ArrayList<>();
                             days = new ArrayList<>();
-                            PlanCreator.index = 0;
-                            Day.setText("Day: " + (PlanCreator.index + 1));
+                            PlanCreatorActivity.index = 0;
+                            Day.setText("Day: " + (PlanCreatorActivity.index + 1));
                             adapter = new CustomAdapter(dataModels, getApplicationContext());
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
 
                             AlertDialog.Builder alert = new AlertDialog.Builder(
-                                    PlanCreator.this);
+                                    PlanCreatorActivity.this);
                             alert.setTitle("What would you like to name this plan?.");
-                            final EditText alertInput = new EditText(PlanCreator.this);
+                            final EditText alertInput = new EditText(PlanCreatorActivity.this);
                             alert.setView(alertInput);
                             alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
                             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -40,43 +40,46 @@
             android:name=".StepActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ToDoList"
+            android:name=".ToDoListActivity"
             android:label="@string/title_activity_to_do_list"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".PlanCreator"
+            android:name=".PlanCreatorActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".UserTable"
+            android:name=".UserTableActivity"
             android:label="@string/title_activity_user_table"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".TrainerTools"
+            android:name=".TrainerToolsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".TrainerAddSingles"
+            android:name=".TrainerAddSinglesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".InstructorTools"
+            android:name=".ClassTableActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".ClassTable"
+            android:name=".ClassBuilderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".ClassBuilder"
+            android:name=".PlanManagerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".PlanManager"></activity>
+        <activity
+            android:name=".ClassUpdaterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>
