@@ -133,6 +133,31 @@ public class ClassBuilderActivity extends AppCompatActivity {
                         });
                         VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                         dialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(
+                                ClassBuilderActivity.this);
+                        alert.setTitle("New ClassID; " + 20);
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent();
+                                //Put ClassID
+                                intent.putExtra("classid", 20);
+                                //Put Name
+                                intent.putExtra("classname", Name.getText().toString());
+                                //Put ID
+                                intent.putExtra("instructorid", 20);
+                                //Put Description
+                                intent.putExtra("description", Description.getText().toString());
+                                //Put Schedule
+                                intent.putExtra("schedule", finalSchedule);
+                                //Put Status
+                                intent.putExtra("status", "");
+                                setResult(RESULT_OK, intent);
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+                        alert.show();
                     }
                 });
                 alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {

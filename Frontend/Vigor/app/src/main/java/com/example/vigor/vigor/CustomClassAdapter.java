@@ -70,7 +70,7 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
         lastPosition = position;
 
         viewHolder.txtClassName.setText(classdataModel.getClassName());
-        viewHolder.txtClassId.setText(classdataModel.getClassId());
+        viewHolder.txtClassId.setText(classdataModel.getClassId() + "");
         viewHolder.txtClassDescription.setText(classdataModel.getBillboard());
         // Return the completed view to render on screen
         return convertView;

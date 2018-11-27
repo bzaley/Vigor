@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class PlanManagerActivity extends AppCompatActivity {
 
     private ListView planList;
-    private Button Continue;
+    private Button add;
 
     private SessionController session;
     private String TAG = PlanManagerActivity.class.getSimpleName();
@@ -42,11 +42,19 @@ public class PlanManagerActivity extends AppCompatActivity {
         session = new SessionController(getApplicationContext());
 
         planList = (ListView) findViewById(R.id.PlanManagerLvPlans);
+        add = (Button) findViewById(R.id.PlanManagerBtnAdd);
 
         plans = new ArrayList<>();
         adapter = new CustomPlanAdapter(plans, getApplicationContext());
         planList.setAdapter(adapter);
         setUpInitialData();
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PlanManagerActivity.this, PlanCreatorActivity.class));
+            }
+        });
 
         planList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

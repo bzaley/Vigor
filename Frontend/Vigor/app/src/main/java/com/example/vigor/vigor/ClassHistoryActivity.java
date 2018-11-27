@@ -15,16 +15,16 @@ public class ClassHistoryActivity extends Activity {
     private ListView classWorkoutList;
 
     private SessionController session;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classhistory);
-
-        addClass = findViewById(R.id.addClassButt);
-        classHistory = findViewById(R.id.histButt);
-        classWorkoutList = findViewById(R.id.listWorkouts);
-
-        session = new SessionController(getApplicationContext());
-    }
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_class_history);
+//
+//        addClass = findViewById(R.id.addClassButt);
+//        classHistory = findViewById(R.id.histButt);
+//        classWorkoutList = findViewById(R.id.listWorkouts);
+//
+//        session = new SessionController(getApplicationContext());
+//    }
 }

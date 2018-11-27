@@ -30,7 +30,7 @@
         android:layout_alignEnd="@+id/MainIvGraph"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Make Plan"
+        android:text="Manage Plans"
         app:layout_constraintBottom_toTopOf="@+id/MainBtnlogoutButt"
         app:layout_constraintEnd_toEndOf="parent" />
 
