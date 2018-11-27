@@ -90,7 +90,6 @@ public class planService {
 			
 			planReturn next = new planReturn(
 					tmp.getPlanName(),
-					tmp.getCurrentDay(),
 					tmp.isActive());
 			right.add(next);
 		}

@@ -4,17 +4,15 @@ public class planReturn {
 
 	
 	private String planName;
-	private int currentDay;
 	private boolean active;
 	
 	public planReturn() {
 		
 	}
 	
-	public planReturn(String planName, int currentDay, boolean active) {
+	public planReturn(String planName, boolean active) {
 		super();
 		this.planName = planName;
-		this.currentDay = currentDay;
 		this.active = active;
 	}
 	public String getPlanName() {
@@ -22,12 +20,6 @@ public class planReturn {
 	}
 	public void setPlanName(String planName) {
 		this.planName = planName;
-	}
-	public int getCurrentDay() {
-		return currentDay;
-	}
-	public void setCurrentDay(int currentDay) {
-		this.currentDay = currentDay;
 	}
 	public boolean isActive() {
 		return active;
