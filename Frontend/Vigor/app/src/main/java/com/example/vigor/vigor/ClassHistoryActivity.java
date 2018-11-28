@@ -1,6 +1,8 @@
 package com.example.vigor.vigor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,8 +38,20 @@ public class ClassHistoryActivity extends Activity {
         classHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ClassWorkoutDataModel activityValue = (ClassWorkoutDataModel) classHistoryList.getItemAtPosition(position);
+                ClassWorkoutDataModel activityValue = (ClassWorkoutDataModel)
+                        classHistoryList.getItemAtPosition(position);
                 //TODO Open small screen with full info of item.
+                AlertDialog.Builder alert = new AlertDialog
+                        .Builder(ClassHistoryActivity.this);
+                alert.setTitle(activityValue.getClassDescription());
+                alert.setMessage(activityValue.getClassNotes());
+                alert.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.create().show();
             }
         });
     }
