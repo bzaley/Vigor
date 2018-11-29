@@ -37,7 +37,7 @@ public interface dayExerciseRepository extends JpaRepository<dayExercise, Intege
 	
 	@Modifying
 	@Transactional
-	@Query(value = "INSERT INTO day_exercise VALUES(entry, :complete, :exerciseId, :planName, :sets, :reps, :userId)", nativeQuery = true)
+	@Query(value = "INSERT INTO day_exercise VALUES(entry, :complete, :exerciseId, :planName, :reps, :sets, :userId)", nativeQuery = true)
 	public void addExercise(
 			@Param("userId") int userId,
 			@Param("planName") String planName,
