@@ -1,5 +1,7 @@
 package com.project.userClass;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,9 @@ public class userClassService {
 		
 	}
 	
-	public List<userClasses> getUsersClasses(int userId) {
+	public List<userClass> getUsersClasses(int userId) {
 		
-		userClassRepo.
+		return userClassRepo.findAllByUserId(userId);
 		
 	}
 	

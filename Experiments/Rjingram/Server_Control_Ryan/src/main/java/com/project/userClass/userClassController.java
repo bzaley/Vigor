@@ -18,5 +18,12 @@ public class userClassController {
 		userClassService.assignToClass(userId, classId);
 	}
 	
+	@RequestMapping("/remove/{userId}/{classId}")
+	public void removeFromClass(@PathVariable int userId, @PathVariable int classId) {
+		userClassService.removeFromClass(userId, classId);
+	}
+	
+	public List<userClass> getUsersClasses(@PathVariable int )
+	
 	
 }
