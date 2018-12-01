@@ -2,7 +2,6 @@ package com.project.plan;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.dayExercise.*;
@@ -19,7 +18,6 @@ public class planService {
 	public void addPlan(plan plan) {
 		planRepo.save(plan);
 	}
-	
 	
 	/*
 	 * Toggles the boolean active variable.
@@ -44,10 +42,13 @@ public class planService {
 	/*
 	 * Increments or decrements the current day of the plan
 	 */
-	public void dayChanger(int userId, String planName, int changer) throws InterruptedException {
+	public void dayChanger(int userId, String planName, int changer) {
 		
+		// Finds the plan to be updated
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
 		
+		
+		// If statement to get the correct new day
 		int new_day = 0;
 		
 		if (changer == 1) { // Increments
@@ -57,20 +58,19 @@ public class planService {
 				new_day = plan.getCurrentDay() + 1;
 			}
 		} else if (changer == 2) { // Decrements
-			if (plan.getCurrentDay() == 0) {
+			if (plan.getCurrentDay() == 1) {
 				new_day = plan.getMaxDay();
 			} else {
 				new_day = plan.getCurrentDay() - 1;
 			}
 		}
-		// Updates the plan with the new current day
-		planRepo.updateDay(userId, planName, new_day);
 		
-		TimeUnit.SECONDS.sleep(5);
+		plan.setCurrentDay(new_day);
+		planRepo.save(plan);
 		
-		// Isn't Updating the new day ????????
-		// Finds the newly updated plan
+		// Should find the newly updated plan. Is grabbing the same thing as the plan variable above
 		plan plan_updated = planRepo.findByUserIdAndPlanName(userId, planName);
+		
 		
 		// Saves and deletes the exercises that are part of the plan being changed
 		dayExerciseService.exerciseSaver(plan_updated);

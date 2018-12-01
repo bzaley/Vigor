@@ -25,16 +25,17 @@ public interface dayExerciseRepository extends JpaRepository<dayExercise, Intege
 			@Param("exerciseId") int exerciseId,
 			@Param("sets") int sets,
 			@Param("reps") int reps);
-	/*
+	
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE day_exercise de SET de.complete = :complete WHERE(de.user_id = :userId AND de.plan_name = :planName AND de.exercise_id = :exerciseId", nativeQuery = true)
-	public void test(
+	@Query(value = "DELETE FROM day_exercise WHERE (user_id = :userId AND plan_name = :planName AND exercise_id = :exerciseId AND sets = :sets AND reps = :reps)", nativeQuery = true)
+	public void remove(
 			@Param("userId") int userId,
 			@Param("planName") String planName,
-			@Param("complete") boolean complete,
-			@Param("exerciseId") int exerciseId);*/
-	
+			@Param("exerciseId") int exerciseId,
+			@Param("sets") int sets,
+			@Param("reps") int reps);
+	//@Query(value = "DELETE FROM day_exercise de WHERE (de.user_id = :userId AND de.plan_name = :planName AND de.exercise_id = :exerciseId AND de.sets = :sets AND de.reps = :reps)", nativeQuery = true)
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO day_exercise VALUES(entry, :complete, :exerciseId, :planName, :reps, :sets, :userId)", nativeQuery = true)
