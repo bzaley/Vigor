@@ -1,4 +1,4 @@
-package com.project.dayExercise;
+ package com.project.dayExercise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,20 @@ public class dayExerciseService {
 	@Autowired
 	private UserRepository userRepo;
 
+	
+	public void remove(dayExerciseRemove dayExerciseRemove) {
+		
+		//String exerciseName = convert.convertIdToExercise(tmp.getExerciseId());
+		Exercise exercise = exerciseRepo.findByName(dayExerciseRemove.getExercise());
+		int exid = exercise.getExerciseId();
+		
+		//String userEmail = convert.convertIdToEmail(tmp.getUserId());
+		User user = userRepo.findByUserEmail(dayExerciseRemove.getUserEmail());
+		int uid = user.getuserId();
+		
+		dayExerciseRepo.remove(uid, "", exid, dayExerciseRemove.getSets(), dayExerciseRemove.getReps());
+	}
+	
 	
 	/*
 	 * Returns a list of all exercises that a user has to do
@@ -165,8 +179,23 @@ public class dayExerciseService {
 		User user = userRepo.findByUserEmail(dayExerciseComp.getUserEmail());
 		int uid = user.getuserId();
 		
-		//dayExerciseRepo.markComplete(uid, dayExerciseComp.getPlanName(), true, exid, dayExerciseComp.getSets(), dayExerciseComp.getSets());
-		dayExerciseRepo.markComplete(uid, dayExerciseComp.getPlanName(), true, exid, dayExerciseComp.getSets(), dayExerciseComp.getReps());
+		if (dayExerciseComp.getPlanName().equals("")) {
+			
+			// Gets current date for saving
+			DateController dateController = new DateController();
+			String saveDate = dateController.returnWorkingDateAsString();
+			
+			dayExerciseRepo.markComplete(uid, dayExerciseComp.getPlanName(), true, exid, dayExerciseComp.getSets(), dayExerciseComp.getReps());
+			
+			historianRepo.addHistory(uid, exid, dayExerciseComp.getSets(), dayExerciseComp.getReps(), saveDate);
+			
+			dayExerciseRepo.remove(uid, dayExerciseComp.getPlanName(), exid, dayExerciseComp.getSets(), dayExerciseComp.getReps());
+			
+		} else {
+		
+			dayExerciseRepo.markComplete(uid, dayExerciseComp.getPlanName(), true, exid, dayExerciseComp.getSets(), dayExerciseComp.getReps());
+			
+		}
 		
 	}
 	

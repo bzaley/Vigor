@@ -19,6 +19,9 @@ public class userPlanService {
 	private planRepository planRepo;
 	
 	@Autowired
+	private planService planService;
+	
+	@Autowired
 	private UserRepository userRepo;
 	
 	@Autowired
@@ -55,6 +58,22 @@ public class userPlanService {
 		// Plan starts with current day zero and max equal to the last day given and active equal to false and assigned by user
 		planRepo.addPlan(userRepo.findByUserEmail(plan.get(0).getUserEmail()).getuserId(), plan.get(0).getPlanName(), 1, plan.get(plan.size()-1).getDay(), false, "user");
 		
+		
+	}
+	
+	public void removeUserPlan(int userId, String planName) {
+		
+		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
+		
+		if (plan.isActive()) {
+			planService.togglePlan(userId, planName);
+		}
+		
+		planRepo.delete(plan);
+		
+		List<userPlan> userPlan = userPlanRepo.findAllByUserIdAndPlanName(userId, planName);
+		
+		userPlanRepo.deleteAll(userPlan);
 		
 	}
 	

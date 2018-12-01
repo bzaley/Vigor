@@ -13,6 +13,7 @@ public interface planRepository extends CrudRepository<plan, Integer> {
 	
 	public List<plan> findAllByUserIdAndActive(int userId, boolean active);
 	
+	public List<plan> findAllByUserId(int userId);
 	
 	@Modifying
 	@Transactional

@@ -6,11 +6,11 @@
 
 	<groupId>com.project</groupId>
 	<artifactId>VigorSpringBoot</artifactId>
-	<version>1.3.3</version>
+	<version>1.4</version>
 	<packaging>jar</packaging>
 
 	<name>Server_Control</name>
-	<description>Combinattion of all exercise functionality, websockets, users/login, and steps</description>
+	<description>Everything except classes and login API</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

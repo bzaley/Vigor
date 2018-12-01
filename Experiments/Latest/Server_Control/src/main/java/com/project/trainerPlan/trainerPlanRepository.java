@@ -8,11 +8,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.userPlan.userPlan;
+
 
 public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integer> {
 
 	
 	public List<trainerPlan> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
+	
+	
+	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
 	
 	@Modifying
 	@Transactional

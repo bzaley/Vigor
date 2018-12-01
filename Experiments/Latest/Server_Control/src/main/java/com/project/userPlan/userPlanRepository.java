@@ -13,6 +13,7 @@ public interface userPlanRepository  extends CrudRepository<userPlan, Integer> {
 	
 	public List<userPlan> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
 	
+	public List<userPlan> findAllByUserIdAndPlanName(int userId, String planName);
 
 	@Modifying
 	@Transactional

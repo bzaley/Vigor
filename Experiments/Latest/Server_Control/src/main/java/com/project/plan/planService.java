@@ -1,5 +1,7 @@
 package com.project.plan;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.dayExercise.*;
@@ -16,7 +18,6 @@ public class planService {
 	public void addPlan(plan plan) {
 		planRepo.save(plan);
 	}
-	
 	
 	/*
 	 * Toggles the boolean active variable.
@@ -43,8 +44,11 @@ public class planService {
 	 */
 	public void dayChanger(int userId, String planName, int changer) {
 		
+		// Finds the plan to be updated
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
 		
+		
+		// If statement to get the correct new day
 		int new_day = 0;
 		
 		if (changer == 1) { // Increments
@@ -54,18 +58,19 @@ public class planService {
 				new_day = plan.getCurrentDay() + 1;
 			}
 		} else if (changer == 2) { // Decrements
-			if (plan.getCurrentDay() == 0) {
+			if (plan.getCurrentDay() == 1) {
 				new_day = plan.getMaxDay();
 			} else {
 				new_day = plan.getCurrentDay() - 1;
 			}
 		}
-		// Updates the plan with the new current day
-		planRepo.updateDay(userId, planName, new_day);
 		
-		// Isn't Updating the new day ????????
-		// Finds the newly updated plan
+		plan.setCurrentDay(new_day);
+		planRepo.save(plan);
+		
+		// Should find the newly updated plan. Is grabbing the same thing as the plan variable above
 		plan plan_updated = planRepo.findByUserIdAndPlanName(userId, planName);
+		
 		
 		// Saves and deletes the exercises that are part of the plan being changed
 		dayExerciseService.exerciseSaver(plan_updated);
@@ -75,4 +80,21 @@ public class planService {
 	}
 	
 	
+	public List<planReturn> getPlans(int userId) {
+		
+		List<plan> wrong = planRepo.findAllByUserId(userId);
+		
+		List<planReturn> right = new ArrayList<planReturn>();
+		
+		for (plan tmp : wrong) {
+			
+			planReturn next = new planReturn(
+					tmp.getPlanName(),
+					tmp.isActive());
+			right.add(next);
+		}
+		return right;
+		
+		
+	}
 }

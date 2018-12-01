@@ -1,5 +1,7 @@
 package com.project.plan;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,4 +31,9 @@ public class planController {
 		planService.dayChanger(userId, planName, changer);
 	}
 	
+	
+	@RequestMapping("/getAll/{userId}")
+	public List<planReturn> getPlans(@PathVariable("userId") int userId) {
+		return planService.getPlans(userId);
+	}
 }

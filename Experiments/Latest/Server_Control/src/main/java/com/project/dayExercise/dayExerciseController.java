@@ -31,4 +31,9 @@ public class dayExerciseController {
 	public void markComplete(@RequestBody dayExerciseComp dayExerciseComp) {
 		dayExerciseService.markComplete(dayExerciseComp);
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/remove")
+	public void remove(@RequestBody dayExerciseRemove dayExerciseRemove) {
+		dayExerciseService.remove(dayExerciseRemove);
+	}
 }
