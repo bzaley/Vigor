@@ -16,7 +16,6 @@ public class userPlanController {
 	@Autowired
 	private userPlanService userPlanService;
 	
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/add")
 	public void addUserPlan(@RequestBody List<userAdd> plan) {
 		userPlanService.addUserPlan(plan);
