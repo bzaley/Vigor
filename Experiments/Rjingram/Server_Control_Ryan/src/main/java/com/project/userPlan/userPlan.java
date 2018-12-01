@@ -1,14 +1,12 @@
-package com.project.userExercise;
+package com.project.userPlan;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-// Finalized Ryan Ingram
-
 @Entity
-public class userExercise {
+public class userPlan {
 
 	@Id
 	@GeneratedValue 
@@ -21,12 +19,11 @@ public class userExercise {
 	private int sets;
 	private int reps;
 	
-	
-	public userExercise() {
+	public userPlan( ) {
 		
 	}
 	
-	public userExercise(int userId, String planName, int day, int exerciseId, int sets, int reps) {
+	public userPlan(int userId, String planName, int day, int exerciseId, int sets, int reps) {
 		super();
 		this.userId = userId;
 		this.planName = planName;
@@ -36,15 +33,12 @@ public class userExercise {
 		this.reps = reps;
 	}
 	
-	
 	public int getEntry() {
 		return entry;
 	}
-
 	public void setEntry(int entry) {
 		this.entry = entry;
 	}
-
 	public int getUserId() {
 		return userId;
 	}
@@ -81,5 +75,4 @@ public class userExercise {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
-	
 }

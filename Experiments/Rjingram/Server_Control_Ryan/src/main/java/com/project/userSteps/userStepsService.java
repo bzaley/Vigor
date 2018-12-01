@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.websocket.WebSocketServer;
 import com.project.utilities.DateController;
 
 @Service
@@ -32,6 +33,10 @@ public class userStepsService {
 	public void addNewEntry(userSteps newEntry) {
 		stepsRepo.save(newEntry);
 	}
+	
+	public void updateIsGoalMet(int userId, String date, boolean accomplished) {
+		stepsRepo.setGoalsMet(userId, date, accomplished);
+	}
 
 	public void checkForEntry(int userId, String date) {
 		if(!stepsRepo.existsByUserIdAndDate(userId, date)) {
@@ -53,6 +58,7 @@ public class userStepsService {
 	}
 	
 	public boolean compareStepsVsGoal(int userId, String date) {
+		
 		userSteps user = stepsRepo.findByUserIdAndDate(userId, date);
 		if(user.getSteps()>=user.getStepGoal()) {
 			return true;

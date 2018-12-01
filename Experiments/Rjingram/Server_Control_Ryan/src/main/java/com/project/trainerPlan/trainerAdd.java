@@ -1,25 +1,24 @@
-package com.project.trainerExercise;
+package com.project.trainerPlan;
 
-public class trainerAddEntry {
+public class trainerAdd {
 
-	
 	
 	private int trainerId;
-	private String email;
+	private String userEmail;
 	private String planName;
 	private int day;
 	private String exercise;
 	private int sets;
 	private int reps;
 	
-	public trainerAddEntry() {
+	public trainerAdd() {
 		
 	}
 	
-	public trainerAddEntry(int trainerId, String email, String planName, int day, String exercise, int sets, int reps) {
+	public trainerAdd(int trainerId, String userEmail, String planName, int day, String exercise, int sets, int reps) {
 		super();
 		this.trainerId = trainerId;
-		this.email = email;
+		this.userEmail = userEmail;
 		this.planName = planName;
 		this.day = day;
 		this.exercise = exercise;
@@ -32,11 +31,11 @@ public class trainerAddEntry {
 	public void setTrainerId(int trainerId) {
 		this.trainerId = trainerId;
 	}
-	public String getEmail() {
-		return email;
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	public String getPlanName() {
 		return planName;
@@ -68,4 +67,7 @@ public class trainerAddEntry {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
+	
+	
+	
 }

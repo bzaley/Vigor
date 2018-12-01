@@ -16,3 +16,4 @@ public class ServerControlApplication {
         SpringApplication.run(ServerControlApplication.class, args);
     }
 }
+

@@ -1,43 +1,45 @@
-package com.project.userExercise;
+package com.project.userPlan;
 
+public class userAdd {
 
-// Finalized Ryan Ingram
-
-// Object for every interaction with front end.
-// Difference with userExercise object is exercise to exerciseId and day needs to be added
-
-public class userEntry {
-
-	private int userId;
+	
+	private String userEmail;
 	private String planName;
+	private int day;
 	private String exercise;
 	private int sets;
 	private int reps;
 	
-	public userEntry() {
+	public userAdd() {
 		
 	}
 	
-	public userEntry(int userId, String planName, String exercise, int sets, int reps) {
+	public userAdd(String userEmail, String planName, int day, String exercise, int sets, int reps) {
 		super();
-		this.userId = userId;
+		this.userEmail = userEmail;
 		this.planName = planName;
+		this.day = day;
 		this.exercise = exercise;
 		this.sets = sets;
 		this.reps = reps;
 	}
-	
-	public int getUserId() {
-		return userId;
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	public String getPlanName() {
 		return planName;
 	}
 	public void setPlanName(String planName) {
 		this.planName = planName;
+	}
+	public int getDay() {
+		return day;
+	}
+	public void setDay(int day) {
+		this.day = day;
 	}
 	public String getExercise() {
 		return exercise;
@@ -57,4 +59,6 @@ public class userEntry {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
+	
+	
 }

@@ -1,40 +1,31 @@
-package com.project.trainerExercise;
+package com.project.dayExercise;
 
-public class trainerEntry {
+public class dayExerciseComp {
 
 	
-	private int trainerId;
-	private String email;
+	private String userEmail;
 	private String planName;
 	private String exercise;
 	private int sets;
 	private int reps;
 	
-	public trainerEntry() {
+	public dayExerciseComp() {
 		
 	}
 	
-	
-	public trainerEntry(int trainerId, String email, String planName, String exercise, int sets, int reps) {
+	public dayExerciseComp(String userEmail, String planName, String exercise, int sets, int reps) {
 		super();
-		this.trainerId = trainerId;
-		this.email = email;
+		this.userEmail = userEmail;
 		this.planName = planName;
 		this.exercise = exercise;
 		this.sets = sets;
 		this.reps = reps;
 	}
-	public int getTrainerId() {
-		return trainerId;
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setTrainerId(int trainerId) {
-		this.trainerId = trainerId;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	public String getPlanName() {
 		return planName;
@@ -60,6 +51,7 @@ public class trainerEntry {
 	public void setReps(int reps) {
 		this.reps = reps;
 	}
+	
 	
 	
 }

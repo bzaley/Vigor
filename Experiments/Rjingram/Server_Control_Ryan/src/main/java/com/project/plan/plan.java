@@ -16,17 +16,21 @@ public class plan {
 	private String planName;
 	private int currentDay;
 	private int maxDay;
+	private boolean active;
+	private String assignedBy;
 	
 	public plan() {
 		
 	}
 	
-	public plan(int userId, String planName, int currentDay, int maxDay) {
+	public plan(int userId, String planName, int currentDay, int maxDay, boolean active, String assignedBy) {
 		super();
 		this.userId = userId;
 		this.planName = planName;
 		this.currentDay = currentDay;
 		this.maxDay = maxDay;
+		this.active = active;
+		this.assignedBy = assignedBy;
 	}
 	
 	
@@ -63,6 +67,22 @@ public class plan {
 
 	public void setMaxDay(int maxDay) {
 		this.maxDay = maxDay;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getAssignedBy() {
+		return assignedBy;
+	}
+
+	public void setAssignedBy(String assignedBy) {
+		this.assignedBy = assignedBy;
 	}
 
 	

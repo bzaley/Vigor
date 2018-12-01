@@ -1,4 +1,4 @@
-package com.project.trainerExercise;
+package com.project.trainerPlan;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,9 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class trainerExercise {
+public class trainerPlan {
 
-	
 	@Id
 	@GeneratedValue 
 	@Column(columnDefinition ="serial")
@@ -21,11 +20,11 @@ public class trainerExercise {
 	private int sets;
 	private int reps;
 	
-	public trainerExercise() {
+	public trainerPlan() {
 		
 	}
 	
-	public trainerExercise(int trainerId, int userId, String planName, int day, int exerciseId, int sets, int reps) {
+	public trainerPlan(int trainerId, int userId, String planName, int day, int exerciseId, int sets, int reps) {
 		super();
 		this.trainerId = trainerId;
 		this.userId = userId;
