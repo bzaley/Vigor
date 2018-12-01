@@ -54,6 +54,7 @@ public class ClassViewActivity extends Activity {
                                         element.getInt("classID"),
                                         element.getString("classname"),
                                         element.getInt("instructorID"),
+                                        element.getString("classDescription"),
                                         element.getString("schedule"),
                                         element.getString("status"),
                                         element.getString("billboard"),

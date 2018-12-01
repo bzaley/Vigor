@@ -128,6 +128,7 @@ public class ClassTableActivity extends AppCompatActivity {
                                         element.getInt("classID"),
                                         element.getString("classname"),
                                         element.getInt("instructorID"),
+                                        element.getString("classDescription"),
                                         element.getString("schedule"),
                                         element.getString("status"),
                                         element.getString("billboard"),
@@ -159,6 +160,7 @@ public class ClassTableActivity extends AppCompatActivity {
                         data.getIntExtra("classID", 0)
                         , data.getStringExtra("classname")
                         , data.getIntExtra("instructorid", 0)
+                        , data.getStringExtra("description")
                         , data.getStringExtra("schedule")
                         , data.getStringExtra("status")
                         , ""
@@ -174,6 +176,7 @@ public class ClassTableActivity extends AppCompatActivity {
                     classDataModels.get(index).getClassId(),
                     classDataModels.get(index).getClassName(),
                     classDataModels.get(index).getInstructorId(),
+                    classDataModels.get(index).getClassDescription(),
                     classDataModels.get(index).getSchedule(),
                     classDataModels.get(index).getStatus(),
                     data.getStringExtra("billboard"),

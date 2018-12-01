@@ -73,7 +73,7 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
-                                plans.add(new PlanDataModel(element.getString("planNmae"), element.getBoolean("current")));
+                                plans.add(new PlanDataModel(element.getString("planName"), element.getBoolean("active")));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

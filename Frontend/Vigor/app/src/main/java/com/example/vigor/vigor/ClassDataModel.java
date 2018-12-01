@@ -5,16 +5,18 @@ public class ClassDataModel {
     int classId;
     String ClassName;
     int instructorId;
+    String description;
     String schedule;
     String status;
     String billboard;
     Boolean locked;
 
     //Constructor for object
-    public ClassDataModel(int classId, String ClassName, int instructorId, String schedule, String status, String billboard, Boolean locked) {
+    public ClassDataModel(int classId, String ClassName, int instructorId, String description, String schedule, String status, String billboard, Boolean locked) {
         this.classId = classId;
         this.ClassName = ClassName;
         this.instructorId = instructorId;
+        this.description = description;
         this.schedule = schedule;
         this.status = status;
         this.billboard = billboard;
@@ -32,6 +34,10 @@ public class ClassDataModel {
 
     public int getInstructorId() {
         return instructorId;
+    }
+
+    public String getClassDescription() {
+        return description;
     }
 
     public String getSchedule() {
