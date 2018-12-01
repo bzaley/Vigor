@@ -89,7 +89,7 @@ public class ClassBuilderActivity extends AppCompatActivity {
                         }
 
                         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                "http://proj309-ad-07.misc.iastate.edu:8080", toSend, new Response.Listener<JSONObject>() {
+                                "http://proj309-ad-07.misc.iastate.edu:8080/classes/newclass", toSend, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 int id = 0;

@@ -49,7 +49,10 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                     Billboard.setEnabled(false);
                     Billboard.setClickable(false);
 
-                    //TODO send unlock and new billboard to server
+                    //TODO send lock and new billboard to server
+                    //just give status and billboard
+
+
                     Intent intent = new Intent();
                     //Put Status
                     intent.putExtra("billboard", Billboard.getText().toString());
@@ -60,7 +63,7 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                     Billboard.setEnabled(true);
                     Billboard.setClickable(true);
 
-                    //TODO send Lock to server
+                    //TODO send unlock to server
                 }
             }
         });

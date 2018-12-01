@@ -85,7 +85,7 @@ public class ClassTableActivity extends AppCompatActivity {
                         //TODO Get URL to delete class from server
                         ClassDataModel temp = classDataModels.get(position);
                         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                "http://proj309-ad-07.misc.iastate.edu:8080" + temp.getClassName(), null, new Response.Listener<JSONObject>() {
+                                "http://proj309-ad-07.misc.iastate.edu:8080/" + temp.getClassName(), null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, response.toString());
@@ -116,9 +116,8 @@ public class ClassTableActivity extends AppCompatActivity {
     }
 
     private void setUpInitialData() {
-        //TODO get URL to request classes from
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
-                "http://proj309-ad-07.misc.iastate.edu:8080", null,
+                "http://proj309-ad-07.misc.iastate.edu:8080/clesses/getallinstructorclasses/" + session.returnUserID(), null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {

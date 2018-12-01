@@ -250,11 +250,11 @@ public class PlanCreatorActivity extends AppCompatActivity {
                                     JSONObject toPut = new JSONObject();
                                     try {
                                         if (session.returnUserRole().equals("trainee")) {
-                                            toPut.put("userId", session.returnUserID());
+                                            toPut.put("userEmail", session.returnEmail());
                                             planURL = "http://proj309-ad-07.misc.iastate.edu:8080/userPlan/add";
                                         } else {
                                             toPut.put("trainerId", session.returnUserID());
-                                            toPut.put("email", UserTableActivity.UserEmailString);
+                                            toPut.put("userEmail", UserTableActivity.UserEmailString);
                                             planURL = "http://proj309-ad-07.misc.iastate.edu:8080/trainerPlan/add";
                                         }
                                         toPut.put("planName", PlanName);
