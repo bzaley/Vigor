@@ -12,11 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,7 +112,8 @@ public class PlanCreatorActivity extends AppCompatActivity {
                         }
                     });
                     alert.show();
-                } else if (toAddSets.equals("") || toAddReps.equals("")) {
+                } else if (toAddSets.equals("") || toAddReps.equals("") ||
+                        isInt(sets.getText().toString()) || isInt(reps.getText().toString())) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             PlanCreatorActivity.this);
                     alert.setTitle("Amount entered isn't a number.");
@@ -121,11 +125,46 @@ public class PlanCreatorActivity extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    dataModels.add(new DataModel(UserTableActivity.UserEmailString, PlanName, toAddActivity, toAddSets, toAddReps));
-                    activity.setText("");
-                    sets.setText("");
-                    reps.setText("");
-                    adapter.notifyDataSetChanged();
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                            "http://proj309-ad-07.misc.iastate.edu:8080/exercise/check/" + toAddActivity, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getBoolean("exists")){
+                                    dataModels.add(new DataModel(
+                                            UserTableActivity.UserEmailString,
+                                            PlanName,
+                                            activity.getText().toString(),
+                                            sets.getText().toString(),
+                                            reps.getText().toString()));
+                                    activity.setText("");
+                                    sets.setText("");
+                                    reps.setText("");
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                                            PlanCreatorActivity.this);
+                                    alert.setTitle("Activity does not exist in our list.");
+                                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    alert.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d(TAG, response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(TAG, "Error:" + error.getMessage());
+                        }
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                 }
             }
         });
@@ -274,15 +313,20 @@ public class PlanCreatorActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                     Log.d(TAG, response.toString());
+                                    Toast.makeText(getApplicationContext(), "Error: " + response.toString(),
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }, new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Log.d(TAG, "Error; " + error.toString());
+                                    Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(),
+                                            Toast.LENGTH_LONG).show();
                                 }
                             });
                             VolleySingleton.getInstance().addToRequestQueue(jsonArrayRequest, "jsonArray_req");
                             dialog.dismiss();
+                            finish();
                             //clear all the data from the current plan and reset the data the user sees
                             dataModels = new ArrayList<>();
                             days = new ArrayList<>();
@@ -291,21 +335,6 @@ public class PlanCreatorActivity extends AppCompatActivity {
                             adapter = new CustomAdapter(dataModels, getApplicationContext());
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-
-                            AlertDialog.Builder alert = new AlertDialog.Builder(
-                                    PlanCreatorActivity.this);
-                            alert.setTitle("What would you like to name this plan?.");
-                            final EditText alertInput = new EditText(PlanCreatorActivity.this);
-                            alert.setView(alertInput);
-                            alertInput.setInputType(InputType.TYPE_CLASS_TEXT);
-                            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    PlanName = alertInput.getText().toString();
-                                    dialog.dismiss();
-                                }
-                            });
-                            alert.show();
                         }
                     }
                 });
@@ -318,5 +347,13 @@ public class PlanCreatorActivity extends AppCompatActivity {
                 alert.show();
             }
         });
+    }
+
+    private boolean isInt(String name) {
+        char[] chars = name.toCharArray();
+        for (char c : chars)
+            if (Character.isLetter(c))
+                return true;
+        return false;
     }
 }

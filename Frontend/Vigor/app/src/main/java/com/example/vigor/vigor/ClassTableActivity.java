@@ -117,7 +117,7 @@ public class ClassTableActivity extends AppCompatActivity {
 
     private void setUpInitialData() {
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
-                "http://proj309-ad-07.misc.iastate.edu:8080/clesses/getallinstructorclasses/" + session.returnUserID(), null,
+                "http://proj309-ad-07.misc.iastate.edu:8080/classes/getallinstructorclasses/" + session.returnUserID(), null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -125,9 +125,9 @@ public class ClassTableActivity extends AppCompatActivity {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
                                 classDataModels.add(new ClassDataModel(
-                                        element.getInt("classID"),
-                                        element.getString("classname"),
-                                        element.getInt("instructorID"),
+                                        element.getInt("classId"),
+                                        element.getString("className"),
+                                        element.getInt("instructorId"),
                                         element.getString("classDescription"),
                                         element.getString("schedule"),
                                         element.getString("status"),

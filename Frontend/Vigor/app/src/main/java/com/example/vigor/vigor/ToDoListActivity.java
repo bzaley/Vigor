@@ -69,18 +69,18 @@ public class ToDoListActivity extends AppCompatActivity {
                 final String enteredSets = toAddSets.getText().toString();
                 final String enteredReps = toAddReps.getText().toString();
 
-                if (enteredItem.equals("")){
+                if (enteredItem.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
                     alert.setTitle("No Exercise Entered.");
-                            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
                     alert.show();
-                } else if (enteredSets.equals("") | enteredReps.equals("") | !isInt(enteredSets) | !isInt(enteredReps)){
+                } else if (enteredSets.equals("") | enteredReps.equals("") | !isInt(enteredSets) | !isInt(enteredReps)) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
                     alert.setTitle("Amount not entered correctly.");
@@ -92,24 +92,58 @@ public class ToDoListActivity extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
-                    //Add the single activity to the list
-                    dataModels.add(new DataModel(session.returnEmail(), "", enteredItem, enteredSets, enteredReps));
-                    adapter.notifyDataSetChanged();
-                    //Send new activity to server as a single
-                    JSONObject toSend = new JSONObject();
-                    String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/addSingle";
-                    try {
-                        toSend.put("userEmail", session.returnEmail());
-                        toSend.put("exercise", enteredItem);
-                        toSend.put("sets", Integer.parseInt(enteredSets));
-                        toSend.put("reps", Integer.parseInt(enteredReps));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                            jsonUrlAddNew, toSend, new Response.Listener<JSONObject>() {
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                            "http://proj309-ad-07.misc.iastate.edu:8080/exercise/check/" + toAddItem.getText().toString(), null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getBoolean("exists")){
+                                    //Add the single activity to the list
+                                    dataModels.add(new DataModel(session.returnEmail(), "", enteredItem, enteredSets, enteredReps));
+                                    adapter.notifyDataSetChanged();
+                                    //Send new activity to server as a single
+                                    JSONObject toSend = new JSONObject();
+                                    String jsonUrlAddNew = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/addSingle";
+                                    try {
+                                        toSend.put("userEmail", session.returnEmail());
+                                        toSend.put("exercise", enteredItem);
+                                        toSend.put("sets", Integer.parseInt(enteredSets));
+                                        toSend.put("reps", Integer.parseInt(enteredReps));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                                            jsonUrlAddNew, toSend, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Log.d(TAG, response.toString());
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            VolleyLog.d(TAG, "Error:" + error.getMessage());
+                                        }
+                                    });
+                                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+                                    //Clear the entered fields
+                                    toAddItem.setText("");
+                                    toAddSets.setText("");
+                                    toAddReps.setText("");
+                                } else {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                                            ToDoListActivity.this);
+                                    alert.setTitle("Activity does not exist in our list.");
+                                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    alert.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Log.d(TAG, response.toString());
                         }
                     }, new Response.ErrorListener() {
@@ -119,10 +153,6 @@ public class ToDoListActivity extends AppCompatActivity {
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
-                    //Clear the entered fields
-                    toAddItem.setText("");
-                    toAddSets.setText("");
-                    toAddReps.setText("");
                 }
             }
         });
@@ -131,51 +161,68 @@ public class ToDoListActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                if(dataModels.get(position).getexercise().equals("null")){
+                if (dataModels.get(position).getuserEmail().equals("null")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
                     alert.setTitle("Would you like to go to the next or last day?");
                     alert.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Direction = 1;
+                            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                                    "http://proj309-ad-07.misc.iastate.edu:8080/plan/"
+                                            + session.returnUserID() + "/"
+                                            + dataModels.get(position).getplanName() + "/1",
+                                    null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    dataModels = new ArrayList<>();
+                                    adapter = new CustomAdapter(dataModels, getApplicationContext());
+                                    listView.setAdapter(adapter);
+                                    setUpInitialData();
+                                    Log.d(TAG, response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    VolleyLog.d(TAG, "Error:" + error.getMessage());
+                                }
+                            });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                             dialog.dismiss();
                         }
                     });
                     alert.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Direction = 0;
                             dialog.dismiss();
                         }
                     });
                     alert.setNegativeButton("LAST", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Direction = 2;
+                            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                                    "http://proj309-ad-07.misc.iastate.edu:8080/plan/"
+                                            + session.returnUserID() + "/"
+                                            + dataModels.get(position).getplanName() + "/2", null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    dataModels = new ArrayList<>();
+                                    adapter = new CustomAdapter(dataModels, getApplicationContext());
+                                    listView.setAdapter(adapter);
+                                    setUpInitialData();
+                                    Log.d(TAG, response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    VolleyLog.d(TAG, "Error:" + error.getMessage());
+                                }
+                            });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                             dialog.dismiss();
                         }
                     });
                     alert.show();
-                    if (Direction == 1 | Direction == 2){
-                        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                "http://proj309-ad-07.misc.iastate.edu:8080/plan/"
-                                        + session.returnUserID() + "/"
-                                        + dataModels.get(position).getplanName() + "/"
-                                        + Direction, null, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.d(TAG, response.toString());
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                VolleyLog.d(TAG, "Error:" + error.getMessage());
-                            }
-                        });
-                        VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
-                    }
-                    Direction = 0;
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
@@ -184,7 +231,7 @@ public class ToDoListActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             JSONObject toSend = new JSONObject();
-                            String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/completed";
+                            String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/markComplete";
                             DataModel temp = dataModels.get(position);
                             try {
                                 toSend.put("userEmail", session.returnEmail());
@@ -246,18 +293,25 @@ public class ToDoListActivity extends AppCompatActivity {
                                 if (!exists) {
                                     // Add Spacer
                                     dataModels.add(new DataModel(
-                                            "",
-                                            element.getString("planName"),
                                             "null",
+                                            element.getString("planName"),
+                                            element.getString("planName"),
                                             "Sets",
                                             "Reps"));
+                                    dataModels.add(new DataModel(
+                                            element.getString("userEmail"),
+                                            element.getString("planName"),
+                                            element.getString("exercise"),
+                                            element.getInt("sets") + "",
+                                            element.getInt("reps") + ""));
+                                } else {
+                                    dataModels.add(position, new DataModel(
+                                            element.getString("userEmail"),
+                                            element.getString("planName"),
+                                            element.getString("exercise"),
+                                            element.getInt("sets") + "",
+                                            element.getInt("reps") + ""));
                                 }
-                                dataModels.add(position, new DataModel(
-                                        element.getString("userEmail"),
-                                        element.getString("planName"),
-                                        element.getString("exercise"),
-                                        element.getInt("sets") + "",
-                                        element.getInt("reps") + ""));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

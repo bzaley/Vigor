@@ -3,8 +3,8 @@ package com.example.vigor.vigor;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class ClassBuilderActivity extends AppCompatActivity {
 
-    private EditText Name, Description, Start, End;
+    private EditText Name, Description, Start, End, Billboard;
 
     private Button Done;
 
@@ -41,6 +41,7 @@ public class ClassBuilderActivity extends AppCompatActivity {
         Description = (EditText) findViewById(R.id.ClassBuilderEtDesc);
         Start = (EditText) findViewById(R.id.ClassBuilderEtStart);
         End = (EditText) findViewById(R.id.ClassBuilderEtEnd);
+        Billboard = (EditText) findViewById(R.id.ClassBuilderEtBillboard);
 
         Done = (Button) findViewById(R.id.ClassBuilderBtnDone);
 
@@ -70,7 +71,14 @@ public class ClassBuilderActivity extends AppCompatActivity {
                         for (int id : ids) {
                             CheckBox t = (CheckBox) findViewById(id);
                             if (t.isChecked()) {
-                                Schedule += t.getText().toString().toLowerCase().charAt(0);
+                                if (t.getText().toString().equals("Thursday")) {
+                                    Schedule += "r";
+                                } else if (t.getText().toString().equals("Saturday") || t.getText().toString().equals("Sunday")) {
+                                    Schedule += t.getText().toString().toLowerCase().charAt(0);
+                                    Schedule += t.getText().toString().toLowerCase().charAt(1);
+                                } else {
+                                    Schedule += t.getText().toString().toLowerCase().charAt(0);
+                                }
                             }
                         }
                         Schedule += " " + Start.getText().toString() + "-" + End.getText().toString();
@@ -78,12 +86,11 @@ public class ClassBuilderActivity extends AppCompatActivity {
 
                         JSONObject toSend = new JSONObject();
                         try {
-                            toSend.put("classname", "Thio");
-                            toSend.put("instructorid", session.returnUserID());
+                            toSend.put("className", Name.getText().toString());
+                            toSend.put("instructorId", session.returnUserID());
+                            toSend.put("classDescription", Description.getText().toString());
                             toSend.put("schedule", Schedule);
-                            toSend.put("status", "");
-                            toSend.put("billboard", "");
-                            toSend.put("locked", true);
+                            toSend.put("billboard", Billboard.getText().toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -94,7 +101,7 @@ public class ClassBuilderActivity extends AppCompatActivity {
                             public void onResponse(JSONObject response) {
                                 int id = 0;
                                 try {
-                                    id = response.getInt("classid");
+                                    id = response.getInt("classId");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -116,6 +123,8 @@ public class ClassBuilderActivity extends AppCompatActivity {
                                         intent.putExtra("description", Description.getText().toString());
                                         //Put Schedule
                                         intent.putExtra("schedule", finalSchedule);
+                                        //Put Billboard
+                                        intent.putExtra("billboard", Billboard.getText().toString());
                                         //Put Status
                                         intent.putExtra("status", "");
                                         setResult(RESULT_OK, intent);

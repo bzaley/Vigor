@@ -61,6 +61,28 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
                 startActivity(new Intent(PlanManagerActivity.this, PlanCreatorActivity.class));
             }
         });
+
+        planList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET
+                        , "http://proj309-ad-07.misc.iastate.edu:8080/userPlan/remove/" +
+                        session.returnUserID() + "/" + plans.get(position).getPlanName(), null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
+                VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
+                return false;
+            }
+        });
     }
 
     private void setUpInitialData() {
