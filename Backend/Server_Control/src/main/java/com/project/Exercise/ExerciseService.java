@@ -27,8 +27,15 @@ public class ExerciseService {
 		exerciseRepo.save(exercise);
 	}
 	
-	/*public boolean existsByName(String exerciseName) {
-		return exerciseRepo.existsByName(exerciseName);
-	}*/
+	public boolean existsByName(String exerciseName) {
+		Exercise exercise = exerciseRepo.findByName(exerciseName);
+
+		if (exercise == null) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
 	
 }

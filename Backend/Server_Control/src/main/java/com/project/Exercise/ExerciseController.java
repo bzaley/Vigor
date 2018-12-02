@@ -27,10 +27,10 @@ public class ExerciseController {
 	/*
 	 * Returns true if the exercise name is already in the table
 	 */
-	/*@RequestMapping("/check/{name}")
+	@RequestMapping("/check/{exerciseName}")
 	public boolean existsByName(@PathVariable String exerciseName) {
 		return exerciseService.existsByName(exerciseName);
-	}*/
+	}
 	
 	/*
 	 * Retrieves all the exercises we have available
