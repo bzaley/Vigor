@@ -42,7 +42,7 @@ public class planService {
 	/*
 	 * Increments or decrements the current day of the plan
 	 */
-	public void dayChanger(int userId, String planName, int changer) {
+	public changerResponse dayChanger(int userId, String planName, int changer) {
 		
 		// Finds the plan to be updated
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
@@ -77,6 +77,9 @@ public class planService {
 		
 		// Fills in the exercises for the next/prev day of the plan
 		dayExerciseService.fillPlan(plan_updated);
+		
+		return new changerResponse("GO");
+		
 	}
 	
 	
