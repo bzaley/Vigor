@@ -20,7 +20,8 @@ public class ClassesController {
 	@RequestMapping(method = RequestMethod.POST, value = "/newclass") //Creates a new class and returns join code
 	public ResponseEntity<?> newClass(@RequestBody Classes newClass){
 		classesService.addNewClass(newClass);
-		return ResponseEntity.ok().body(newClass.getClassId());
+		sendClassId neat = new sendClassId(newClass.getClassId());
+		return ResponseEntity.ok().body(neat);
 	}
 	@RequestMapping("/getallinstructorclasses/{instructorId}")
 	public ArrayList<Classes> getClassesWithInstructorId(@PathVariable int instructorId){
