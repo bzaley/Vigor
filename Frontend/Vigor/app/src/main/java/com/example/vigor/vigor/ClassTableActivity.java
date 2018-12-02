@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -67,6 +68,7 @@ public class ClassTableActivity extends AppCompatActivity {
                 classData.putString("classname", temp.getClassName());
                 classData.putInt("classid", temp.getClassId());
                 classData.putString("billboard", temp.getBillboard());
+                classData.putString("status", temp.getStatus());
                 classData.putBoolean("locked", temp.getLocked());
                 launch.putExtras(classData);
                 startActivityForResult(launch, 2);
@@ -124,13 +126,18 @@ public class ClassTableActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
+                                String descTemp = "";
+                                if (element.getString("status") != null)
+                                    descTemp = element.getString("status");
+                                if (descTemp.equals("null"))
+                                    descTemp = "";
                                 classDataModels.add(new ClassDataModel(
                                         element.getInt("classId"),
                                         element.getString("className"),
                                         element.getInt("instructorId"),
                                         element.getString("classDescription"),
                                         element.getString("schedule"),
-                                        element.getString("status"),
+                                        descTemp,
                                         element.getString("billboard"),
                                         element.getBoolean("locked")));
                             } catch (JSONException e) {
@@ -178,7 +185,7 @@ public class ClassTableActivity extends AppCompatActivity {
                     classDataModels.get(index).getInstructorId(),
                     classDataModels.get(index).getClassDescription(),
                     classDataModels.get(index).getSchedule(),
-                    classDataModels.get(index).getStatus(),
+                    data.getStringExtra("status"),
                     data.getStringExtra("billboard"),
                     classDataModels.get(index).getLocked()));
             ClassAdapter.notifyDataSetChanged();

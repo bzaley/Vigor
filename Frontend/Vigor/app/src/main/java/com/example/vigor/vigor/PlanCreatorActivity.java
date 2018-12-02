@@ -313,7 +313,7 @@ public class PlanCreatorActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                     Log.d(TAG, response.toString());
-                                    Toast.makeText(getApplicationContext(), "Error: " + response.toString(),
+                                    Toast.makeText(getApplicationContext(),response.toString(),
                                             Toast.LENGTH_LONG).show();
                                 }
                             }, new Response.ErrorListener() {

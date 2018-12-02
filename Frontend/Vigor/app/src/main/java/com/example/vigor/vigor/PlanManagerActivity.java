@@ -50,7 +50,7 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
         adapter = new CustomPlanAdapter(plans, this);
         planList.setAdapter(adapter);
 
-        plans.add(new PlanDataModel("Swoop", false));
+//        plans.add(new PlanDataModel("Swoop", false));
         adapter.notifyDataSetChanged();
 
         setUpInitialData();
