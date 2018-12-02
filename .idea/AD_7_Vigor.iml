@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+=======
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+>>>>>>> 73f0e5b5290c14093ccff414ec78c6c969048327
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+<<<<<<< HEAD
+=======
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  </component>
+>>>>>>> 73f0e5b5290c14093ccff414ec78c6c969048327
+</module>

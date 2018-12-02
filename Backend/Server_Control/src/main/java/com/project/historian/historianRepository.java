@@ -20,6 +20,6 @@ public interface historianRepository extends JpaRepository<historian, Integer>, 
 			@Param("sets") int sets,
 			@Param("reps") int reps,
 			@Param("saveDate") String saveDate);
-	
+
 	public List<historian> findAllByUserIdAndSaveDate(int userId, String saveDate);
 }

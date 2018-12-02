@@ -15,7 +15,7 @@ public class historianService {
 	
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	@Autowired
 	private ExerciseRepository exerciseRepo;
 	
@@ -28,26 +28,26 @@ public class historianService {
 	}
 	
 	public List<historianReturn> getExercisesForDate(String userEmail, String saveDate) {
-		
+
 		User user = userRepo.findByUserEmail(userEmail);
 		int userId = user.getuserId();
-		
+
 		List<historianReturn> right = new ArrayList<historianReturn>();
-		
+
 		List<historian> wrong = historianRepo.findAllByUserIdAndSaveDate(userId, saveDate);
-		
+
 		for (historian tmp : wrong) {
-			
+
 			Exercise exercise = exerciseRepo.findByExerciseId(tmp.getExerciseId());
 			String name = exercise.getName();
-			
+
 			historianReturn toAdd = new historianReturn(name, tmp.getSets(), tmp.getReps());
-			
+
 			right.add(toAdd);
 		}
-		
+
 		return right;
-		
+
 	}
-	
+
 }

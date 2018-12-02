@@ -29,13 +29,13 @@ public class ExerciseService {
 	
 	public boolean existsByName(String exerciseName) {
 		Exercise exercise = exerciseRepo.findByName(exerciseName);
-		
+
 		if (exercise == null) {
 			return false;
 		} else {
 			return true;
 		}
-		
+
 	}
 	
 }
