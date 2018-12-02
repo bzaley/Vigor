@@ -1,6 +1,8 @@
 package com.example.vigor.vigor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,9 +28,12 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class LoginActivity extends Activity {
     private String TAG = LoginActivity.class.getSimpleName();
     private String loginURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/login";
+    private String registerURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/signup";
     private String strEmail;
     private String strPass;
     private Button loginButton;
@@ -156,14 +161,16 @@ public class LoginActivity extends Activity {
                 checkGoogleLogIn(email, lastName, firstName, googleID);
             } catch (ApiException e) {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public void checkGoogleLogIn(String email, String lastName, String firstName, String googleID) {
-        String jsonCheckURL = idk;
+    public void checkGoogleLogIn(final String email, final String lastName, final String firstName, final String googleID) throws JSONException {
+        String jsonCheckURL = loginURL;
         JsonObjectRequest jsonGoogleCheckRequest = new JsonObjectRequest(Request.Method.POST,
-                jsonCheckURL, makeGoogleCheckObject(email, lastName, firstName, googleID),
+                jsonCheckURL, makeLoginJsonObject(email, googleID),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -181,7 +188,7 @@ public class LoginActivity extends Activity {
                                         MainActivity.class));
                                 finish();
                             } else {
-
+                                requestForUserRole(email, lastName, firstName, googleID);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -193,23 +200,77 @@ public class LoginActivity extends Activity {
 
             }
         });
+        VolleySingleton.getInstance().addToRequestQueue(jsonGoogleCheckRequest, "google_reg_req");
     }
 
+    public void requestForUserRole(final String email, final String lastName, final String firstName,
+                                   final String googleID) {
+        AlertDialog.Builder alert = new AlertDialog
+                .Builder(LoginActivity.this);
+        alert.setTitle("Please enter your preferred role!");
+        final String[] items = {"trainee", "personaltrainer", "instructor"};
+        alert.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        JsonObjectRequest jsonRequest = null;
+                        try {
+                            jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                                    registerURL, makeRegisterJsonObject(firstName, lastName, email,
+                                    googleID, Arrays.asList(items).get(which)),
+                                    new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        boolean error = response.getBoolean("error");
+                                        if (!error) {
+                                            Toast.makeText(getApplicationContext(), "Role " +
+                                                            "has been selected, logging in!",
+                                                    Toast.LENGTH_LONG).show();
 
-    public JSONObject makeGoogleCheckObject(String email, String lastName, String firstName,
-                                            String googleID) {
-        JSONObject objToSend = new JSONObject();
+                                            startActivity(new Intent(LoginActivity.this,
+                                                    MainActivity.class));
+                                            finish();
+                                        } else {
+                                            String errorReceived = response.getString("errorMsg");
+                                            Toast.makeText(getApplicationContext(), errorReceived,
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    VolleyLog.d(TAG, "Error:" + error.getMessage());
+                                    Toast.makeText(getApplicationContext(), "Error: " +
+                                            error.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "reg_req");
+                    }
+                });
+        alert.create().show();
+    }
+
+    public JSONObject makeRegisterJsonObject(String firstName, String lastName, String email,
+                                             String password, String role) throws JSONException {
+        JSONObject returnObject = new JSONObject();
         try {
-            objToSend.put("email", email);
-            objToSend.put("lastname", lastName);
-            objToSend.put("firstname", firstName);
-            objToSend.put("googleId", googleID);
-
+            returnObject.put("userEmail", email);
+            returnObject.put("firstname", firstName);
+            returnObject.put("lastname", lastName);
+            returnObject.put("password", password);
+            returnObject.put("role", role);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return objToSend;
+        return returnObject;
     }
+
     public JSONObject makeLoginJsonObject(String email, String password) throws JSONException {
         JSONObject objToSend = new JSONObject();
         try {

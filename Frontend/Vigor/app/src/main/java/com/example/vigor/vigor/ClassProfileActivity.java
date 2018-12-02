@@ -26,6 +26,7 @@ public class ClassProfileActivity extends Activity {
 
     private String classIDForURL;
     private ClassDataModel classModel;
+    private String jsonClassURL = "http://proj309-ad-07.misc.iastate.edu:8080/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class ClassProfileActivity extends Activity {
 
         classIDForURL = getIntent().getStringExtra("targetClassID");
 
-        JsonObjectRequest jsonRequest  = new JsonObjectRequest(Request.Method.GET, jsonURL,
+        JsonObjectRequest jsonClassRequest  = new JsonObjectRequest(Request.Method.GET, jsonClassURL,
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -66,10 +67,10 @@ public class ClassProfileActivity extends Activity {
 
             }
         });
-        VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "class_json_req");
+        VolleySingleton.getInstance().addToRequestQueue(jsonClassRequest, "class_json_req");
 
         className.setText(classModel.getClassName());
-        classDescription.setText(classModel.getDescription());
+        classDescription.setText(classModel.getClassDescription());
         classSchedule.setText(classSchedule.getText().toString() + classModel.getSchedule());
         billBoard.setText(billBoard.getText().toString() + classModel.getBillboard());
 
