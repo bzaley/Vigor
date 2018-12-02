@@ -1,5 +1,6 @@
 package com.example.vigor.vigor;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,7 @@ public class ClassUpdaterActivity extends AppCompatActivity {
         Bundle receivedData = getIntent().getExtras();
         if (receivedData != null){
             ClassName.setText(receivedData.getString("classname"));
-            ClassID.setText(receivedData.getInt("classid"));
+            ClassID.setText(receivedData.getInt("classid") + "");
             Billboard.setText(receivedData.getString("billboard"));
             if (receivedData.getBoolean("locked")){
                 Lock.setText("Unlock");
@@ -48,13 +49,21 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                     Billboard.setEnabled(false);
                     Billboard.setClickable(false);
 
-                    //TODO send Lock to server
+                    //TODO send lock and new billboard to server
+                    //just give status and billboard
+
+
+                    Intent intent = new Intent();
+                    //Put Status
+                    intent.putExtra("billboard", Billboard.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
                 } else {
                     Lock.setText("Lock");
                     Billboard.setEnabled(true);
                     Billboard.setClickable(true);
 
-                    //TODO send unlock and new billboard to server
+                    //TODO send unlock to server
                 }
             }
         });

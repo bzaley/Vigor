@@ -37,8 +37,6 @@ public class ToDoListActivity extends AppCompatActivity {
     private EditText toAddReps;
     private Button addBtn;
     private String TAG = ToDoListActivity.class.getSimpleName();
-    private String planName = "";
-    private String trainerPlanName = "";
 
     static int Direction = 0;
 
@@ -258,8 +256,8 @@ public class ToDoListActivity extends AppCompatActivity {
                                         element.getString("userEmail"),
                                         element.getString("planName"),
                                         element.getString("exercise"),
-                                        element.get("sets") + "",
-                                        element.get("reps") + ""));
+                                        element.getInt("sets") + "",
+                                        element.getInt("reps") + ""));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -22,60 +23,42 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlanManagerActivity extends AppCompatActivity {
+public class PlanManagerActivity extends AppCompatActivity implements android.widget.CompoundButton.OnCheckedChangeListener {
 
-    private ListView planList;
-    private Button Continue;
+    ListView planList;
+    ArrayList<PlanDataModel> plans;
+    CustomPlanAdapter adapter;
+
+    private Button add;
 
     private SessionController session;
     private String TAG = PlanManagerActivity.class.getSimpleName();
 
-    private ArrayList<PlanDataModel> plans;
-    private CustomPlanAdapter adapter;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_manager);
-
         session = new SessionController(getApplicationContext());
 
         planList = (ListView) findViewById(R.id.PlanManagerLvPlans);
+        add = (Button) findViewById(R.id.PlanManagerBtnAdd);
 
         plans = new ArrayList<>();
-        adapter = new CustomPlanAdapter(plans, getApplicationContext());
+        adapter = new CustomPlanAdapter(plans, this);
         planList.setAdapter(adapter);
+
+        plans.add(new PlanDataModel("Swoop", false));
+        adapter.notifyDataSetChanged();
+
         setUpInitialData();
 
-        planList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toggle the Checkbox
-                PlanDataModel temp = plans.get(position);
-                if (temp.isChecked)
-                    temp.unCheck();
-                else
-                    temp.check();
-                plans.set(position, temp);
-                adapter.notifyDataSetChanged();
-
-                //then tell server plan is now current or not current
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://proj309-ad-07.misc.iastate.edu:8080/plan/toggle/"
-                                + session.returnUserID()
-                                + "/" + temp.getPlanName(), null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, "Error:" + error.getMessage());
-                    }
-                });
-                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+            public void onClick(View v) {
+                startActivity(new Intent(PlanManagerActivity.this, PlanCreatorActivity.class));
             }
         });
     }
@@ -83,14 +66,14 @@ public class PlanManagerActivity extends AppCompatActivity {
     private void setUpInitialData() {
         //TODO get plan request URL
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
-                "http://proj309-ad-07.misc.iastate.edu:8080", null,
+                "http://proj309-ad-07.misc.iastate.edu:8080/plan/getAll/" + session.returnUserID(), null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
-                                plans.add(new PlanDataModel(element.getString("planNmae"), element.getBoolean("current")));
+                                plans.add(new PlanDataModel(element.getString("planName"), element.getBoolean("active")));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -112,5 +95,33 @@ public class PlanManagerActivity extends AppCompatActivity {
             if (Character.isLetter(c))
                 return true;
         return false;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int position = planList.getPositionForView(buttonView);
+
+        if (position != ListView.INVALID_POSITION){
+            //Toggle the Checkbox
+            plans.get(position).setSelected(isChecked);
+            adapter.notifyDataSetChanged();
+
+            //then tell server plan is now current or not current
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                    "http://proj309-ad-07.misc.iastate.edu:8080/plan/toggle/"
+                            + session.returnUserID()
+                            + "/" + plans.get(position).getPlanName(), null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d(TAG, response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error:" + error.getMessage());
+                }
+            });
+            VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+        }
     }
 }

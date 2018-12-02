@@ -4,73 +4,100 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
+class PlanDataModel {
 
-public class CustomPlanAdapter extends ArrayAdapter<PlanDataModel> implements View.OnClickListener {
+    String PlanName;
+    public Boolean isChecked;
 
-    private ArrayList<PlanDataModel> dataSet;
-    Context mContext;
-
-    // View lookup cache
-    private static class ViewHolder {
-        CheckBox active;
+    //Constructor for object
+    public PlanDataModel(String PlanName, boolean isChecked) {
+        super();
+        this.PlanName = PlanName;
+        this.isChecked = isChecked;
     }
 
-    public CustomPlanAdapter(ArrayList<PlanDataModel> data, Context context) {
-        super(context, R.layout.plan_row_item, data);
-        this.dataSet = data;
-        this.mContext = context;
+    //return methods for different aspects
+    public String getPlanName() {
+        return PlanName;
+    }
+
+    public boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void toggle() {
+        isChecked = !isChecked;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setSelected(boolean checked) {
+        isChecked = checked;
+    }
+}
+
+public class CustomPlanAdapter extends ArrayAdapter<PlanDataModel> {
+
+    private List<PlanDataModel> planList;
+    private Context context;
+
+    public CustomPlanAdapter(List<PlanDataModel> planList, Context context) {
+        super(context, R.layout.plan_row_item, planList);
+        this.planList = planList;
+        this.context = context;
     }
 
     @Override
-    public void onClick(View v) {
-        int position = (Integer) v.getTag();
-        Object object = getItem(position);
-        PlanDataModel plandataModel = (PlanDataModel) object;
+    public int getCount() {
+        if (planList != null)
+            return planList.size();
+        else
+            return 0;
     }
 
-    private int lastPosition = -1;
+    @Override
+    public PlanDataModel getItem(int position) {
+        return planList.get(position);
+    }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        PlanDataModel classdataModel = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        ViewHolder viewHolder; // view lookup cache stored in tag
+    public long getItemId(int position) {
+        return position;
+    }
 
-        final View result;
+    public boolean isChecked(int position) {
+        return planList.get(position).isChecked;
+    }
 
-        if (convertView == null) {
+    public class PlanHolder {
+        public CheckBox active;
+        public TextView planName;
+    }
 
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.class_row_item, parent, false);
-            viewHolder.active = (CheckBox) convertView.findViewById(R.id.PlanName);
-//            viewHolder.active.setText(classdataModel.getPlanName());
-//            viewHolder.active.setSelected(classdataModel.getIsChecked());
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View v = convertView;
+        PlanHolder holder = new PlanHolder();
 
-            result = convertView;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        v = inflater.inflate(R.layout.plan_row_item, null);
 
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
-        }
+        holder.planName = (TextView) v.findViewById(R.id.PlanTextView);
+        holder.active = (CheckBox) v.findViewById(R.id.PlanCheckBox);
+        holder.active.setOnCheckedChangeListener((PlanManagerActivity) context);
 
-        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        result.startAnimation(animation);
-        lastPosition = position;
+        holder.planName.setText(planList.get(position).getPlanName());
+        holder.active.setChecked(planList.get(position).getIsChecked());
+        holder.active.setTag(planList.get(position));
 
-        viewHolder.active.setText(classdataModel.getPlanName());
-        viewHolder.active.setSelected(classdataModel.getIsChecked());
-        // Return the completed view to render on screen
-        return convertView;
+        return v;
     }
 }

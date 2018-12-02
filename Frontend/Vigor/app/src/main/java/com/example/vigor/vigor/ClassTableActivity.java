@@ -26,14 +26,12 @@ import java.util.ArrayList;
 
 public class ClassTableActivity extends AppCompatActivity {
 
-    private Button addClass;
-    private CustomClassAdapter adapter;
-
     ArrayList<ClassDataModel> classDataModels;
-
     ListView classes;
-
+    private CustomClassAdapter ClassAdapter;
+    private Button addClass;
     private String TAG = ClassTableActivity.class.getSimpleName();
+
     private SessionController session;
 
     @Override
@@ -45,10 +43,11 @@ public class ClassTableActivity extends AppCompatActivity {
 
         addClass = (Button) findViewById(R.id.classTableBtnEnter);
         classes = (ListView) findViewById(R.id.list);
-        classDataModels = new ArrayList<>();
-        adapter = new CustomClassAdapter(classDataModels, getApplicationContext());
-        classes.setAdapter(adapter);
 
+        classDataModels = new ArrayList<>();
+//        classDataModels.add(new ClassDataModel(30012, "bo bo bo", 21, "mwf 2:10-3", "cancelled", "water aerobics", false));
+        ClassAdapter = new CustomClassAdapter(classDataModels, getApplicationContext());
+        classes.setAdapter(ClassAdapter);
         setUpInitialData();
 
         addClass.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +69,7 @@ public class ClassTableActivity extends AppCompatActivity {
                 classData.putString("billboard", temp.getBillboard());
                 classData.putBoolean("locked", temp.getLocked());
                 launch.putExtras(classData);
-                startActivity(launch);
+                startActivityForResult(launch, 2);
             }
         });
 
@@ -86,7 +85,7 @@ public class ClassTableActivity extends AppCompatActivity {
                         //TODO Get URL to delete class from server
                         ClassDataModel temp = classDataModels.get(position);
                         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                "http://proj309-ad-07.misc.iastate.edu:8080" + temp.getClassName(), null, new Response.Listener<JSONObject>() {
+                                "http://proj309-ad-07.misc.iastate.edu:8080/" + temp.getClassName(), null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, response.toString());
@@ -100,7 +99,7 @@ public class ClassTableActivity extends AppCompatActivity {
                         VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
                         //Remove class from list user sees.
                         classDataModels.remove(position);
-                        adapter.notifyDataSetChanged();
+                        ClassAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
@@ -111,15 +110,14 @@ public class ClassTableActivity extends AppCompatActivity {
                     }
                 });
                 alert.show();
-                return false;
+                return true;
             }
         });
     }
 
     private void setUpInitialData() {
-        //TODO get URL to request classes from
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
-                "http://proj309-ad-07.misc.iastate.edu:8080", null,
+                "http://proj309-ad-07.misc.iastate.edu:8080/clesses/getallinstructorclasses/" + session.returnUserID(), null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -130,6 +128,7 @@ public class ClassTableActivity extends AppCompatActivity {
                                         element.getInt("classID"),
                                         element.getString("classname"),
                                         element.getInt("instructorID"),
+                                        element.getString("classDescription"),
                                         element.getString("schedule"),
                                         element.getString("status"),
                                         element.getString("billboard"),
@@ -138,7 +137,7 @@ public class ClassTableActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        ClassAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -153,22 +152,37 @@ public class ClassTableActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             boolean exists = false;
-            for (int i=0; i<classDataModels.size(); i++)
+            for (int i = 0; i < classDataModels.size(); i++)
                 if (classDataModels.get(i).getClassName().equals(data.getStringExtra("classname")))
                     exists = true;
-            if (!exists){
-                int i = 0;
-                data.getIntExtra("classID", i);
+            if (!exists) {
                 classDataModels.add(new ClassDataModel(
-                        i
+                        data.getIntExtra("classID", 0)
                         , data.getStringExtra("classname")
-                        , session.returnUserID()
+                        , data.getIntExtra("instructorid", 0)
+                        , data.getStringExtra("description")
                         , data.getStringExtra("schedule")
                         , data.getStringExtra("status")
                         , ""
                         , false));
-                adapter.notifyDataSetChanged();
+                ClassAdapter.notifyDataSetChanged();
             }
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            int index = 0;
+            for (int i = 0; i < classDataModels.size(); i++)
+                if (classDataModels.get(i).getClassName().equals(data.getStringExtra("classname")))
+                    index = i;
+            classDataModels.set(index, new ClassDataModel(
+                    classDataModels.get(index).getClassId(),
+                    classDataModels.get(index).getClassName(),
+                    classDataModels.get(index).getInstructorId(),
+                    classDataModels.get(index).getClassDescription(),
+                    classDataModels.get(index).getSchedule(),
+                    classDataModels.get(index).getStatus(),
+                    data.getStringExtra("billboard"),
+                    classDataModels.get(index).getLocked()));
+            ClassAdapter.notifyDataSetChanged();
         }
     }
 }
+
