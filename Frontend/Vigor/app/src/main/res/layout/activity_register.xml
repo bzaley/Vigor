@@ -47,13 +47,6 @@
             android:hint="Confirm Password"
             android:password="true"
             android:inputType="textPassword"/>
-
-        <!--<EditText-->
-            <!--android:id="@+id/roleET"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="Role"/>-->
-
         <Spinner
             android:id="@+id/roleSpinner"
             android:layout_width="fill_parent"

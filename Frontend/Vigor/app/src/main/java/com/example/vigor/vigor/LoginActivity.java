@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
     private SessionController session;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton signInButton;
+    private SignInButton googleSignInButton;
     private static final int RC_SIGN_IN = 9001;
 
     @Override
@@ -58,10 +58,10 @@ public class LoginActivity extends Activity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        googleSignInButton = findViewById(R.id.sign_in_button);
+        googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -153,12 +153,63 @@ public class LoginActivity extends Activity {
                 String lastName = account.getFamilyName();
                 String firstName = account.getGivenName();
                 String googleID = account.getId();
+                checkGoogleLogIn(email, lastName, firstName, googleID);
             } catch (ApiException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public void checkGoogleLogIn(String email, String lastName, String firstName, String googleID) {
+        String jsonCheckURL = idk;
+        JsonObjectRequest jsonGoogleCheckRequest = new JsonObjectRequest(Request.Method.POST,
+                jsonCheckURL, makeGoogleCheckObject(email, lastName, firstName, googleID),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Boolean error = null;
+                        try {
+                            error = response.getBoolean("error");
+                            if (!error) {
+                                session.attemptLogin(true,
+                                        response.getInt("userId"),
+                                        response.getString("userEmail"),
+                                        response.getString("firstname"),
+                                        response.getString("lastname"),
+                                        response.getString("role"));
+                                startActivity(new Intent(LoginActivity.this,
+                                        MainActivity.class));
+                                finish();
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+
+    public JSONObject makeGoogleCheckObject(String email, String lastName, String firstName,
+                                            String googleID) {
+        JSONObject objToSend = new JSONObject();
+        try {
+            objToSend.put("email", email);
+            objToSend.put("lastname", lastName);
+            objToSend.put("firstname", firstName);
+            objToSend.put("googleId", googleID);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return objToSend;
+    }
     public JSONObject makeLoginJsonObject(String email, String password) throws JSONException {
         JSONObject objToSend = new JSONObject();
         try {

@@ -27,7 +27,6 @@ public class RegisterActivity extends Activity {
     private EditText registerEmail;
     private EditText registerPass;
     private EditText confirmPass;
-    // private EditText registerRole;
     private Button registerButton;
     private Button switchToLoginButton;
     private Spinner dropDownSpinner;
@@ -54,7 +53,6 @@ public class RegisterActivity extends Activity {
         confirmPass = findViewById(R.id.confirmET);
         registerButton = findViewById(R.id.regButton);
         switchToLoginButton = findViewById(R.id.logButton);
-        //registerRole = findViewById(R.id.roleET);
         dropDownSpinner = findViewById(R.id.roleSpinner);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -73,7 +71,6 @@ public class RegisterActivity extends Activity {
                 strRegEmail = registerEmail.getText().toString();
                 strRegPass = registerPass.getText().toString();
                 strConfirmPass = confirmPass.getText().toString();
-                //strRegRole = registerRole.getText().toString();
                 strRegRole = dropDownSpinner.getSelectedItem().toString();
                 JSONObject registerInfo = null;
 
