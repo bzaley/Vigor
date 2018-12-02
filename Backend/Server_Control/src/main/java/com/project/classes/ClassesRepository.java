@@ -13,6 +13,7 @@ public interface ClassesRepository extends JpaRepository<Classes, Integer>, Crud
 
 	public ArrayList<Classes> findAllByInstructorId(int instructorId);
 	public Classes findByClassId(int classId);
+	public boolean existsByClassId(int classId);
 	@Transactional
 	public void deleteByClassId(int classId);
 	@Modifying

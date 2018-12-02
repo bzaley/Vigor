@@ -28,7 +28,7 @@ public class ExerciseController {
 	 * Returns true if the exercise name is already in the table
 	 */
 	@RequestMapping("/check/{exerciseName}")
-	public boolean existsByName(@PathVariable String exerciseName) {
+	public exerciseResponse existsByName(@PathVariable String exerciseName) {
 		return exerciseService.existsByName(exerciseName);
 	}
 	
