@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 @RestController
 @RequestMapping("/exercise")
 public class ExerciseController {
@@ -16,32 +20,38 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseService exerciseService;
 	
-	/*
-	 * Retrieves the exercise name given the exercise ID 
+	/**
+	 * Retrieves an exercise given the exerciseId
+	 * @param exerciseId
+	 * @return
 	 */
 	@RequestMapping("/{exerciseId}")
 	public Exercise getExercise(@PathVariable int exerciseId) {
 		return exerciseService.getExercise(exerciseId);
 	}
 	
-	/*
-	 * Returns true if the exercise name is already in the table
+	/**
+	 * Returns true of exerciseName is already in table
+	 * @param exerciseName
+	 * @return
 	 */
 	@RequestMapping("/check/{exerciseName}")
 	public boolean existsByName(@PathVariable String exerciseName) {
 		return exerciseService.existsByName(exerciseName);
 	}
 	
-	/*
-	 * Retrieves all the exercises we have available
+	/**
+	 * Retrieves all avaiable exercises
+	 * @return
 	 */
 	@RequestMapping("/all")
 	public List<Exercise> getAllExercises() {
 		return exerciseService.getAllExercises();
 	}
 	
-	/*
+	/**
 	 * Adds an exercise
+	 * @param exercise
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/add")
 	public void addExercise(@RequestBody Exercise exercise) {

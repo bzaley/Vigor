@@ -10,15 +10,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.userPlan.userPlan;
 
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integer> {
 
-	
+	/**
+	 * 
+	 * @param userId
+	 * @param planName
+	 * @param day
+	 * @return
+	 */
 	public List<trainerPlan> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
 	
-	
+	/**
+	 * 
+	 * @param userId
+	 * @param planName
+	 * @return
+	 */
 	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
 	
+	/**
+	 * Add trainer exercise to table.
+	 * @param trainerId
+	 * @param userId
+	 * @param planName
+	 * @param day
+	 * @param exerciseId
+	 * @param sets
+	 * @param reps
+	 */
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO trainer_plan VALUES (entry, :day, :exerciseId, :planName, :reps, :sets, :trainerId, :userId)", nativeQuery = true)
