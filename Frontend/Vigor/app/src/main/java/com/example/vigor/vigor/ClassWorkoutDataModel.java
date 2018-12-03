@@ -1,5 +1,11 @@
 package com.example.vigor.vigor;
 
+/**
+ * Data object made to handle a generic model for all class workouts.
+ * Feature required, appropriate getters.
+ *
+ * @author Kirkland Keith
+ */
 public class ClassWorkoutDataModel {
     int classID;
     String classNotes;

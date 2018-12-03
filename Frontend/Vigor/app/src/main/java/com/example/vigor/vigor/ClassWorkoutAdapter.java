@@ -11,16 +11,31 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter made to facilitate linking of WorkoutDataModels with the ListView used in
+ * ClassHistoryActivity
+ *
+ * @author Kirkland Keith
+ */
 public class ClassWorkoutAdapter extends ArrayAdapter<ClassWorkoutDataModel> implements View.OnClickListener {
 
     private ArrayList<ClassWorkoutDataModel> dataSet;
     Context mctx;
 
+    /**
+     * Creates the ViewHolder for the Adapter
+     */
     private static class ViewHolder {
         TextView classWorkout;
         TextView workoutDate;
     }
 
+    /**
+     * Populates data to be used in the ListView
+     *
+     * @param data ClassWorkoutDataModel containing the appropriate information for the listed items
+     * @param context Context of the activity for which the Adapter will be used
+     */
     public ClassWorkoutAdapter(ArrayList<ClassWorkoutDataModel> data, Context context) {
         super(context, R.layout.workout_row_item, data);
         this.dataSet = data;

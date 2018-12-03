@@ -21,6 +21,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Activity page to list the user's previous class workouts. When a list item is clicked, more
+ * detailed information on the activity appears in an AlertDialog.
+ *
+ * @author Kirkland Keith
+ */
 public class ClassHistoryActivity extends Activity {
     private String TAG = ClassViewActivity.class.getSimpleName();
     private ListView classHistoryList;

@@ -19,6 +19,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Activity for generic implementation of account registration
+ *
+ * @author Kirkland Keith
+ */
 public class RegisterActivity extends Activity {
     private String TAG = RegisterActivity.class.getSimpleName();
     private String registerURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/signup";
@@ -144,6 +149,17 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    /**
+     * Method to create the JSON to be sent as a Google user is first registered for the app.
+     *
+     * @param firstName User-to-be's first name
+     * @param lastName User-to-be's last name
+     * @param email User-to-be's email address
+     * @param password User-to-be's preferred password for login purposes
+     * @param role User-to-be's application role
+     * @return JSON object to send registration information to server
+     * @throws JSONException
+     */
     public JSONObject makeRegisterJsonObject(String firstName, String lastName, String email,
                                              String password, String role) throws JSONException {
         JSONObject returnObject = new JSONObject();

@@ -19,6 +19,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Activity view to list all classes attended by the logged in user. Clicking on a list item will
+ * send the user to the class's profile page.
+ *
+ * @author Kirkland Keith
+ */
 public class ClassViewActivity extends Activity {
     private String TAG = ClassViewActivity.class.getSimpleName();
     private String jsonURL;
