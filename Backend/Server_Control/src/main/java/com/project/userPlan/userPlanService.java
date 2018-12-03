@@ -8,7 +8,11 @@ import com.project.Exercise.Exercise;
 import com.project.plan.*;
 import com.project.user.*;
 import com.project.utilities.*;
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 @Service
 public class userPlanService {
 
@@ -28,6 +32,10 @@ public class userPlanService {
 	private ExerciseRepository exerciseRepo;
 	
 	
+	/**
+	 * Adds every element in a users plan to the userPlan table.
+	 * @param plan
+	 */
 	public void addUserPlan(List<userAdd> plan) {
 		
 		// Inserts every element into userPlan table
@@ -57,7 +65,11 @@ public class userPlanService {
 		
 		
 	}
-	
+	/**
+	 * remove a userPla given the userId and planName.
+	 * @param userId
+	 * @param planName
+	 */
 	public void removeUserPlan(int userId, String planName) {
 		
 		plan plan = planRepo.findByUserIdAndPlanName(userId, planName);

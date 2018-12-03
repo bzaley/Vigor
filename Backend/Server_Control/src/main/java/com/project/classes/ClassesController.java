@@ -16,17 +16,31 @@ public class ClassesController {
 
 	@Autowired
 	private ClassesService classesService;
-	
+	/**
+	 * 
+	 * @param newClass
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/newclass") //Creates a new class and returns join code
 	public ResponseEntity<?> newClass(@RequestBody Classes newClass){
 		classesService.addNewClass(newClass);
 		sendClassId neat = new sendClassId(newClass.getClassId());
 		return ResponseEntity.ok().body(neat);
 	}
+	/**
+	 * 
+	 * @param instructorId
+	 * @return
+	 */
 	@RequestMapping("/getallinstructorclasses/{instructorId}")
 	public ArrayList<Classes> getClassesWithInstructorId(@PathVariable int instructorId){
 		return classesService.findAllByInstructorId(instructorId);
 	}
+	/**
+	 * 
+	 * @param classId
+	 * @return
+	 */
 	@RequestMapping("/editclass/{classId}")
 	public Classes pullForEdit(@PathVariable int classId) {
 		return classesService.getClassByClassId(classId);
@@ -35,6 +49,12 @@ public class ClassesController {
 	public void submitEdit(@RequestBody Classes editedClass){
 		classesService.submitEdit(editedClass);
 	}
+	/**
+	 * 
+	 * @param lockingIn
+	 * @param classId
+	 * @param lock
+	 */
 	@RequestMapping (method = RequestMethod.POST, value = "/padlock/{classId}/{lock}")
 	public void lockUnlock(@RequestBody LockInClass lockingIn, @PathVariable int classId, @PathVariable boolean lock) {
 		if(lock) {
@@ -43,6 +63,10 @@ public class ClassesController {
 			classesService.unlockClass(lock, classId);
 		}
 	}
+	/**
+	 * 
+	 * @param classId
+	 */
 	@RequestMapping("/deleteclass/{classId}")
 	public void deleteClass(@PathVariable int classId) {
 		classesService.deleteClass(classId);

@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 @RestController
 @RequestMapping("/userPlan")
 public class userPlanController {
@@ -16,12 +20,19 @@ public class userPlanController {
 	@Autowired
 	private userPlanService userPlanService;
 	
-	
+	/**
+	 * 
+	 * @param plan
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/add")
 	public void addUserPlan(@RequestBody List<userAdd> plan) {
 		userPlanService.addUserPlan(plan);
 	}
-	
+	/**
+	 * 
+	 * @param userId
+	 * @param planName
+	 */
 	@RequestMapping("/remove/{userId}/{planName}")
 	public void removeUserPlan(@PathVariable int userId, @PathVariable String planName) {
 		userPlanService.removeUserPlan(userId, planName);

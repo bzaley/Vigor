@@ -10,7 +10,11 @@ import com.project.plan.*;
 import com.project.user.*;
 import com.project.userPlan.userPlan;
 import com.project.utilities.*;
-
+/**
+ *
+ * @author Ryan Ingram
+ *
+ */
 @Service
 public class trainerPlanService {
 
@@ -29,7 +33,12 @@ public class trainerPlanService {
 	
 	@Autowired
 	private ExerciseRepository exerciseRepo;
-	
+
+
+	/**
+	 * Add plan to trainer table.
+	 * @param plan
+	 */
 	public void addTrainerPlan(List<trainerAdd> plan) {
 			
 			// Inserts every element into userPlan table
@@ -37,10 +46,10 @@ public class trainerPlanService {
 			
 			// Loops through all exercises in the plan given
 			for (trainerAdd tmp : plan) {
-				
+
 				Exercise exercise = exerciseRepo.findByName(tmp.getExercise());
 				int exid = exercise.getExerciseId();
-				
+
 				User user = userRepo.findByUserEmail(tmp.getUserEmail());
 				int uid = user.getuserId();
 				
@@ -59,7 +68,11 @@ public class trainerPlanService {
 			planRepo.addPlan(userRepo.findByUserEmail(plan.get(0).getUserEmail()).getuserId(), plan.get(0).getPlanName(), 1, plan.get(plan.size()-1).getDay(), false, "trainer");
 			
 	}
-	
+	/**
+	 * removes a trainer plan given a userId and planName.
+	 * @param userId
+	 * @param planName
+	 */
 	public void removeTrainerPlan(int userId, String planName) {
 			
 			plan plan = planRepo.findByUserIdAndPlanName(userId, planName);
