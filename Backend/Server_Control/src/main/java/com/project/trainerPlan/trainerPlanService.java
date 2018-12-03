@@ -65,7 +65,7 @@ public class trainerPlanService {
 			
 			// Add the plan to the plan table
 			// Plan starts with current day zero and max equal to the last day given and active equal to false and assigned by trainer
-			planRepo.addPlan(userRepo.findByUserEmail(plan.get(0).getUserEmail()).getuserId(), plan.get(0).getPlanName(), 1, plan.get(plan.size()-1).getDay(), false, "trainer");
+			planService.addPlan(new plan(userRepo.findByUserEmail(plan.get(0).getUserEmail()).getuserId(), plan.get(0).getPlanName(), 1, plan.get(plan.size()-1).getDay(), false, "trainer"));
 			
 	}
 	/**
