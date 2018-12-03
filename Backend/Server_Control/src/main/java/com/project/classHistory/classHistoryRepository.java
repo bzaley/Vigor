@@ -10,4 +10,5 @@ public interface classHistoryRepository extends CrudRepository<classHistory, Int
 	
 	public List<classHistory> findAllByUserIdAndDate(int userId, String date);
 	
+	public void deleteByUserId(int userId);
 }

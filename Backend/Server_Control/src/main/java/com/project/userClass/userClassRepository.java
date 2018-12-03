@@ -11,4 +11,5 @@ public interface userClassRepository extends CrudRepository<userClass, Integer> 
 	
 	public List<userClass> findAllByClassId(int classId);
 	
+	public void deleteByUserId(int userId);
 }

@@ -45,6 +45,11 @@ public class UserController {
 		return ResponseEntity.ok().body(userService.login(logon.getEmail(), logon.getPassword())) ;
 	}
 	
+	@RequestMapping("/delete/{userId}")
+	public void deleteUser(@PathVariable int userId) {
+		
+	}
+	
 	
 }
 

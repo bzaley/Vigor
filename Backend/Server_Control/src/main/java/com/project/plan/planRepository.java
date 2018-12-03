@@ -15,6 +15,8 @@ public interface planRepository extends CrudRepository<plan, Integer> {
 	
 	public List<plan> findAllByUserId(int userId);
 	
+	public void deleteByUserId(int userId);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE plan p SET p.current_day = :newDay WHERE(p.user_id = :userID AND p.plan_name = :planName)", nativeQuery = true)

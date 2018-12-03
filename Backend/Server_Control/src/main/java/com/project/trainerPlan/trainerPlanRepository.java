@@ -19,6 +19,8 @@ public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integ
 	
 	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
 	
+	public void deleteByUserId(int userId);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO trainer_plan VALUES (entry, :day, :exerciseId, :planName, :reps, :sets, :trainerId, :userId)", nativeQuery = true)
