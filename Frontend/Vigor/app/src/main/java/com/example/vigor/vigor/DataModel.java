@@ -3,45 +3,45 @@ package com.example.vigor.vigor;
 public class DataModel {
 
     //The aspects of an activity, will be reworked after demo
-    String Activity;
-    String Sets;
-    String Reps;
-    String AssignedBy;
-    String PlanName;
-    String TrainerId;
+    String userEmail;
+    String planName;
+    String exercise;
+    String sets;
+    String reps;
 
     //Constructor for object
-    public DataModel(String Activity, String Sets, String Reps, String AssignedBy, String PlanName, String TrainerId) {
-        this.Activity = Activity;
-        this.Sets = Sets;
-        this.Reps = Reps;
-        this.AssignedBy = AssignedBy;
-        this.PlanName = PlanName;
-        this.TrainerId = TrainerId;
+    //    String userEmail
+    //    String planName
+    //    String exercise
+    //    int sets // Might be changed depending on what user accomplished
+    //    int reps
+    public DataModel(String userEmail, String planName, String exercise, String sets, String reps) {
+        this.userEmail = userEmail;
+        this.planName = planName;
+        this.exercise = exercise;
+        this.sets = sets;
+        this.reps = reps;
     }
 
     //return methods for different aspects
-    public String getActivity() {
-        return Activity;
+    public String getuserEmail() {
+        return userEmail;
     }
 
-    public String getSets() {
-        return Sets;
+    public String getplanName() {
+        return planName;
     }
 
-    public String getReps() {
-        return Reps;
+    public String getexercise() {
+        return exercise;
     }
 
-    public String getAssignedBy() {
-        return AssignedBy;
+    public String getsets() {
+        return sets;
     }
 
-    public String getPlanName() {
-        return PlanName;
+    public String getreps() {
+        return reps;
     }
 
-    public String getTrainerId() {
-        return TrainerId;
-    }
 }

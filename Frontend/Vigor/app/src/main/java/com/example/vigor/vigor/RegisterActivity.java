@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,9 +27,9 @@ public class RegisterActivity extends Activity {
     private EditText registerEmail;
     private EditText registerPass;
     private EditText confirmPass;
-    private EditText registerRole;
     private Button registerButton;
     private Button switchToLoginButton;
+    private Spinner dropDownSpinner;
     private SessionController session;
 
     // String fields to be sent to server
@@ -37,6 +39,7 @@ public class RegisterActivity extends Activity {
     private String strRegPass;
     private String strConfirmPass;
     private String strRegRole;
+    private String[] dropDownList = {"trainee", "personaltrainer", "instructor"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,12 @@ public class RegisterActivity extends Activity {
         confirmPass = findViewById(R.id.confirmET);
         registerButton = findViewById(R.id.regButton);
         switchToLoginButton = findViewById(R.id.logButton);
-        registerRole = findViewById(R.id.roleET);
+        dropDownSpinner = findViewById(R.id.roleSpinner);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, dropDownList);
+
+        dropDownSpinner.setAdapter(adapter);
 
         session = new SessionController(getApplicationContext());
 
@@ -63,7 +71,7 @@ public class RegisterActivity extends Activity {
                 strRegEmail = registerEmail.getText().toString();
                 strRegPass = registerPass.getText().toString();
                 strConfirmPass = confirmPass.getText().toString();
-                strRegRole = registerRole.getText().toString();
+                strRegRole = dropDownSpinner.getSelectedItem().toString();
                 JSONObject registerInfo = null;
 
                 if (!strRegFirstName.isEmpty() && !strRegLastName.isEmpty()
