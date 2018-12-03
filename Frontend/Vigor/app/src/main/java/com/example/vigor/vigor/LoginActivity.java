@@ -30,6 +30,11 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+/**
+ * Activity for generic implementation of Login Services (including Google Sign-In options)
+ *
+ * @author  Kirkland Keith
+ */
 public class LoginActivity extends Activity {
     private String TAG = LoginActivity.class.getSimpleName();
     private String loginURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/login";
@@ -167,6 +172,17 @@ public class LoginActivity extends Activity {
         }
     }
 
+    /**
+     * Method to handle Google Login. The command sends a JSON to the server in order to determine
+     * if an Google account is already linked to the server. If the user is already linked, they are
+     * logged in. Otherwise, requestForUserRole is called.
+     *
+     * @param email email supplied by Google account
+     * @param lastName The last name associated with the Google account
+     * @param firstName The first name assocated with the Google account
+     * @param googleID The Google ID associated with the Google account
+     * @throws JSONException
+     */
     public void checkGoogleLogIn(final String email, final String lastName, final String firstName, final String googleID) throws JSONException {
         String jsonCheckURL = loginURL;
         JsonObjectRequest jsonGoogleCheckRequest = new JsonObjectRequest(Request.Method.POST,
@@ -203,6 +219,16 @@ public class LoginActivity extends Activity {
         VolleySingleton.getInstance().addToRequestQueue(jsonGoogleCheckRequest, "google_reg_req");
     }
 
+    /**
+     * This method is called after a Google account is used to log in, but has not yet been
+     * associated with the server. The method creates and AlertDialog for the user to choose role.
+     * This info is then sent to the server to register the user.
+     *
+     * @param email supplied by Google account
+     * @param lastName The last name associated with the Google account
+     * @param firstName The first name assocated with the Google account
+     * @param googleID The Google ID associated with the Google account
+     */
     public void requestForUserRole(final String email, final String lastName, final String firstName,
                                    final String googleID) {
         AlertDialog.Builder alert = new AlertDialog
@@ -254,6 +280,17 @@ public class LoginActivity extends Activity {
         alert.create().show();
     }
 
+    /**
+     * Method to create the JSON to be sent as a Google user is first registered for the app.
+     *
+     * @param firstName User-to-be's first name
+     * @param lastName User-to-be's last name
+     * @param email User-to-be's email address
+     * @param password User-to-be's Google ID, acting as their account's password
+     * @param role User-to-be's application role
+     * @return JSON object to send registration information to server
+     * @throws JSONException
+     */
     public JSONObject makeRegisterJsonObject(String firstName, String lastName, String email,
                                              String password, String role) throws JSONException {
         JSONObject returnObject = new JSONObject();
@@ -269,6 +306,13 @@ public class LoginActivity extends Activity {
         return returnObject;
     }
 
+    /**
+     *
+     * @param email User's email required for login
+     * @param password User's password required for login
+     * @return JSON object to send login information to server
+     * @throws JSONException
+     */
     public JSONObject makeLoginJsonObject(String email, String password) throws JSONException {
         JSONObject objToSend = new JSONObject();
         try {

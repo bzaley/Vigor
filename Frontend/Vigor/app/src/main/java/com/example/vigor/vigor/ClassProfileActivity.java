@@ -18,6 +18,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Activity to showcase a class's general information to an attending user. Also allows for user to
+ * save the class's latest associated workout to their workout history.
+ *
+ * @author Kirkand Keith
+ */
 public class ClassProfileActivity extends Activity {
     private String TAG = ClassProfileActivity.class.getSimpleName();
 
@@ -158,6 +164,17 @@ public class ClassProfileActivity extends Activity {
             }
         });
     }
+
+    /**
+     * Creates a JSON that represents the class workout
+     *
+     * @param userId ID associated with the user who is saving the workout to their history
+     * @param classId ID associated with the class hosting the workout
+     * @param date The date the workout was added to a user's history
+     * @param billBoard The actual workout to be saved
+     * @param notes Any notes or comments the user would make on the workout
+     * @return JSON Object to be sent to the server for history addition
+     */
 
     public JSONObject makeBillboardJson (int userId, int classId, String date, String billBoard,
                                    String notes) {
