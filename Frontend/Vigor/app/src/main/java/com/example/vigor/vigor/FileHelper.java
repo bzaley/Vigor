@@ -10,10 +10,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * @author Adrian H
+ * This is the class for making permanent files for writing
+ * string arraylists to.
+ */
 public class FileHelper {
 
     public static final String FILENAME = "Listinfo.dat";
 
+    /**
+     * Write the data to a permanent file
+     * @param items
+     * @param context
+     */
     public static void writeData(ArrayList<String> items, Context context){
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -27,6 +37,11 @@ public class FileHelper {
         }
     }
 
+    /**
+     * Read the data from the permanent file
+     * @param context
+     * @return
+     */
     public static ArrayList<String> readData(Context context){
         ArrayList<String> itemsList = null;
         try {
@@ -43,6 +58,4 @@ public class FileHelper {
         }
         return itemsList;
     }
-
-
 }

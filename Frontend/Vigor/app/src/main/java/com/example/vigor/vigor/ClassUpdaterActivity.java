@@ -21,8 +21,10 @@ import org.json.JSONObject;
 
 /**
  * @author Adrian H
- * This activity allows a user of typw instructor to open and update the
- * information for a classtehy manage
+ * This activity allows a user of type instructor to open and update the
+ * information for a class they manage. They can change the description
+ * and status depending on if the class is locked or unlocked at the time
+ * which they can also change woht the lock/unlock button.
  */
 public class ClassUpdaterActivity extends AppCompatActivity {
 
@@ -39,12 +41,14 @@ public class ClassUpdaterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_updater);
 
+        //Initialize XML variables
         ClassName = (TextView) findViewById(R.id.ClassUpdaterTvClassName);
         ClassID = (TextView) findViewById(R.id.ClassUpdaterTvClassID);
         Billboard = (EditText) findViewById(R.id.ClassUpdaterEtBillboard);
         Status = (EditText) findViewById(R.id.ClassUpdaterEtStatus);
         Lock = (Button) findViewById(R.id.ClassUpdaterBtnLock);
 
+        //Receive data from previous activity and update XML variables accordingly
         Bundle receivedData = getIntent().getExtras();
         if (receivedData != null) {
             ClassName.setText(receivedData.getString("classname"));
@@ -67,6 +71,7 @@ public class ClassUpdaterActivity extends AppCompatActivity {
             }
         }
 
+        //Listen for the user to change the locking status and send the update to the server.
         Lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,15 +97,11 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, response.toString());
-//                            Toast.makeText(getApplicationContext(), "Correct " + response.toString(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
-//                            Toast.makeText(getApplicationContext(),error.toString(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
@@ -128,15 +129,11 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, response.toString());
-//                            Toast.makeText(getApplicationContext(),response.toString(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
-//                            Toast.makeText(getApplicationContext(),error.toString(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
