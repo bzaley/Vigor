@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.websocket.WebSocketServer;
-
+/**
+ * 
+ * @author Ben Zaley
+ *
+ */
 @RestController
 @RequestMapping("/steps")
 public class userStepsController {
@@ -22,18 +26,31 @@ public class userStepsController {
 
 	@Autowired
 	private WebSocketServer socket;
-
+	/**
+	 * 
+	 * @param userId
+	 * @param date
+	 * @return
+	 */
 	@RequestMapping("/{userId}/{date}")
 	public userSteps getStepsByDate(@PathVariable int userId, @PathVariable String date) {
 		return stepsService.getToday(userId, date);
 	}
-
+	/**
+	 * 
+	 * @param user
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/add")
 	public void addStepsToUser(@RequestBody userSteps user) {
 
 		stepsService.addNewEntry(user);
 
 	}
+	/**
+	 * 
+	 * @param user
+	 * @throws IOException
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/update")
 	public void updateStepsToUser(@RequestBody userSteps user) throws IOException{
 		String date = user.getDate();
@@ -50,17 +67,27 @@ public class userStepsController {
 		}
 
 	}
-
+	/**
+	 * 
+	 * @param userId
+	 * @param numDays
+	 * @return
+	 */
 	@RequestMapping("/multiple/{userId}/{numDays}")
 	public ArrayList<userSteps> getMultipleDates(@PathVariable int userId, @PathVariable int numDays) {
 		return stepsService.getMultipleDays(userId, numDays);
 	}
-
+	/**
+	 * 
+	 * @param userId
+	 * @param date
+	 * @param stepGoal
+	 */
 	@RequestMapping("/updateStepGoal/{userId}/{date}/{stepGoal}")
 	public void updateStepGoal(@PathVariable int userId, @PathVariable String date, @PathVariable int stepGoal) {
 		stepsService.updateStepGoal(userId, date, stepGoal);
 		stepsService.updateIsGoalMet(userId, date, false);
-		
+
 	}
 
 

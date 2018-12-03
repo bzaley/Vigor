@@ -33,7 +33,11 @@ public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integ
 	 * @return
 	 */
 	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
-    @Transactional
+   /**
+    * 
+    * @param userId
+    */
+	@Transactional
     public void deleteByUserId(int userId);
 	/**
 	 * Add trainer exercise to table.

@@ -29,6 +29,10 @@ public interface userPlanRepository  extends CrudRepository<userPlan, Integer> {
 	 * @return
 	 */
 	public List<userPlan> findAllByUserIdAndPlanName(int userId, String planName);
+	/**
+	 * 
+	 * @param userId
+	 */
     @Transactional
     public void deleteByUserId(int userId);
 	/**

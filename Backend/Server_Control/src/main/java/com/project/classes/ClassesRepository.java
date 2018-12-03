@@ -8,7 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * 
+ * @author Ben Zaley
+ *
+ */
 public interface ClassesRepository extends JpaRepository<Classes, Integer>, CrudRepository<Classes, Integer> {
 	/**
 	 *
@@ -22,6 +26,11 @@ public interface ClassesRepository extends JpaRepository<Classes, Integer>, Crud
 	 * @return
 	 */
 	public Classes findByClassId(int classId);
+	/**
+	 * 
+	 * @param classId
+	 * @return
+	 */
     public boolean existsByClassId(int classId);
 	/**
 	 *
