@@ -6,6 +6,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.vigor.vigor.utils.LruBitmapCache;
 
+/**
+ * Singleton to sustain volley operations throughout app
+ *
+ * @author Kirkland Keith
+ */
 public class VolleySingleton extends android.app.Application {
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
@@ -18,11 +23,6 @@ public class VolleySingleton extends android.app.Application {
         super.onCreate();
         mInstance = this;
     }
-
-    // private VolleySingleton(Context context) {
-    //     mCtx = context;
-    //     mRequestQueue = getRequestQueue();
-    //}
 
     public static synchronized VolleySingleton getInstance() {
         return mInstance;

@@ -1,6 +1,8 @@
 package com.example.vigor.vigor;
 
-// Meant to filter out values that are approximately considered to be steps
+/**
+ * Class meant to filter out values that are approximately considered to be steps
+ */
 public class sensorFilter {
 
     private sensorFilter() {}

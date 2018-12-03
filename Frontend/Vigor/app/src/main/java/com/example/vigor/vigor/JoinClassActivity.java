@@ -19,6 +19,12 @@ import org.json.JSONObject;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
+/**
+ * Activity to allow user's to join new classes. Users are notified if the add was successful or
+ * not.
+ *
+ * @author Kirkland Keith
+ */
 public class JoinClassActivity extends Activity {
     private String TAG = JoinClassActivity.class.getSimpleName();
     private Button checkClass;

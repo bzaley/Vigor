@@ -34,6 +34,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 
+/**
+ * Activity to showcase user's step history, start/stop counting steps, and set step goals.
+ *
+ * @author Kirkland Keith
+ */
 public class StepActivity extends AppCompatActivity implements SensorEventListener,
         genericStepDetection {
     private stepMonitor stepMonitor;
@@ -310,6 +315,12 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Method to process what needs to be done when a step has been taken. If the steps have
+     * increased by 5 or more, the server is updated.
+     *
+     * @param timeNs
+     */
     @Override
     public void step(long timeNs) {
         numSteps++;
@@ -338,6 +349,11 @@ public class StepActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Create Android notification when called.
+     *
+     * @param message String to be shown as part of Android notification
+     */
     public void sendNotification(String message) {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

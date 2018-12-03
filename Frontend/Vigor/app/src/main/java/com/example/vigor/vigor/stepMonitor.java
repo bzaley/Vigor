@@ -1,5 +1,11 @@
 package com.example.vigor.vigor;
 
+/**
+ * Class meant to determine whether movement has been made or not. Utilizes sensorFilter to
+ * properly differentiate between steps and other movements.
+ *
+ * @author Kirkland Keith
+ */
 public class stepMonitor {
 
     private static final int ACCEL_RING_SIZE = 50;
