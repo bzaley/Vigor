@@ -30,8 +30,6 @@ public class trainerPlanService {
 	@Autowired
 	private ExerciseRepository exerciseRepo;
 	
-	private Converter convert;
-	
 	public void addTrainerPlan(List<trainerAdd> plan) {
 			
 			// Inserts every element into userPlan table
@@ -40,11 +38,9 @@ public class trainerPlanService {
 			// Loops through all exercises in the plan given
 			for (trainerAdd tmp : plan) {
 				
-				//int exid = convert.convertExerciseToId(tmp.getExercise());
 				Exercise exercise = exerciseRepo.findByName(tmp.getExercise());
 				int exid = exercise.getExerciseId();
 				
-				//int uid = convert.convertEmailToId(tmp.getuserEmail());
 				User user = userRepo.findByUserEmail(tmp.getUserEmail());
 				int uid = user.getuserId();
 				

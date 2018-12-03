@@ -15,6 +15,8 @@ public interface dayExerciseRepository extends JpaRepository<dayExercise, Intege
 	
 	public List<dayExercise> findAllByUserIdAndPlanName(int userId, String planName);
 	
+	public void deleteByUserId(int userId);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE day_exercise de SET de.sets = :sets, de.reps = :reps, de.complete = :complete WHERE(de.user_id = :userId AND de.plan_name = :planName AND de.exercise_id = :exerciseId)", nativeQuery = true)

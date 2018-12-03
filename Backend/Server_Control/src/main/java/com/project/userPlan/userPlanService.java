@@ -27,7 +27,6 @@ public class userPlanService {
 	@Autowired
 	private ExerciseRepository exerciseRepo;
 	
-	private Converter convert;
 	
 	public void addUserPlan(List<userAdd> plan) {
 		
@@ -37,11 +36,9 @@ public class userPlanService {
 		// Loops through all exercises in the plan given
 		for (userAdd tmp : plan) {
 			
- 			//int exid = convert.convertExerciseToId(tmp.getExercise());
 			Exercise exercise = exerciseRepo.findByName(tmp.getExercise());
 			int exid = exercise.getExerciseId();
 			
-			//int uid = convert.convertEmailToId(tmp.getuserEmail());
 			User user = userRepo.findByUserEmail(tmp.getUserEmail());
 			int uid = user.getuserId();
 			

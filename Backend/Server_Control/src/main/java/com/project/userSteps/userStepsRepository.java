@@ -19,7 +19,7 @@ public interface userStepsRepository extends JpaRepository<userSteps, Integer>, 
 	
 	public boolean existsByUserIdAndDate(int userId, String date);
 	
-	
+	public void deleteByUserId(int userId);
 	
 	
 	
