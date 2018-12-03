@@ -23,5 +23,6 @@ public interface historianRepository extends JpaRepository<historian, Integer>, 
 
 	public List<historian> findAllByUserIdAndSaveDate(int userId, String saveDate);
 	
+	@Transactional
 	public void deleteByUserId(int userId);
 }

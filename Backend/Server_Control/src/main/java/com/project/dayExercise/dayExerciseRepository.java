@@ -15,6 +15,7 @@ public interface dayExerciseRepository extends JpaRepository<dayExercise, Intege
 	
 	public List<dayExercise> findAllByUserIdAndPlanName(int userId, String planName);
 	
+	@Transactional
 	public void deleteByUserId(int userId);
 	
 	@Modifying

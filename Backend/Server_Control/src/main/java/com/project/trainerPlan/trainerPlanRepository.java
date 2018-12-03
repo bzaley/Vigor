@@ -19,6 +19,7 @@ public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integ
 	
 	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
 	
+	@Transactional
 	public void deleteByUserId(int userId);
 	
 	@Modifying
