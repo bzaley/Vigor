@@ -15,6 +15,7 @@ public interface planRepository extends CrudRepository<plan, Integer> {
 	
 	public List<plan> findAllByUserId(int userId);
 	
+	@Transactional
 	public void deleteByUserId(int userId);
 	
 	@Modifying
