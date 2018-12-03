@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This Activity allows users of the "instructor" type to build
  * and save classes they run to our database. Once done it
  * displays the class ID for the newly created class and then returns
@@ -39,6 +39,10 @@ public class ClassBuilderActivity extends AppCompatActivity {
     private String TAG = ClassBuilderActivity.class.getSimpleName();
     private SessionController session;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

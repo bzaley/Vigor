@@ -11,7 +11,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+/**
+ * @author Adrian Hamill
+ * This is a Custom Adapter built for the ClassTableActivity.java. It builds and displays
+ * class items based on the class_row_item.xml, it will be called to create and update
+ * the displays for those items.
+ */
 public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements View.OnClickListener {
 
     private ArrayList<ClassDataModel> dataSet;
@@ -24,6 +29,11 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
         TextView txtClassDescription;
     }
 
+    /**
+     * The constructor for this adapter
+     * @param data
+     * @param context
+     */
     public CustomClassAdapter(ArrayList<ClassDataModel> data, Context context) {
         super(context, R.layout.class_row_item, data);
         this.dataSet = data;
@@ -39,6 +49,13 @@ public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements 
 
     private int lastPosition = -1;
 
+    /**
+     * This is the method that actually updates the view holder with new data when called
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

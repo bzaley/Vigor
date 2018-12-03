@@ -21,6 +21,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian Hamill
+ * This activity allows personal trainers to add single activities to
+ * their managed user.
+ */
 public class TrainerAddSinglesActivity extends AppCompatActivity {
 
     static ArrayList<DataModel> dataModels;
@@ -44,19 +49,20 @@ public class TrainerAddSinglesActivity extends AppCompatActivity {
 
         session = new SessionController(getApplicationContext());
 
+        //Initialize XML variables
         activity = (EditText) findViewById(R.id.TrainerAddSingleEtNewItem);
         sets = (EditText) findViewById(R.id.TrainerAddSingleEtNewSets);
         reps = (EditText) findViewById(R.id.TrainerAddSingleEtNewReps);
-
         addToPlan = (Button) findViewById(R.id.TrainerAddSingleBtnAddItem);
         saveItems = (Button) findViewById(R.id.TrainerAddSingleBtnSaveitems);
-
-        dataModels = new ArrayList<>();
-
         listView = (ListView) findViewById(R.id.list);
+
+        //Initialize necessary variables for hte list
+        dataModels = new ArrayList<>();
         adapter = new CustomAdapter(dataModels, getApplicationContext());
         listView.setAdapter(adapter);
 
+        //Listen for the trainer to add an exercise to the plan
         addToPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +102,7 @@ public class TrainerAddSinglesActivity extends AppCompatActivity {
             }
         });
 
+        //Listen for the trainer to save all the singe activities they've made
         saveItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -11,7 +11,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+/**
+ * @author Adrian Hamill
+ * This is the custom adapter made for the listview in ToDoListActivity.java.
+ * This creates row items based on the row_item.xml, and will be called to
+ * when different elements are changed.
+ */
 public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnClickListener {
 
     private ArrayList<DataModel> dataSet;
@@ -24,12 +29,21 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         TextView txtReps;
     }
 
+    /**
+     * The Constructor for this adapter
+     * @param data
+     * @param context
+     */
     public CustomAdapter(ArrayList<DataModel> data, Context context) {
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.mContext = context;
     }
 
+    /**
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         int position = (Integer) v.getTag();
@@ -39,6 +53,13 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
 
     private int lastPosition = -1;
 
+    /**
+     * This is the method that actually updates the view holder with new data when called
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

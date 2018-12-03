@@ -14,6 +14,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian Hamill
+ * This activity allows a personal trainer to select which
+ * \particular users they are managing
+ */
 public class UserTableActivity extends AppCompatActivity {
     private EditText userEmail;
     private Button enter;

@@ -29,7 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
+/**
+ * @author Adrian Hamill
+ * This activity allows the user to request a graphical representatiuon
+ * of the step data they've saved withihn the last week.
+ */
 public class Graphing extends AppCompatActivity {
     private int i = 0;
     private int data[] = new int[7];
@@ -45,7 +49,10 @@ public class Graphing extends AppCompatActivity {
     private DateController dateController;
     private Date currentDate;
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +122,11 @@ public class Graphing extends AppCompatActivity {
         });
     }
 
+    /**
+     * Graph the given data
+     * @param days
+     * @param dates
+     */
     public void Graph(int days[], int dates[]) {
         double resultNum = 0, temp = 0;
 
@@ -159,24 +171,10 @@ public class Graphing extends AppCompatActivity {
         view1.setMinY(0);
         weekRev.setSpacing(5);
 
-
-//        // set date label formatter
-//        revGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(Graphing.this));
-        revGraph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
         revGraph.getGridLabelRenderer().setNumVerticalLabels(5);
-//
-//// set manual x bounds to have nice steps
         revGraph.getViewport().setMinX(0.5);
         revGraph.getViewport().setMaxX(7.5);
 
         revGraph.getViewport().setXAxisBoundsManual(true);
-//
-//// as we use dates as labels, the human rounding to nice readable numbers
-//// is not necessary
-//        revGraph.getGridLabelRenderer().setHumanRounding(false);
     }
-
-//    public void set(int index, int element){
-//
-//    }
 }
