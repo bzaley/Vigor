@@ -41,39 +41,47 @@ public class JoinClassActivity extends Activity {
             @Override
             public void onClick(View v) {
                 strClassCode = classIDCode.getText().toString();
-                String jsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/";
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
-                        jsonURL, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            boolean error = response.getBoolean("error");
-                            if (!error) {
-                                Toast.makeText(getApplicationContext(), "Class added " +
-                                        "successfully! Bringing you back to class list.",
-                                        Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(),
-                                        ClassViewActivity.class));
-                                finish();
-                            } else {
-                                String errorReceived = response.getString("errorMsg");
-                                Toast.makeText(getApplicationContext(), errorReceived,
-                                        Toast.LENGTH_LONG).show();
+                if (!strClassCode.isEmpty() || !strClassCode.equals("")) {
+                    String jsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/userClass/assign/"
+                            + session.returnUserID() + "/" + strClassCode;
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                            jsonURL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                boolean error = response.getBoolean("error");
+                                if (!error) {
+                                    Toast.makeText(getApplicationContext(), "Class added " +
+                                                    "successfully! Bringing you back to class " +
+                                                    "list.",
+                                            Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(getApplicationContext(),
+                                            ClassViewActivity.class));
+                                    finish();
+                                } else {
+                                    String errorReceived = response.getString("errorMsg. " +
+                                            "Please enter a valid class code!");
+                                    Toast.makeText(getApplicationContext(), errorReceived,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d( TAG, "Error:" + error.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error: " +
-                                error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_join_req");
-
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d( TAG, "Error:" + error.getMessage());
+                            Toast.makeText(getApplicationContext(), "Error: " +
+                                    error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonRequest,
+                            "json_join_req");
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please enter a class code!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

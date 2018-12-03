@@ -65,7 +65,8 @@ public class ClassWorkoutAdapter extends ArrayAdapter<ClassWorkoutDataModel> imp
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.classWorkout.setText(workoutDataModel.getClassDescription());
+        viewHolder.classWorkout.setText(workoutDataModel.getClassBillBoard());
+        viewHolder.workoutDate.setText(workoutDataModel.getDate());
         // Return the completed view to render on screen
         return convertView;
     }

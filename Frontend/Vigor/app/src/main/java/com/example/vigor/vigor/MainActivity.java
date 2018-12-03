@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         graphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ClassTableActivity.class));
+                startActivity(new Intent(MainActivity.this, ClassViewActivity.class));
             }
         });
 

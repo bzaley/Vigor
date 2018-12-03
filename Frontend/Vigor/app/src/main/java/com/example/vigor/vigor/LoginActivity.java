@@ -211,7 +211,7 @@ public class LoginActivity extends Activity {
         final String[] items = {"trainee", "personaltrainer", "instructor"};
         alert.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
                         JsonObjectRequest jsonRequest = null;
                         try {
                             jsonRequest = new JsonObjectRequest(Request.Method.POST,
@@ -224,12 +224,10 @@ public class LoginActivity extends Activity {
                                         boolean error = response.getBoolean("error");
                                         if (!error) {
                                             Toast.makeText(getApplicationContext(), "Role " +
-                                                            "has been selected, logging in!",
+                                                            "has been selected. Please sign in " +
+                                                            "with Google again!",
                                                     Toast.LENGTH_LONG).show();
-
-                                            startActivity(new Intent(LoginActivity.this,
-                                                    MainActivity.class));
-                                            finish();
+                                            dialog.dismiss();
                                         } else {
                                             String errorReceived = response.getString("errorMsg");
                                             Toast.makeText(getApplicationContext(), errorReceived,

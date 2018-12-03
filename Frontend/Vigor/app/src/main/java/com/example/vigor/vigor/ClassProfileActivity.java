@@ -1,9 +1,14 @@
 package com.example.vigor.vigor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,16 +22,19 @@ public class ClassProfileActivity extends Activity {
     private String TAG = ClassProfileActivity.class.getSimpleName();
 
     private TextView className;
-    private TextView instructorName;
     private TextView classDescription;
     private TextView classSchedule;
     private TextView billBoard;
     private Button saveBillboardButton;
     private Button contactInstructorButton;
+    private EditText alertText;
+    private String jsonInstructorURL;
+    private String strInstructorName;
+    private String strInstructorContact;
+    private Bundle receivedData;
 
-    private String classIDForURL;
-    private ClassDataModel classModel;
-    private String jsonClassURL = "http://proj309-ad-07.misc.iastate.edu:8080/";
+    private SessionController session;
+    private DateController dateController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,45 +42,135 @@ public class ClassProfileActivity extends Activity {
         setContentView(R.layout.activity_classprofile);
 
         className = findViewById(R.id.classNameTV);
-        instructorName = findViewById(R.id.instructorNameTV);
         classDescription = findViewById(R.id.classDescriptionTV);
         classSchedule = findViewById(R.id.classScheduleTV);
         billBoard = findViewById(R.id.billBoardTV);
         saveBillboardButton = findViewById(R.id.saveWorkoutButt);
         contactInstructorButton = findViewById(R.id.contactButt);
 
-        classIDForURL = getIntent().getStringExtra("targetClassID");
+        session = new SessionController(getApplicationContext());
+        dateController = new DateController();
 
-        JsonObjectRequest jsonClassRequest  = new JsonObjectRequest(Request.Method.GET, jsonClassURL,
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    classModel = new ClassDataModel(
-                            response.getInt("classId"),
-                            response.getString("className"),
-                            response.getInt("instructorId"),
-                            response.getString("classDescription"),
-                            response.getString("schedule"),
-                            response.getString("status"),
-                            response.getString("billboard"),
-                            response.getBoolean("locked"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        receivedData = getIntent().getExtras();
+        if (receivedData != null) {
+            className.setText(receivedData.getString("className"));
+            String descriptText = classDescription.getText().toString() +
+                    receivedData.getString("description");
+            classDescription.setText(descriptText);
+            String scheduleText = classSchedule.getText().toString() +
+                    receivedData.getString("schedule") ;
+            classSchedule.setText(scheduleText);
+            String billboardText = billBoard.getText().toString() +
+                    receivedData.getString("billboard");
+            billBoard.setText(billboardText);
+        }
 
+        contactInstructorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    jsonInstructorURL = "http://proj309-ad-07.misc.iastate.edu:8080/user/" +
+                            receivedData.getInt("instructorID");
+                    JsonObjectRequest jsonInstructorRequest = new JsonObjectRequest(Request.Method.GET,
+                            jsonInstructorURL, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                strInstructorName = response.getString("firstname") + " "
+                                        + response.getString("lastname");
+                                strInstructorContact = response.getString("userEmail");
+                                AlertDialog.Builder alert = new AlertDialog
+                                        .Builder(ClassProfileActivity.this);
+                                alert.setTitle("Instructor's Contact Information");
+                                alert.setMessage("Instructor: " + strInstructorName + "\nEmail: "
+                                        + strInstructorContact);
+                                alert.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                alert.create().show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+                    VolleySingleton.getInstance().addToRequestQueue(jsonInstructorRequest, "instructor_json_req");
             }
         });
-        VolleySingleton.getInstance().addToRequestQueue(jsonClassRequest, "class_json_req");
 
-        className.setText(classModel.getClassName());
-        classDescription.setText(classModel.getClassDescription());
-        classSchedule.setText(classSchedule.getText().toString() + classModel.getSchedule());
-        billBoard.setText(billBoard.getText().toString() + classModel.getBillboard());
+        saveBillboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (receivedData.getBoolean("locked")) {
+                    AlertDialog.Builder alert = new AlertDialog
+                            .Builder(ClassProfileActivity.this);
+                    alert.setTitle("Any additional notes for this session?");
+                    alertText = new EditText(alert.getContext());
+                    alert.setView(alertText);
+                    alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String notes = alertText.getText().toString();
+                            JSONObject newBillBoard = makeBillboardJson(session.returnUserID(),
+                                    receivedData.getInt("classID"),
+                                    dateController.returnWorkingDateAsString(),
+                                    receivedData.getString("billboard"), notes);
+                            String jsonHistoryURL = "http://proj309-ad-07.misc.iastate.edu:8080/" +
+                                    "classHistory/add";
+                            JsonObjectRequest jsonHistoryRequest =
+                                    new JsonObjectRequest(Request.Method.POST, jsonHistoryURL,
+                                            newBillBoard, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
 
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                }
+                            });
+                            VolleySingleton.getInstance().addToRequestQueue(jsonHistoryRequest,
+                                    "history_json_req");
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Billboard was not saved!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    alert.create().show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "The class billboard is currently "
+                                    + "unavailable. Refresh the page or contact your instructor " +
+                                    "for more information.",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public JSONObject makeBillboardJson (int userId, int classId, String date, String billBoard,
+                                   String notes) {
+        JSONObject returnObject = new JSONObject();
+        try {
+            returnObject.put("userId", userId);
+            returnObject.put("classId", classId);
+            returnObject.put("date", date);
+            returnObject.put("billBoard", billBoard);
+            returnObject.put("notes", notes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return returnObject;
     }
 }

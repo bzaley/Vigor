@@ -13,6 +13,7 @@ public class DateController {
     public DateController() {
         dateOfToday();
         workingCalendarDate = Calendar.getInstance();
+        workingDate = workingCalendarDate.getTime();
     }
 
     public Date dateOfToday() {

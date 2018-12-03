@@ -10,6 +10,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ClassHistoryActivity extends Activity {
@@ -29,21 +38,45 @@ public class ClassHistoryActivity extends Activity {
 
         session = new SessionController(getApplicationContext());
         workoutDataModels = new ArrayList<>();
-
-        //TODO populate workoutDataModels
-
         adapter = new ClassWorkoutAdapter(workoutDataModels, getApplicationContext());
         classHistoryList.setAdapter(adapter);
+
+        String jsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/classHistory/getAll/" +
+                session.returnUserID();
+
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonURL,
+                null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject element = response.getJSONObject(i);
+                        workoutDataModels.add(new ClassWorkoutDataModel(
+                                element.getInt("classId"),
+                                element.getString("notes"),
+                                element.getString("billBoard"),
+                                element.getString("date")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "history_json_req");
 
         classHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ClassWorkoutDataModel activityValue = (ClassWorkoutDataModel)
                         classHistoryList.getItemAtPosition(position);
-                //TODO Open small screen with full info of item.
                 AlertDialog.Builder alert = new AlertDialog
                         .Builder(ClassHistoryActivity.this);
-                alert.setTitle(activityValue.getClassDescription());
+                alert.setTitle(activityValue.getClassBillBoard());
                 alert.setMessage(activityValue.getClassNotes());
                 alert.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
