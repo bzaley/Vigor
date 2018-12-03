@@ -12,7 +12,11 @@ import com.project.user.*;
 import com.project.Exercise.*;
 import com.project.historian.*;
 import com.project.utilities.*;
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 @Service
 public class dayExerciseService {
 
@@ -35,7 +39,10 @@ public class dayExerciseService {
 	@Autowired
 	private UserRepository userRepo;
 
-	
+	/**
+	 * JSON Request form for removing an exercise.
+	 * @param dayExerciseRemove
+	 */
 	public void remove(dayExerciseRemove dayExerciseRemove) {
 		
 		//String exerciseName = convert.convertIdToExercise(tmp.getExerciseId());
@@ -81,7 +88,10 @@ public class dayExerciseService {
 		
 		return right;
 	}
-	
+	/**
+	 * Add a single exercise to the table, that is not part of a plan.
+	 * @param dayExerciseAdd
+	 */
 	public void addSingle(dayExerciseAdd dayExerciseAdd) {
 		
 		//int exid = convert.convertExerciseToId(tmp.getExercise());
