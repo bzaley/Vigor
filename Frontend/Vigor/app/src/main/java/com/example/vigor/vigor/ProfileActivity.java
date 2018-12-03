@@ -30,6 +30,9 @@ import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
+/**
+ * This activity allows users to view their profile and delete it if necessary
+ */
 public class ProfileActivity extends AppCompatActivity {
 
     private SessionController session;
@@ -45,17 +48,23 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView picture;
     Uri ImageURI;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        //Initialize the variables necessary
         session = new SessionController(getApplicationContext());
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //Set up initial display
         TextView name = (TextView) findViewById(R.id.ProfileTvUserName);
         name.setText(session.returnFirstName() + " " + session.returnLastName());
 
@@ -70,38 +79,56 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Listen to if the user wants to delete their profile.
         DeleteUser = (Button) findViewById(R.id.ProfileBtnDeleteUser);
         DeleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String sendUrl = "http://proj309-ad-07.misc.iastate.edu:8080/user/delete/" + session.returnUserID();
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
-                        sendUrl, null, new Response.Listener<JSONObject>() {
+            public void onClick(View v) {AlertDialog.Builder alert = new AlertDialog.Builder(
+                    ProfileActivity.this);
+                alert.setTitle("Are you sure about that?");
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, "Error:" + error.getMessage());
+                    public void onClick(DialogInterface dialog, int which) {
+                        String sendUrl = "http://proj309-ad-07.misc.iastate.edu:8080/user/delete/" + session.returnUserID();
+                        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                                sendUrl, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(TAG, response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                VolleyLog.d(TAG, "Error:" + error.getMessage());
+                            }
+                        });
+                        VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
+                        session.attemptLogout();
+                        startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                        finish();
+                        mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                            }
+                        });
+                        dialog.dismiss();
                     }
                 });
-                VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
-                session.attemptLogout();
-                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                finish();
-                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 });
-
+                alert.show();
             }
         });
 
     }
 
+    /**
+     * Used to open a phone's image storage to attempt to set a custom profile
+     */
     private void openImageGallery() {
         final CharSequence[] items = {"Camera", "Gallery", "Cancel"};
 
@@ -124,11 +151,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         alert.show();
-
-//        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(gallery, PICK_IMAGE);
     }
 
+    /**
+     * Used to recieve and process image data
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This is the custom adapter made for the listview in ToDoListActivity.java.
  * This creates row items based on the row_item.xml, and will be called to
  * when different elements are changed.
@@ -40,6 +40,10 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         this.mContext = context;
     }
 
+    /**
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         int position = (Integer) v.getTag();

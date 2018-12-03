@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This activity allows a user of type instructor to open and update the
  * information for a class they manage. They can change the description
  * and status depending on if the class is locked or unlocked at the time
@@ -36,6 +36,10 @@ public class ClassUpdaterActivity extends AppCompatActivity {
     private int classIDint;
     private String TAG = ClassUpdaterActivity.class.getSimpleName();
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -26,6 +26,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian Hamill
+ * This activity allows the user to view a comprehensive todolist of custom
+ * exercise objects. these objects are pulled from the server and denoted
+ * by the plans marked current in the PlanManagerActivity. They can the mark
+ * specific items complete and move days of individual plans.
+ */
 public class ToDoListActivity extends AppCompatActivity {
 
     ArrayList<DataModel> dataModels;
@@ -40,6 +47,10 @@ public class ToDoListActivity extends AppCompatActivity {
 
     static int Direction = 0;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +80,7 @@ public class ToDoListActivity extends AppCompatActivity {
                 final String enteredSets = toAddSets.getText().toString();
                 final String enteredReps = toAddReps.getText().toString();
 
+                //Check to see if the Items entered fit within our scope of acceptable char types
                 if (enteredItem.equals("")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
@@ -92,6 +104,7 @@ public class ToDoListActivity extends AppCompatActivity {
                     });
                     alert.show();
                 } else {
+                    //Send then new activity to the server as a single activity
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
                             "http://proj309-ad-07.misc.iastate.edu:8080/exercise/check/" + toAddItem.getText().toString(), null, new Response.Listener<JSONObject>() {
                         @Override
@@ -161,6 +174,7 @@ public class ToDoListActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                //Check if the user is incrementing a plan or marking an activity as complete
                 if (dataModels.get(position).getuserEmail().equals("null")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(
                             ToDoListActivity.this);
@@ -271,6 +285,9 @@ public class ToDoListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Pull initial data from the server, organizes and display it
+     */
     private void setUpInitialData() {
         //Load singular activities from server
         String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/dayExercise/get/" +
@@ -279,6 +296,7 @@ public class ToDoListActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        //Iterate through the given array of values and add them
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject element = (JSONObject) response.getJSONObject(i);
@@ -291,7 +309,7 @@ public class ToDoListActivity extends AppCompatActivity {
                                     }
                                 }
                                 if (!exists) {
-                                    // Add Spacer
+                                    // Add Spacer because it wasn't already there
                                     dataModels.add(new DataModel(
                                             "null",
                                             element.getString("planName"),
@@ -316,6 +334,7 @@ public class ToDoListActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        //Update the adapter
                         adapter.notifyDataSetChanged();
                     }
                 },
@@ -327,12 +346,22 @@ public class ToDoListActivity extends AppCompatActivity {
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
     }
 
+    /**
+     * Make the menu for the activity
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    /**
+     * Return the selected item
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -342,6 +371,11 @@ public class ToDoListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Check if a string is made up of ints
+     * @param name
+     * @return
+     */
     public boolean isInt(String name) {
         char[] chars = name.toCharArray();
         for (char c : chars)

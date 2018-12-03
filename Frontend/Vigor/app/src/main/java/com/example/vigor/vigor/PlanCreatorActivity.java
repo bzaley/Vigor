@@ -27,6 +27,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian Hamill
+ * This activity allows users of every type to create plans of any length of days.
+ */
 public class PlanCreatorActivity extends AppCompatActivity {
 
     private EditText activity;
@@ -48,6 +52,10 @@ public class PlanCreatorActivity extends AppCompatActivity {
     static ArrayList<ArrayList> days;
     static ArrayList<DataModel> dataModels;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -349,6 +357,12 @@ public class PlanCreatorActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Helper method used to determine whether a string
+     * has only integers or not.
+     * @param name
+     * @return
+     */
     private boolean isInt(String name) {
         char[] chars = name.toCharArray();
         for (char c : chars)

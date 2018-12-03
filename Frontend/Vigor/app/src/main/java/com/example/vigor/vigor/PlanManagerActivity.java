@@ -23,6 +23,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian Hamill
+ * This activity allows users of every type to manage the plans that have been
+ * assigned to them. This means they can mark which are current and not or add
+ * new ones in order to dynamically change what is pulled from the server in a
+ * separate activity.
+ */
 public class PlanManagerActivity extends AppCompatActivity implements android.widget.CompoundButton.OnCheckedChangeListener {
 
     ListView planList;
@@ -34,26 +41,30 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
     private SessionController session;
     private String TAG = PlanManagerActivity.class.getSimpleName();
 
-
-
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_manager);
         session = new SessionController(getApplicationContext());
 
+        //Initialize the XML variables
         planList = (ListView) findViewById(R.id.PlanManagerLvPlans);
         add = (Button) findViewById(R.id.PlanManagerBtnAdd);
 
+        //Initialize the necessary variables for the list
         plans = new ArrayList<>();
         adapter = new CustomPlanAdapter(plans, this);
         planList.setAdapter(adapter);
-
         adapter.notifyDataSetChanged();
 
+        //pull initial values from the server
         setUpInitialData();
 
+        //Listen for a user to add an a new plan and start the appropriate activity
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +72,7 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
             }
         });
 
+        //Listen for a user to attempt to update an object
         planList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -84,8 +96,10 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
         });
     }
 
+    /**
+     * Pull the initial data from the server and display it.
+     */
     private void setUpInitialData() {
-        //TODO get plan request URL
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
                 "http://proj309-ad-07.misc.iastate.edu:8080/plan/getAll/" + session.returnUserID(), null,
                 new Response.Listener<JSONArray>() {
@@ -110,14 +124,11 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
     }
 
-    public boolean isInt(String name) {
-        char[] chars = name.toCharArray();
-        for (char c : chars)
-            if (Character.isLetter(c))
-                return true;
-        return false;
-    }
-
+    /**
+     * Check for a change in the checkboxes used in this list.
+     * @param buttonView
+     * @param isChecked
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int position = planList.getPositionForView(buttonView);

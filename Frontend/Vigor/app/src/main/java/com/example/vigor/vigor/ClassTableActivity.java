@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This activity creates a Listview with a CustomArrayAdapter that shows a
  * list of the Classes managed by the current user
  */
@@ -40,6 +40,10 @@ public class ClassTableActivity extends AppCompatActivity {
 
     private SessionController session;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +93,9 @@ public class ClassTableActivity extends AppCompatActivity {
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO Get URL to delete class from server
                         ClassDataModel temp = classDataModels.get(position);
                         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
-                                "http://proj309-ad-07.misc.iastate.edu:8080/" + temp.getClassName(), null, new Response.Listener<JSONObject>() {
+                                "http://proj309-ad-07.misc.iastate.edu:8080/classes/delete/" + temp.getClassId(), null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, response.toString());
@@ -122,6 +125,9 @@ public class ClassTableActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Pull, organize and display the data from the server
+     */
     private void setUpInitialData() {
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET,
                 "http://proj309-ad-07.misc.iastate.edu:8080/classes/getallinstructorclasses/" + session.returnUserID(), null,
@@ -160,6 +166,13 @@ public class ClassTableActivity extends AppCompatActivity {
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
     }
 
+    /**
+     * When either the ClassBuilderActivity or the ClassUpdaterActivity returns
+     * data to this activity, process and update the date returned.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {

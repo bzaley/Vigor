@@ -18,23 +18,34 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+/**
+ * @author Adrian Hamill
+ * @author Kirkland Kieth
+ * Main page for the application. The buttons dynamically update for different
+ * user types with relevant titles and links to different activities.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private SessionController session;
     private GoogleSignInClient mGoogleSignInClient;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initializations
         session = new SessionController(getApplicationContext());
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-
+        //Update buttons based on a user's role
         Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
         Button btnProfile = (Button) findViewById(R.id.MainBtnViewProfile);
         if (session.returnUserRole().equals("personaltrainer")) {
@@ -43,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             btnProfile.setText("Class Manager");
         }
 
+        //Set the text views for the page including the headers and welcome message.
         TextView temp = (TextView) findViewById(R.id.MainTvQuickView);
         String mystring = new String("Quick View");
         SpannableString content = new SpannableString(mystring);
@@ -59,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mystring = new String("Welcome Back " + session.returnFirstName() + "!");
         temp.setText(mystring);
 
+        //Listen for each clickable object and start the appropriate process with each.
         ImageView profile = (ImageView) findViewById(R.id.MainProfileImage);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override

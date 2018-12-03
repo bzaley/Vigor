@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This is the class for making permanent files for writing
  * string arraylists to.
  */

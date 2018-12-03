@@ -1,7 +1,7 @@
 package com.example.vigor.vigor;
 
 /**
- * @author Adrian H
+ * @author Adrian Hamill
  * This is a custom object type made to contain exercises that the user
  * is currently seeing.
  */
