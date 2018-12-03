@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ClassViewActivity extends Activity {
     private String TAG = ClassViewActivity.class.getSimpleName();
-    private String jsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/";
+    private String jsonURL;
 
     private Button addClass;
     private Button classHistory;
@@ -42,6 +42,11 @@ public class ClassViewActivity extends Activity {
 
         session = new SessionController(getApplicationContext());
         classModels = new ArrayList<>();
+        adapter = new CustomClassAdapter(classModels, getApplicationContext());
+        classList.setAdapter(adapter);
+
+        jsonURL = "http://proj309-ad-07.misc.iastate.edu:8080/userClass/getClasses/"
+                + session.returnUserID();
 
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonURL,
                 null, new Response.Listener<JSONArray>() {
@@ -51,9 +56,9 @@ public class ClassViewActivity extends Activity {
                             try {
                                 JSONObject element = response.getJSONObject(i);
                                 classModels.add(new ClassDataModel(
-                                        element.getInt("classID"),
-                                        element.getString("classname"),
-                                        element.getInt("instructorID"),
+                                        element.getInt("classId"),
+                                        element.getString("className"),
+                                        element.getInt("instructorId"),
                                         element.getString("classDescription"),
                                         element.getString("schedule"),
                                         element.getString("status"),
@@ -63,6 +68,7 @@ public class ClassViewActivity extends Activity {
                                 e.printStackTrace();
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -71,8 +77,7 @@ public class ClassViewActivity extends Activity {
                 });
         VolleySingleton.getInstance().addToRequestQueue(jsonArrRequest, "json_req");
 
-        adapter = new CustomClassAdapter(classModels, getApplicationContext());
-        classList.setAdapter(adapter);
+
 
         addClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +97,19 @@ public class ClassViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ClassDataModel classValue = (ClassDataModel) classList.getItemAtPosition(position);
-                Intent intent = new Intent(getApplicationContext(), ClassProfileActivity.class);
-                intent.putExtra("targetClassID", classValue.getClassId());
-                startActivity(intent);
+                Intent sentIntent = new Intent(ClassViewActivity.this,
+                        ClassProfileActivity.class);
+                Bundle sentData = new Bundle();
+                sentData.putString("className", classValue.getClassName());
+                sentData.putString("description", classValue.getClassDescription());
+                sentData.putString("schedule", classValue.getSchedule());
+                sentData.putInt("classID", classValue.getClassId());
+                sentData.putInt("instructorID", classValue.getInstructorId());
+                sentData.putString("billboard", classValue.getBillboard());
+                sentData.putString("status", classValue.getStatus());
+                sentData.putBoolean("locked", classValue.getLocked());
+                sentIntent.putExtras(sentData);
+                startActivity(sentIntent);
             }
         });
     }
