@@ -5,7 +5,11 @@ import java.util.List;
 import com.project.classes.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * 
+ * @author Ryan Ingram
+ *
+ */
 @Service
 public class userClassService {
 
@@ -15,7 +19,12 @@ public class userClassService {
 	
 	@Autowired
 	private userClassRepository userClassRepo;
-	
+	/**
+	 * assign users to a class.
+	 * @param userId
+	 * @param classId
+	 * @return
+	 */
 	public addClassResponse assignUserClass(int userId, int classId) {
 		
 		boolean exists = classesRepo.existsByClassId(classId);
@@ -34,7 +43,11 @@ public class userClassService {
 		
 	}
 	
-	
+	/**
+	 * remove a user from a class.
+	 * @param userId
+	 * @param classId
+	 */
 	public void removeUserClass(int userId, int classId) {
 		
 		userClass userClass = new userClass(userId, classId);
@@ -42,7 +55,11 @@ public class userClassService {
 		userClassRepo.delete(userClass);
 		
 	}
-	
+	/**
+	 * get all classes for a given userId
+	 * @param userId
+	 * @return
+	 */
 	public List<Classes> getClasses(int userId) {
 		
 		List<userClass> class_list = userClassRepo.findAllByUserId(userId);
@@ -60,7 +77,11 @@ public class userClassService {
 		return right;
 		
 	}
-	
+	/**
+	 * get all users given a classId.
+	 * @param classId
+	 * @return
+	 */
 	public List<userClass> getUsers(int classId) {
 		
 		return userClassRepo.findAllByClassId(classId);

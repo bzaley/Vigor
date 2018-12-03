@@ -35,7 +35,10 @@ public interface UserRepository extends CrudRepository<User, Integer>{
 	 * @return
 	 */
 	public User findByUserId(int userId);
-	
+	/**
+	 * 
+	 * @param userId
+	 */
 	@Transactional
 	public void deleteByUserId(int userId);
 }
