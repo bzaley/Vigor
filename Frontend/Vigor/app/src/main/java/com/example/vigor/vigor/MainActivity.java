@@ -36,26 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button btnMakePlan = (Button) findViewById(R.id.MainBtnMakePlan);
-        if (session.returnUserRole().equals("personaltrainer")){
+        Button btnProfile = (Button) findViewById(R.id.MainBtnViewProfile);
+        if (session.returnUserRole().equals("personaltrainer")) {
             btnMakePlan.setText("Trainer Tools");
-        } else if (session.returnUserRole().equals("instructor")){
-            btnMakePlan.setText("Class Creator");
+        } else if (session.returnUserRole().equals("instructor")) {
+            btnProfile.setText("Class Manager");
         }
 
         TextView temp = (TextView) findViewById(R.id.MainTvQuickView);
-        String mystring=new String("Quick View");
+        String mystring = new String("Quick View");
         SpannableString content = new SpannableString(mystring);
         content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
         temp.setText(content);
 
         temp = (TextView) findViewById(R.id.MainTvQuickAccess);
-        mystring=new String("Quick Access");
+        mystring = new String("Quick Access");
         content = new SpannableString(mystring);
         content.setSpan(new UnderlineSpan(), 0, mystring.length(), 0);
         temp.setText(content);
 
         temp = (TextView) findViewById(R.id.MainTvWelcome);
-        mystring=new String("Welcome Back " + session.returnFirstName() + "!");
+        mystring = new String("Welcome Back " + session.returnFirstName() + "!");
         temp.setText(mystring);
 
         ImageView profile = (ImageView) findViewById(R.id.MainProfileImage);
@@ -111,12 +112,21 @@ public class MainActivity extends AppCompatActivity {
         btnMakePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (session.returnUserRole().equals("personaltrainer")){
+                if (session.returnUserRole().equals("personaltrainer")) {
                     startActivity(new Intent(MainActivity.this, UserTableActivity.class));
-                } else if (session.returnUserRole().equals("instructor")) {
-                    startActivity(new Intent(MainActivity.this, ClassTableActivity.class));
                 } else {
                     startActivity(new Intent(MainActivity.this, PlanManagerActivity.class));
+                }
+            }
+        });
+
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (session.returnUserRole().equals("instructor")) {
+                    startActivity(new Intent(MainActivity.this, ClassTableActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
             }
         });

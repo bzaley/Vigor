@@ -27,7 +27,8 @@ import java.util.ArrayList;
 
 /**
  * @author Adrian H
- * This activity creates a Listview with a CustomArrayAdapter that shows a list of the Classes managed by
+ * This activity creates a Listview with a CustomArrayAdapter that shows a
+ * list of the Classes managed by the current user
  */
 public class ClassTableActivity extends AppCompatActivity {
 

@@ -19,6 +19,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @author Adrian H
+ * This activity allows a user of typw instructor to open and update the
+ * information for a classtehy manage
+ */
 public class ClassUpdaterActivity extends AppCompatActivity {
 
     private TextView ClassName;
