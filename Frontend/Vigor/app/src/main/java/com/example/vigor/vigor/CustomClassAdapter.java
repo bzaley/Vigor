@@ -12,10 +12,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * @author Adrian Hamill
  * This is a Custom Adapter built for the ClassTableActivity.java. It builds and displays
  * class items based on the class_row_item.xml, it will be called to create and update
  * the displays for those items.
+ *
+ * @author Adrian Hamill
  */
 public class CustomClassAdapter extends ArrayAdapter<ClassDataModel> implements View.OnClickListener {
 

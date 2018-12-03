@@ -1,9 +1,10 @@
 package com.example.vigor.vigor;
 
 /**
- * @author Adrian Hamill
  * This is the custom object we are using to contain classes when they
  * are created or viewed
+ *
+ * @author Adrian Hamill
  */
 public class ClassDataModel {
 

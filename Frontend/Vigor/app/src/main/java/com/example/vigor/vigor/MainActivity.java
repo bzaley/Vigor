@@ -19,10 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 /**
- * @author Adrian Hamill
- * @author Kirkland Kieth
  * Main page for the application. The buttons dynamically update for different
  * user types with relevant titles and links to different activities.
+ *
+ * @author Adrian Hamill
+ * @author Kirkland Keith
  */
 public class MainActivity extends AppCompatActivity {
 

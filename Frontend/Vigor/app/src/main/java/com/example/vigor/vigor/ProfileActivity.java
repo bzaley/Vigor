@@ -31,7 +31,10 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONObject;
 
 /**
- * This activity allows users to view their profile and delete it if necessary
+ * This activity allows users to view their profile and delete
+ * it if necessary.
+ *
+ * @author Adrian Hamill
  */
 public class ProfileActivity extends AppCompatActivity {
 

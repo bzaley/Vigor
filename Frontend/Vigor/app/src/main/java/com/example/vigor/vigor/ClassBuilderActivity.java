@@ -20,11 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Adrian Hamill
  * This Activity allows users of the "instructor" type to build
  * and save classes they run to our database. Once done it
  * displays the class ID for the newly created class and then returns
  * the fully made class object to the previous activity.
+ *
+ * @author Adrian Hamill
  *
  * @return      The Full set of data for a new class.
  */

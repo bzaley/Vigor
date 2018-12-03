@@ -24,11 +24,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * @author Adrian Hamill
  * This activity allows users of every type to manage the plans that have been
  * assigned to them. This means they can mark which are current and not or add
  * new ones in order to dynamically change what is pulled from the server in a
  * separate activity.
+ *
+ * @author Adrian Hamill
  */
 public class PlanManagerActivity extends AppCompatActivity implements android.widget.CompoundButton.OnCheckedChangeListener {
 

@@ -30,9 +30,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author Adrian Hamill
  * This activity allows the user to request a graphical representatiuon
  * of the step data they've saved withihn the last week.
+ *
+ * @author Adrian Hamill
  */
 public class Graphing extends AppCompatActivity {
     private int i = 0;

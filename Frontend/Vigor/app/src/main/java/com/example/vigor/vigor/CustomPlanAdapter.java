@@ -11,9 +11,10 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * @author Adrian Hamill
  * This is the Class for a plan object we use to contain plans
  * when they are created and updated.
+ *
+ * @author Adrian Hamill
  */
 class PlanDataModel {
 
@@ -54,10 +55,11 @@ class PlanDataModel {
 }
 
 /**
- * @author Adrian Hamill
  * This is a Custom Adapter built for PlanManager.java. It builds and displays
  * plan items based on the class_row_item.xml, it will be called to create and update
  * the displays for those items.
+ *
+ * @author Adrian Hamill
  */
 public class CustomPlanAdapter extends ArrayAdapter<PlanDataModel> {
 

@@ -27,11 +27,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * @author Adrian Hamill
  * This activity allows the user to view a comprehensive todolist of custom
  * exercise objects. these objects are pulled from the server and denoted
  * by the plans marked current in the PlanManagerActivity. They can the mark
  * specific items complete and move days of individual plans.
+ *
+ * @author Adrian Hamill
  */
 public class ToDoListActivity extends AppCompatActivity {
 

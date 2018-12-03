@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * @author Adrian Hamill
  * Activity to allow trainers to have a managment sweet for the
  * tools they use to manage a user.
+ *
+ * @author Adrian Hamill
  */
 public class TrainerToolsActivity extends AppCompatActivity {
 

@@ -26,9 +26,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * @author Adrian Hamill
  * This activity creates a Listview with a CustomArrayAdapter that shows a
  * list of the Classes managed by the current user
+ *
+ * @author Adrian Hamill
  */
 public class ClassTableActivity extends AppCompatActivity {
 

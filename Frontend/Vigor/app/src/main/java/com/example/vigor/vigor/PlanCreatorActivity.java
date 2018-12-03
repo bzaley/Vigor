@@ -28,8 +28,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
+ * This activity allows users of every type to create plans
+ * of any length of days.
+ *
  * @author Adrian Hamill
- * This activity allows users of every type to create plans of any length of days.
  */
 public class PlanCreatorActivity extends AppCompatActivity {
 

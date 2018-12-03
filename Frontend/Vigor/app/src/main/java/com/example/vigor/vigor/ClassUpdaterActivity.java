@@ -20,11 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Adrian Hamill
  * This activity allows a user of type instructor to open and update the
  * information for a class they manage. They can change the description
  * and status depending on if the class is locked or unlocked at the time
  * which they can also change woht the lock/unlock button.
+ *
+ * @author Adrian Hamill
  */
 public class ClassUpdaterActivity extends AppCompatActivity {
 
