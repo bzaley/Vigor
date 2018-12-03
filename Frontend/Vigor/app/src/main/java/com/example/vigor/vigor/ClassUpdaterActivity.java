@@ -87,15 +87,15 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, response.toString());
-                            Toast.makeText(getApplicationContext(), "Correct " + response.toString(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(), "Correct " + response.toString(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
-                            Toast.makeText(getApplicationContext(), "Error " + error.toString(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(),error.toString(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
@@ -119,15 +119,19 @@ public class ClassUpdaterActivity extends AppCompatActivity {
                     String sendUrl = "http://proj309-ad-07.misc.iastate.edu:8080/classes/padlock/" + classIDint + "/" + false;
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                             sendUrl,
-                            null, new Response.Listener<JSONObject>() {
+                            new JSONObject(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, response.toString());
+//                            Toast.makeText(getApplicationContext(),response.toString(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(TAG, "Error:" + error.getMessage());
+//                            Toast.makeText(getApplicationContext(),error.toString(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance().addToRequestQueue(jsonRequest, "json_req");
