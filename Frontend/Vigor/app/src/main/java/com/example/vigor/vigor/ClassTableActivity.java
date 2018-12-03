@@ -25,6 +25,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * @author Adrian H
+ * This activity creates a Listview with a CustomArrayAdapter that shows a list of the Classes managed by
+ */
 public class ClassTableActivity extends AppCompatActivity {
 
     ArrayList<ClassDataModel> classDataModels;
