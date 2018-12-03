@@ -50,7 +50,6 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
         adapter = new CustomPlanAdapter(plans, this);
         planList.setAdapter(adapter);
 
-        plans.add(new PlanDataModel("Swoop", false));
         adapter.notifyDataSetChanged();
 
         setUpInitialData();
@@ -59,6 +58,28 @@ public class PlanManagerActivity extends AppCompatActivity implements android.wi
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PlanManagerActivity.this, PlanCreatorActivity.class));
+            }
+        });
+
+        planList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET
+                        , "http://proj309-ad-07.misc.iastate.edu:8080/userPlan/remove/" +
+                        session.returnUserID() + "/" + plans.get(position).getPlanName(), null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        });
+                VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest, "json_req");
+                return false;
             }
         });
     }
