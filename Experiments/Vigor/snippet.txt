@@ -1,4 +1,0 @@
-For MySql the username is : teamAD7'@'%
-The password is : VigorProject1_
-The URL is : http://http://proj309-ad-07.misc.iastate.edu
-Correct?

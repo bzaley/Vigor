@@ -1,7 +1,6 @@
 package com.example.vigor.vigor;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.txtActivity = (TextView) convertView.findViewById(R.id.activity);
+            viewHolder.txtActivity = (TextView) convertView.findViewById(R.id.Activity);
             viewHolder.txtSets = (TextView) convertView.findViewById(R.id.sets);
             viewHolder.txtReps = (TextView) convertView.findViewById(R.id.reps);
 
@@ -70,9 +69,9 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtActivity.setText(dataModel.getActivity());
-        viewHolder.txtSets.setText(dataModel.getSets());
-        viewHolder.txtReps.setText(dataModel.getReps());
+        viewHolder.txtActivity.setText(dataModel.getexercise());
+        viewHolder.txtSets.setText(dataModel.getsets());
+        viewHolder.txtReps.setText(dataModel.getreps());
         // Return the completed view to render on screen
         return convertView;
     }

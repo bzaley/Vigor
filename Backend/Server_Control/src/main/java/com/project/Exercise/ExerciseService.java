@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
- * 
+ *
  * @author Ryan Ingram
  *
  */
 @Service
 public class ExerciseService {
-	
+
 	@Autowired
 	private ExerciseRepository exerciseRepo;
 
@@ -40,20 +40,19 @@ public class ExerciseService {
 	public void addExercise(Exercise exercise) {
 		exerciseRepo.save(exercise);
 	}
-	/**
-	 * Check if an exercise is present in the table by its name.
-	 * @param exerciseName
-	 * @return
-	 */
-	public boolean existsByName(String exerciseName) {
+
+	public exerciseResponse existsByName(String exerciseName) {
 		Exercise exercise = exerciseRepo.findByName(exerciseName);
 
+		exerciseResponse sendBack = new exerciseResponse();
+
 		if (exercise == null) {
-			return false;
+			sendBack.setExists(false);
 		} else {
-			return true;
+			sendBack.setExists(true);
 		}
 
+		return sendBack;
 	}
 	
 }

@@ -9,24 +9,26 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 /**
- * 
+ *
  * @author Ryan Ingram
  *
  */
 public interface dayExerciseRepository extends JpaRepository<dayExercise, Integer>, CrudRepository<dayExercise, Integer> {
 	/**
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 */
 	public List<dayExercise> findAllByUserId(int userId);
 	/**
-	 * 
+	 *
 	 * @param userId
 	 * @param planName
 	 * @return
 	 */
 	public List<dayExercise> findAllByUserIdAndPlanName(int userId, String planName);
+    @Transactional
+    public void deleteByUserId(int userId);
 	/**
 	 * Updates workout item in SQL table.
 	 * @param userId

@@ -43,8 +43,8 @@ public class planController {
 	// Changer == 1 is increment
 	// Changer == 2 is decrement
 	@RequestMapping("/{userId}/{planName}/{changer}")
-	public void dayChanger(@PathVariable("userId") int userId, @PathVariable("planName") String planName, @PathVariable("changer") int changer) {
-		planService.dayChanger(userId, planName, changer);
+	public changerResponse dayChanger(@PathVariable("userId") int userId, @PathVariable("planName") String planName, @PathVariable("changer") int changer) {
+		return planService.dayChanger(userId, planName, changer);
 	}
 	
 	/**

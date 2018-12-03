@@ -36,7 +36,7 @@ public class ExerciseController {
 	 * @return
 	 */
 	@RequestMapping("/check/{exerciseName}")
-	public boolean existsByName(@PathVariable String exerciseName) {
+	public exerciseResponse existsByName(@PathVariable String exerciseName) {
 		return exerciseService.existsByName(exerciseName);
 	}
 	

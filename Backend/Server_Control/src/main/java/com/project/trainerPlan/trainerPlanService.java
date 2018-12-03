@@ -11,7 +11,7 @@ import com.project.user.*;
 import com.project.userPlan.userPlan;
 import com.project.utilities.*;
 /**
- * 
+ *
  * @author Ryan Ingram
  *
  */
@@ -33,8 +33,8 @@ public class trainerPlanService {
 	
 	@Autowired
 	private ExerciseRepository exerciseRepo;
-	
-	
+
+
 	/**
 	 * Add plan to trainer table.
 	 * @param plan
@@ -46,12 +46,10 @@ public class trainerPlanService {
 			
 			// Loops through all exercises in the plan given
 			for (trainerAdd tmp : plan) {
-				
-				//int exid = convert.convertExerciseToId(tmp.getExercise());
+
 				Exercise exercise = exerciseRepo.findByName(tmp.getExercise());
 				int exid = exercise.getExerciseId();
-				
-				//int uid = convert.convertEmailToId(tmp.getuserEmail());
+
 				User user = userRepo.findByUserEmail(tmp.getUserEmail());
 				int uid = user.getuserId();
 				

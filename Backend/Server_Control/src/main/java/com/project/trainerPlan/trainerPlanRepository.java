@@ -11,14 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project.userPlan.userPlan;
 
 /**
- * 
+ *
  * @author Ryan Ingram
  *
  */
 public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integer> {
 
 	/**
-	 * 
+	 *
 	 * @param userId
 	 * @param planName
 	 * @param day
@@ -27,13 +27,14 @@ public interface trainerPlanRepository extends CrudRepository<trainerPlan, Integ
 	public List<trainerPlan> findAllByUserIdAndPlanNameAndDay(int userId, String planName, int day);
 	
 	/**
-	 * 
+	 *
 	 * @param userId
 	 * @param planName
 	 * @return
 	 */
 	public List<trainerPlan> findAllByUserIdAndPlanName(int userId, String planName);
-	
+    @Transactional
+    public void deleteByUserId(int userId);
 	/**
 	 * Add trainer exercise to table.
 	 * @param trainerId

@@ -85,8 +85,8 @@ public class Graphing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //hardcoded for testing
-                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/" +
-                        session.returnUserID() + "/7/" + dateController.returnWorkingDateAsString();
+                String jsonUrl = "http://proj309-ad-07.misc.iastate.edu:8080/steps/multiple/" +
+                        session.returnUserID() + "/7";
                 JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl,
                         null, new Response.Listener<JSONArray>() {
                             @Override
